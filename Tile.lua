@@ -10,7 +10,7 @@ Tile = class('Tile')
 Tile.static.TILE_ALPHA = 128
 Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
-
+Tile.static.GRAVITY = 500  -- pixels/second^2
 
 -- cc = collision check, l = left, t = top, w = width, h = height
 function Tile:initialize( world, cc, l,t,w,h, r,g,b )
@@ -39,11 +39,18 @@ end
 -- Move the Tile, Check for Collisions, Register Change w/ Bump
 function Tile:move( new_l, new_t )
   if self.cc then
+    local cols, len = world:check( self )
+    while len > 0 do
+      tl, tt, nx, ny, sl, st = cols[1].getSlide()
+      cols, len = world:check( self, sl, st )
+    end
     self.l, self.t = new_l, new_t
     self.world:move( self, new_l, new_t )
   else
     self.l, self.t  = new_l, new_t
   end
 end
+
+function Tile:applyGravity(dt)
 
 return Tile

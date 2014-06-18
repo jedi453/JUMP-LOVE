@@ -6,8 +6,8 @@ tilesHoriz = 40
 bump = require('bump.bump')
 bump_debug = require('bump.bump_debug')
 Tile = require('Tile')
-Background_Open = require('Background_Open')
-Background_Wall = require('Background_Wall')
+BG_Open = require('BG_Open')
+BG_Wall = require('BG_Wall')
 
 local world
 
@@ -26,9 +26,9 @@ function love.load()
   for lpos = 1,40 do
     for tpos = 1,30 do
       if ( math.random(0,1) > 0.5 ) then
-        local block = Background_Open:new( world, lpos-1, tpos-1 )
+        local block = BG_Open:new( world, lpos-1, tpos-1 )
       else
-        local block = Background_Wall:new( world, lpos-1, tpos-1 )
+        local block = BG_Wall:new( world, lpos-1, tpos-1 )
       end
     end
   end
