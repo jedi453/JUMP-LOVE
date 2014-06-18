@@ -7,6 +7,7 @@ Tile = require('Tile')
 Background = class( 'Background', Tile )
 
 --[[
+-- Inherited from Tile
 Background.static.CELL_WIDTH = 16
 Background.static.CELL_HEIGHT = 16
 --]]
@@ -49,7 +50,7 @@ end
 --]]
 
 function Background:initialize( world, cc, l,t,w,h, r,g,b )
-  Tile.initialize(self, world, cc, l,t,w,h, r,g,b )
+  Tile.initialize( self, world, cc, l,t,w,h, r,g,b )
 end
 
 

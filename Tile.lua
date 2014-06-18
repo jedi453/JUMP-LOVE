@@ -52,5 +52,6 @@ function Tile:move( new_l, new_t )
 end
 
 function Tile:applyGravity(dt)
+end
 
 return Tile
