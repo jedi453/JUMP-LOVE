@@ -24,7 +24,8 @@ function love.load()
   
   Map:new( world, "map1.txt" )
 
-  print( "Map Loaded!" )
+  local block = Tile:new( world, true, 620, 0, 16, 16, 255, 255, 255, 0, 0, true )
+
 end
 
 function love.draw()
@@ -33,4 +34,11 @@ function love.draw()
     blocks[i]:draw()
   end
   --block:draw()
+end
+
+function love.update( dt )
+  local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
+  for i = 1, len do
+    blocks[i]:update( dt )
+  end
 end

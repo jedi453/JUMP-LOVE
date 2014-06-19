@@ -16,10 +16,8 @@ Map.static.CELL_HEIGHT = 16
 
 
 function Map:initialize( world, file )
-  --print('Map:initialize Called')
   self.world = world
   if file then self:loadFile( file ) end
-  --print('Map:initialize Finished')
 end
 
 function Map:addTile( layer, kind, xpos, ypos )
@@ -40,9 +38,6 @@ function Map:addOB( kind, lpos, tpos )
 end
 
 function Map:addBGLine( line, tpos )
-  --print( 'Map:addBGLine() Called' )
-  --print( '  line = ' .. line )
-  --print( string.format('  tpos = %d', tpos ) )
   local lpos = 0
   for word in string.gmatch( line, '%w+' ) do
     self:addBG( word, lpos, tpos )
@@ -76,13 +71,6 @@ function Map:addPlayerLine( line )
 end
 
 function Map:loadFile( file )
-  print("Map:loadFile( " .. file .. " ) Called ")
-
-  --[[
-  if not io.open( file ) then
-    return
-  end
-  --]]
   
   local row = 0
   local isComment = false
@@ -107,7 +95,6 @@ function Map:loadFile( file )
           isOB = false
           isPlayer = false
         elseif mode == 'Background' then
-          print('Background Section Found')
           isBG = true
           isComment = false
           isOB = false
@@ -134,7 +121,6 @@ function Map:loadFile( file )
       end
     end
   end
-  --io.close( file )
 end
 
 
