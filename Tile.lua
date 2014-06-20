@@ -10,11 +10,11 @@ Tile = class('Tile')
 Tile.static.TILE_ALPHA = 128
 Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
-Tile.static.GRAVITY = 50  -- pixels/second^2
-Tile.static.TERMINAL_VY = 350
+Tile.static.GRAVITY = 700  -- pixels/second^2
+Tile.static.TERMINAL_VY = 800
 
--- cc = collision check, l = left, t = top, w = width, h = height
-function Tile:initialize( world, cc, l,t,w,h, r,g,b, updates, vx, vy, hasGravity )
+-- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function
+function Tile:initialize( world, cc, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
   -- Initialize Members to Given Values
   self.world = world
   self.cc = cc
@@ -24,6 +24,7 @@ function Tile:initialize( world, cc, l,t,w,h, r,g,b, updates, vx, vy, hasGravity
   self.vx = vx or 0
   self.vy = vy or 0
   self.hasGravity = hasGravity or false
+  self.cFilter = cFilter or function( other ) return other.cc end
 
   -- Register Tile with bump if Collisions Should be Checked
   if cc then
@@ -47,7 +48,7 @@ function Tile:move( new_l, new_t )
   if self.cc then
     local visited = {}
     local dl, dt = new_l - self.l, new_t - self.t
-    local cols, len = self.world:check( self )
+    local cols, len = self.world:check( self, new_l, new_t, self.cFilter )
     local col = cols[1]
     while len > 0 do
       tl, tt, nx, ny, sl, st = col:getSlide()
@@ -55,10 +56,10 @@ function Tile:move( new_l, new_t )
       if visited[col.other] then return end -- Thanks to Kikito - Prevent Infinite Loops
       visited[col.other] = true
 
-      cols, len = self.world:check( self, sl, st )
+      cols, len = self.world:check( self, sl, st, self.cFilter )
       col = cols[1]
-      if self.hasGravity and ny > 0 then
-        vy = 0
+      if self.hasGravity and ny > 0 then -- TODO CHECK THIS
+        self.vy = 0
       end
     end
     self.l, self.t = sl or new_l, st or new_t
@@ -70,7 +71,7 @@ end
 
 function Tile:calcGravity(dt)
   if self.hasGravity then
-    self.vy = self.vy - Tile.GRAVITY
+    self.vy = self.vy - ( Tile.GRAVITY * dt )
     if self.vy < -Tile.TERMINAL_VY then
       self.vy = -Tile.TERMINAL_VY
     end
@@ -79,7 +80,7 @@ end
 
 function Tile:update(dt)
   if self.hasGravity then
-    self:calcGravity()
+    self:calcGravity( dt )
   end
   if self.updates and self.vx ~= 0 or self.vy ~= 0 then
     self:move( self.l + (self.vx*dt), self.t - (self.vy*dt) )
