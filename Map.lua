@@ -13,15 +13,56 @@ Map = class('Map')
 
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
+Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
 
 
-function Map:initialize( world, file )
-  self.world = world
+function Map:initialize( levelNum )
+  self.world = bump.newWorld()
   self.height = 0
+  self.width = 0
   self.players = {}
   self.numPlayers = 0
-  if file then self:loadFile( file ) end
+  self.levelNum = levenNum or 1
+  self.numBGTiles = 0
+  self.BGTiles = {}
+  self.numOBTiles = 0
+  self.OBTiles = {}
+  local file = Map.MAP_FILES[self.levelNum]
+  if file then
+    Map.loadFile( self, file )
+  else
+    love.event.quit()
+  end
 end
+
+function Map:nextLevel()
+  self.world = bump.newWorld()
+  self.width, self.height = 0, 0
+  self.players = {}
+  self.numPlayers = 0
+  self.levelNum = self.levelNum + 1
+  self.numBGTiles = 0
+  self.BGTiles = {}
+  self.numOBTiles = 0
+  self.OBTiles = {}
+  local file = Map.MAP_FILES[self.levelNum]
+  if file then
+    Map.loadFile( self, file )
+  else
+    love.event.quit()
+  end
+  collectgarbage("collect")
+end
+
+--[[
+function Map:clear()
+  local blocks, len = self.world:queryRect( 0, 0, self.width, self.height )
+  for _, block in ipairs(blocks) do
+    self.world:remove( block )
+  end
+end
+--]]
+
 
 function Map:addTile( layer, kind, xpos, ypos )
   if layer == 'BG' then
@@ -33,27 +74,32 @@ end
 
 function Map:addBG( kind, lpos, tpos )
   if kind == 'WL' then
-    BG_Wall:new( self.world, lpos, tpos )
+    self.numBGTiles = self.numBGTiles + 1
+    self.BGTiles[ self.numBGTiles ] = BG_Wall:new( self.world, lpos, tpos )
   end
 end
 
 function Map:addOB( kind, lpos, tpos )
 end
 
+-- Add a Line of Background Elements and Return Maximum lpos
 function Map:addBGLine( line, tpos )
   local lpos = 0
   for word in string.gmatch( line, '%w+' ) do
     self:addBG( word, lpos, tpos )
     lpos = lpos + 1
   end
+  return lpos
 end
 
+-- Add a Line of Obstical Elements and Return Maximum lpos
 function Map:addOBLine( line, tpos )
   local lpos = 0
   for word in string.gmatch( line, '%w+' ) do
     self:addOB( word, lpos, tpos )
     lpos = lpos + 1
   end
+  return lpos
 end
 
 function Map:addTileLine( kind, line, xpos )
@@ -82,6 +128,9 @@ function Map:loadFile( file )
   local isPlayer = false
   local comment = ''
   local tpos = 0
+  local maxTPos = 0
+  
+  Player.static.numPlayers = 0
 
   for line in io.lines( file ) do
     if string.sub( line, 1, 1 ) == '#' then
@@ -119,11 +168,11 @@ function Map:loadFile( file )
         if isComment then
           comment = comment .. line
         elseif isBG then
-          self:addBGLine( line, tpos )
+          maxTPos = math.max( self:addBGLine( line, tpos ), maxTPos )
           tpos = tpos + 1
           self.height = self.height + Tile.CELL_HEIGHT
         elseif isOB then
-          self:addOBLine( line, tpos )
+          maxTPos = math.max( self:addOBLine( line, tpos ), maxTPos )
           tpos = tpos + 1
         elseif isPlayer then
           self.numPlayers = self.numPlayers + 1
@@ -132,6 +181,46 @@ function Map:loadFile( file )
         end
       end
     end
+  end
+  self.width = Tile.CELL_WIDTH * maxTPos
+end
+
+
+-- Map Update Function
+function Map:update( dt )
+  -- Iterate over all Non-Player Tiles and Update them
+  local blocks, len = self.world:queryRect( 0, 0, self.width, self.height )
+  for i = 1, len do
+    local block = blocks[i]
+    if block.class.name ~= 'Player' and block.update then
+      block:update( dt )
+    end
+  end
+  -- Iterate over all Players and Update them
+  for i = 1, self.numPlayers do
+    -- Avoid Crashing When Switching to Level with Fewer Players
+    if self.players[i] then
+      self.players[i]:update( dt )
+    end
+  end
+end
+
+
+-- Map Draw Function
+function Map:draw()
+  -- Draw Background Tiles
+  for i = 1, self.numBGTiles do
+    self.BGTiles[i]:draw()
+  end
+
+  -- Draw Obstical Tiles
+  for i = 1, self.numOBTiles do
+    self.OBTiles[i]:draw()
+  end
+
+  -- Draw Players
+  for i = 1, self.numPlayers do
+    self.players[i]:draw()
   end
 end
 

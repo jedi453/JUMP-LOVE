@@ -26,6 +26,9 @@ function Player:initialize( world, lpos, tpos, map )
   self.map = map
   self.origTPos = self.t
   self.origLPos = self.l
+  -- If Keys Are Held Down Already, Adjust Velocity Accordingly
+  if love.keyboard.isDown( "left" ) then self.vx = - Player.speedHoriz end
+  if love.keyboard.isDown( "right" ) then self.vx = self.vx + Player.speedHoriz end
 end
 
 --[[ To Redefine Later? Maybe the Default Tile:update() is Sufficient
@@ -34,15 +37,17 @@ function Player:update( dt )
 end
 --]]
 
+
+-- Move Change Velocity of Player when their Key is Pressed
 function Player:keypressed( key, isRepeat )
   if self.numPlayer == 1 then
     if key == "left" then
       self.vx = self.vx - Player.speedHoriz
     elseif key == "right" then
       self.vx = self.vx + Player.speedHoriz
-    elseif key == "up" and self.onGround then
+    elseif key == "up" and self.onGround and self.isAlive then
       self.vy = Player.static.jumpSpeed
-    elseif key == "up" and self.hasDoubleJump then
+    elseif key == "up" and self.hasDoubleJump and self.isAlive then
       self.vy = Player.static.jumpSpeed
       self.hasDoubleJump = false
     end
@@ -60,6 +65,8 @@ function Player:keypressed( key, isRepeat )
   end
 end
 
+
+-- 
 function Player:keyreleased( key )
   if self.numPlayer == 1 then
     if key == "left" then
@@ -77,6 +84,9 @@ function Player:keyreleased( key )
 end
 
 
+--[[ Check if the Player is On the Ground, and Reset hasDoubleJump,
+--    onGround
+--]]
 function Player:checkOnGround( ny )
   if ny < 0 then
     self.onGround = true
@@ -87,7 +97,7 @@ end
 function Player:kill()
   self.isAlive = false
   self.t = self.map.height - Player.HEIGHT
-  self.vy = Player.jumpSpeed
+  self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
 end
 
@@ -101,42 +111,75 @@ function Player:respawn()
 end
 
 
+function Player:beatMap()
+  local map = self.map
+  map:nextLevel()
+end
+
+
+-- Move Player to New Location Checking for Collisions if Applicable
 function Player:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
+  -- Assume Not On Ground Until Proven Otherwise
   self.onGround = false
   if self.cc and self.isAlive then
+    -- Obey Normal Collision Checking Rules
+    
     local visited = {}
+    -- dl, dt -- Delta_Left, Delta_Top -- Change in Position
     local dl, dt = new_l - self.l, new_t - self.t
+    -- Get Collisions for New Location
     local cols, len = self.world:check( self, new_l, new_t, self.cFilter )
     local col = cols[1]
+    -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
     while len > 0 do
+      -- Get Adjusted/Corrected Location and Collsion Normals
       tl, tt, nx, ny, sl, st = col:getSlide()
       
+      --[[ Check if the Player is On the Ground, and Reset hasDoubleJump,
+      --    onGround and vy if they are
+      --]]
       self:checkOnGround( ny )
 
-      if visited[col.other] then return end -- Thanks to Kikito - Prevent Infinite Loops
+      -- Thanks to Kikito - Prevent Infinite Loops
+      if visited[col.other] then return end
       visited[col.other] = true
 
+      -- Recalculate Collisions
       cols, len = self.world:check( self, sl, st, self.cFilter )
       col = cols[1]
-      if self.hasGravity and ny > 0 then --------- TODO: CHECK THIS
+
+      -- Set Vertical Velocity to 0 if on a Solid Object
+      if self.hasGravity and ny ~= 0 then --------- TODO: CHECK THIS
         self.vy = 0
       end
     end
     self.l, self.t = sl or new_l, st or new_t
     self.l = math.max( self.l, 0 )
     --if self.l < 0 then self.l = 0 end
-    self.t = math.max( self.t, 0 )
-    --if self.t < 0 then self.t = 0
+    if self.t < 0 then 
+      self.t = 0
+      self.vy = 0
+    end
     if self.t > self.map.height then
       self:kill()
     end
     self.world:move( self, self.l, self.t )
   else
-    self.l, self.t  = new_l, new_t
-    if not self.isAlive and self.t > self.map.height then
-      self:respawn()
+    -- Don't Obey Normal Collision Checking Rules
+    if self.isAlive then
+      self.l, self.t  = new_l, new_t
+    else
+      self.t = new_t
+      if self.t > self.map.height then
+        self:respawn()
+      end
     end
+  end
+
+  -- Check Win Condition
+  if self.isAlive and self.l > self.map.width then
+    self:beatMap()
   end
 end
 

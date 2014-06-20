@@ -11,7 +11,6 @@ BG_Wall = require('BG_Wall')
 Map = require('Map')
 
 local map
-local world
 
 
 function love.load()
@@ -19,12 +18,12 @@ function love.load()
   math.randomseed(os.time())
   
   love.window.setMode( Tile.CELL_WIDTH*tilesHoriz, Tile.CELL_HEIGHT*tilesVert )
-  world = bump.newWorld()
+  -- world = bump.newWorld()
 
   --local block = Tile.new( world, false, 100,100,32,32, 0,255,0 )
   --local block = Tile:new( world, false, 100,100,32,32, 0,255,0 )
   
-  map = Map:new( world, "map1.txt" )
+  map = Map:new()
 
   --local block = Tile:new( world, true, 620, 0, 16, 16, 255, 255, 255, true, 0, 0, true )
 
@@ -32,15 +31,13 @@ end
 
 
 function love.draw()
-  local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
-  for i = 1,len do
-    blocks[i]:draw()
-  end
-  --block:draw()
+  map:draw()
 end
 
 
 function love.update( dt )
+  map:update(dt)
+--[[
   local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
   for i = 1, len do
     local block = blocks[i]
@@ -51,10 +48,15 @@ function love.update( dt )
   for _, player in ipairs( map.players ) do
     if player.updates then player:update( dt ) end
   end
+--]]
 end
 
 -- Pass Key Presses to Map
 function love.keypressed( key, isrepeat )
+  if key == "escape" then
+    love.event.quit()
+    return 
+  end
   if map then
     map:keypressed( key, isrepeat )
   end
