@@ -44,9 +44,12 @@ function love.update( dt )
   local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
   for i = 1, len do
     local block = blocks[i]
-    if block.updates then
+    if block.updates and block.class.name ~= 'Player' then
       block:update( dt )
     end
+  end
+  for _, player in ipairs( map.players ) do
+    if player.updates then player:update( dt ) end
   end
 end
 

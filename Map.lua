@@ -65,12 +65,12 @@ function Map:addTileLine( kind, line, xpos )
 end
 
 function Map:addPlayer( lpos, tpos )
-  return Player:new( self.world, lpos, tpos )
+  return Player:new( self.world, lpos, tpos, self )
 end
 
 function Map:addPlayerLine( line )
   local lpos, tpos = string.match( line, "(%d+)%s+(%d+)" )
-  return Player:new( self.world, lpos, tpos )
+  return Player:new( self.world, lpos, tpos, self )
 end
 
 function Map:loadFile( file )
