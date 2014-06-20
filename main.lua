@@ -10,7 +10,9 @@ BG_Open = require('BG_Open')
 BG_Wall = require('BG_Wall')
 Map = require('Map')
 
+local map
 local world
+
 
 function love.load()
 
@@ -22,11 +24,12 @@ function love.load()
   --local block = Tile.new( world, false, 100,100,32,32, 0,255,0 )
   --local block = Tile:new( world, false, 100,100,32,32, 0,255,0 )
   
-  Map:new( world, "map1.txt" )
+  map = Map:new( world, "map1.txt" )
 
-  local block = Tile:new( world, true, 620, 0, 16, 16, 255, 255, 255, 0, 0, true )
+  --local block = Tile:new( world, true, 620, 0, 16, 16, 255, 255, 255, true, 0, 0, true )
 
 end
+
 
 function love.draw()
   local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
@@ -36,9 +39,27 @@ function love.draw()
   --block:draw()
 end
 
+
 function love.update( dt )
   local blocks, len = world:queryRect( 0,0,fullTileWidth*tilesHoriz,fullTileHeight*tilesVert )
   for i = 1, len do
-    blocks[i]:update( dt )
+    local block = blocks[i]
+    if block.updates then
+      block:update( dt )
+    end
+  end
+end
+
+-- Pass Key Presses to Map
+function love.keypressed( key, isrepeat )
+  if map then
+    map:keypressed( key, isrepeat )
+  end
+end
+
+-- Pass Key Releases to Map
+function love.keyreleased( key )
+  if map then
+    map:keyreleased( key )
   end
 end

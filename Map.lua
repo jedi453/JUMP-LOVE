@@ -17,6 +17,9 @@ Map.static.CELL_HEIGHT = 16
 
 function Map:initialize( world, file )
   self.world = world
+  self.height = 0
+  self.players = {}
+  self.numPlayers = 0
   if file then self:loadFile( file ) end
 end
 
@@ -62,12 +65,12 @@ function Map:addTileLine( kind, line, xpos )
 end
 
 function Map:addPlayer( lpos, tpos )
-  Player:new( self.world, lpos, tpos )
+  return Player:new( self.world, lpos, tpos )
 end
 
 function Map:addPlayerLine( line )
   local lpos, tpos = string.match( line, "(%d+)%s+(%d+)" )
-  Player:new( self.world, lpos, tpos )
+  return Player:new( self.world, lpos, tpos )
 end
 
 function Map:loadFile( file )
@@ -104,7 +107,13 @@ function Map:loadFile( file )
           isOB = true
           isBG = false
           isComment = false
+          isPlayer = false
           tpos = 0
+        elseif mode == 'Player' then
+          isOB = false
+          isBG = false
+          isComment = false
+          isPlayer = true
         end
       else
         if isComment then
@@ -112,11 +121,14 @@ function Map:loadFile( file )
         elseif isBG then
           self:addBGLine( line, tpos )
           tpos = tpos + 1
+          self.height = self.height + Tile.CELL_HEIGHT
         elseif isOB then
           self:addOBLine( line, tpos )
           tpos = tpos + 1
         elseif isPlayer then
-          self:addPlayerLine( line )
+          self.numPlayers = self.numPlayers + 1
+          self.players[self.numPlayers] = self:addPlayerLine( line )
+          --isPlayer = false -- 1 Player Mode
         end
       end
     end
@@ -124,5 +136,20 @@ function Map:loadFile( file )
 end
 
 
+-- Pass Key Presses to Players
+function Map:keypressed( key, isRepeat )
+  for _, player in ipairs(self.players) do
+    player:keypressed( key, isRepeat )
+  end
+end
 
+-- Pass Key Releases to Players
+function Map:keyreleased( key )
+  for _, player in ipairs(self.players) do
+    player:keyreleased( key )
+  end
+end
+
+
+-- Return Our Fresh, Shiny, New Class
 return Map

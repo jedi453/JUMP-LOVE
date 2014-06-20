@@ -10,20 +10,21 @@ Tile = class('Tile')
 Tile.static.TILE_ALPHA = 128
 Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
-Tile.static.GRAVITY = 40  -- pixels/second^2
-Tile.static.TERMINAL_VY = 500
+Tile.static.GRAVITY = 50  -- pixels/second^2
+Tile.static.TERMINAL_VY = 350
 
 -- cc = collision check, l = left, t = top, w = width, h = height
-function Tile:initialize( world, cc, l,t,w,h, r,g,b, vx, vy, gravity )
+function Tile:initialize( world, cc, l,t,w,h, r,g,b, updates, vx, vy, hasGravity )
   -- Initialize Members to Given Values
   self.world = world
   self.cc = cc
   self.l, self.t, self.w, self.h = l, t, w, h
   self.r, self.g, self.b = r, g, b
+  self.updates = updates or false
   self.vx = vx or 0
   self.vy = vy or 0
-  self.gravity = gravity or false
-  
+  self.hasGravity = hasGravity or false
+
   -- Register Tile with bump if Collisions Should be Checked
   if cc then
     world:add(self, l,t,w,h)
@@ -45,6 +46,7 @@ function Tile:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
   if self.cc then
     local visited = {}
+    local dl, dt = new_l - self.l, new_t - self.t
     local cols, len = self.world:check( self )
     local col = cols[1]
     while len > 0 do
@@ -55,7 +57,7 @@ function Tile:move( new_l, new_t )
 
       cols, len = self.world:check( self, sl, st )
       col = cols[1]
-      if self.gravity and ny > 0 then
+      if self.hasGravity and ny > 0 then
         vy = 0
       end
     end
@@ -66,8 +68,8 @@ function Tile:move( new_l, new_t )
   end
 end
 
-function Tile:applyGravity(dt)
-  if self.gravity then
+function Tile:calcGravity(dt)
+  if self.hasGravity then
     self.vy = self.vy - Tile.GRAVITY
     if self.vy < -Tile.TERMINAL_VY then
       self.vy = -Tile.TERMINAL_VY
@@ -76,10 +78,10 @@ function Tile:applyGravity(dt)
 end
 
 function Tile:update(dt)
-  if self.gravity then
-    self:applyGravity()
+  if self.hasGravity then
+    self:calcGravity()
   end
-  if self.vx ~= 0 or self.vy ~= 0 then
+  if self.updates and self.vx ~= 0 or self.vy ~= 0 then
     self:move( self.l + (self.vx*dt), self.t - (self.vy*dt) )
   end
 end
