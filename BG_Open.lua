@@ -8,7 +8,7 @@ local h = Background.CELL_HEIGHT
 local r, g, b = 0, 0, 0
 
 function BG_Open:initialize( world, lpos, hpos )
-  Background.initialize( self, world, false, 
+  Background.initialize( self, world, false, false, false,
                           lpos*w, hpos*h, w, h,
                           r, g, b )
 end

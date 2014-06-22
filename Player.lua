@@ -7,8 +7,12 @@ Player = class( 'Player', Tile )
 Player.static.HEIGHT = Tile.CELL_WIDTH
 Player.static.WIDTH = Tile.CELL_HEIGHT
 Player.static.numPlayers = 0
-Player.static.speedHoriz = 100
-Player.static.jumpSpeed = 400
+Player.static.speedHoriz = 150
+Player.static.jumpSpeed = 300
+Player.static.leftKeys = { "left", "a" }
+Player.static.rightKeys = { "right", "d" }
+Player.static.jumpKeys = { "up", "w" }
+Player.static.maxPlayers = 2
 
 function Player:initialize( world, lpos, tpos, map )
   -- Only Add to Player Count if Creating a new Player
@@ -16,19 +20,22 @@ function Player:initialize( world, lpos, tpos, map )
     Player.static.numPlayers = Player.static.numPlayers + 1
     self.numPlayer = Player.numPlayers
   end
-  Tile.initialize( self, world, true, lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_WIDTH,
+  if Player.numPlayers > Player.maxPlayers then
+    error("Maximum of " .. tostring(Player.maxPlayers) .. " Players Supported...")
+  end
+  Tile.initialize( self, world, true, true, false, lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_WIDTH,
                    Player.WIDTH, Player.HEIGHT,
                    255 - ( ( self.numPlayer-1 ) * 63 ), 0, (self.numPlayer - 1) * 63,
-                   true, 0, 0, true, playerCFilter )
+                   true, 0, 0, true, Player.cFilter )
   self.isAlive = true
   self.onGround = false
   self.hasDoubleJump = true
   self.map = map
   self.origTPos = self.t
   self.origLPos = self.l
+  self.cFilter = Player.cFilter
   -- If Keys Are Held Down Already, Adjust Velocity Accordingly
-  if love.keyboard.isDown( "left" ) then self.vx = - Player.speedHoriz end
-  if love.keyboard.isDown( "right" ) then self.vx = self.vx + Player.speedHoriz end
+  self:adjustInitialVelocity()
 end
 
 --[[ To Redefine Later? Maybe the Default Tile:update() is Sufficient
@@ -40,46 +47,30 @@ end
 
 -- Move Change Velocity of Player when their Key is Pressed
 function Player:keypressed( key, isRepeat )
-  if self.numPlayer == 1 then
-    if key == "left" then
-      self.vx = self.vx - Player.speedHoriz
-    elseif key == "right" then
-      self.vx = self.vx + Player.speedHoriz
-    elseif key == "up" and self.onGround and self.isAlive then
-      self.vy = Player.static.jumpSpeed
-    elseif key == "up" and self.hasDoubleJump and self.isAlive then
-      self.vy = Player.static.jumpSpeed
-      self.hasDoubleJump = false
-    end
-  elseif self.numPlayer == 2 then
-    if key == "a" then
-      self.vx = self.vx - Player.speedHoriz
-    elseif key == "d" then
-      self.vx = self.vx + Player.speedHoriz
-    elseif key == "w" and self.onGround then
-      self.vy = Player.static.jumpSpeed
-    elseif key == "w" and self.hasDoubleJump then
-      self.vy = Player.static.jumpSpeed
-      self.hasDoubleJump = false
+  -- Player Number Independant Keypress Reactions
+  if key == Player.leftKeys[self.numPlayer] then
+    self.vx = self.vx - Player.speedHoriz
+  elseif key == Player.rightKeys[self.numPlayer] then
+    self.vx = self.vx + Player.speedHoriz
+  elseif key == Player.jumpKeys[self.numPlayer] then
+    if self.isAlive then
+      if self.onGround then
+        self.vy = Player.jumpSpeed
+      elseif self.hasDoubleJump then
+        self.hasDoubleJump = false
+        self.vy = Player.jumpSpeed
+      end
     end
   end
 end
 
-
 -- 
 function Player:keyreleased( key )
-  if self.numPlayer == 1 then
-    if key == "left" then
-      self.vx = self.vx + Player.speedHoriz
-    elseif key == "right" then
-      self.vx = self.vx - Player.speedHoriz
-    end
-  elseif self.numPlayer == 2 then
-    if key == "a" then
-      self.vx = self.vx + Player.speedHoriz
-    elseif key == "d" then
-      self.vx = self.vx - Player.speedHoriz
-    end
+  -- Player Number Independant Key Release Reactions
+  if key == Player.leftKeys[self.numPlayer] then
+    self.vx = self.vx + Player.speedHoriz
+  elseif key == Player.rightKeys[self.numPlayer] then
+    self.vx = self.vx - Player.speedHoriz
   end
 end
 
@@ -96,7 +87,7 @@ end
 
 function Player:kill()
   self.isAlive = false
-  self.t = self.map.height - Player.HEIGHT
+  self.t = math.min( self.map.height - Player.HEIGHT, self.t )
   self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
 end
@@ -133,9 +124,13 @@ function Player:move( new_l, new_t )
     local col = cols[1]
     -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
     while len > 0 do
+      -- If Touching a Deadly Object, Kill the Player
+      if col.other.deadly then
+        self:kill()
+        return
+      end
       -- Get Adjusted/Corrected Location and Collsion Normals
       tl, tt, nx, ny, sl, st = col:getSlide()
-      
       --[[ Check if the Player is On the Ground, and Reset hasDoubleJump,
       --    onGround and vy if they are
       --]]
@@ -183,9 +178,19 @@ function Player:move( new_l, new_t )
   end
 end
 
-
-function playerCFilter( other )
-  return other.cc and other.class.name ~= 'Player'
+function Player:adjustInitialVelocity()
+  if love.keyboard.isDown( Player.leftKeys[ self.numPlayer ] ) then
+    self.vx = -Player.speedHoriz
+  elseif love.keyboard.isDown( Player.rightKeys[ self.numPlayer ] ) then
+    self.vx = Player.speedHoriz
+  end
 end
+
+
+-- Only Handle Collisions with these Objects
+function Player.static.cFilter( other )
+  return other.cc and ( other.solid or other.deadly ) and other.class.name ~= 'Player'
+end
+
 
 return Player

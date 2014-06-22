@@ -10,21 +10,23 @@ Tile = class('Tile')
 Tile.static.TILE_ALPHA = 128
 Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
-Tile.static.GRAVITY = 700  -- pixels/second^2
-Tile.static.TERMINAL_VY = 800
+Tile.static.GRAVITY = 500  -- pixels/second^2
+Tile.static.TERMINAL_VY = 350
 
 -- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function
-function Tile:initialize( world, cc, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
+function Tile:initialize( world, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
   -- Initialize Members to Given Values
   self.world = world
   self.cc = cc
+  self.solid = solid
+  self.deadly = deadly
   self.l, self.t, self.w, self.h = l, t, w, h
   self.r, self.g, self.b = r, g, b
   self.updates = updates or false
   self.vx = vx or 0
   self.vy = vy or 0
   self.hasGravity = hasGravity or false
-  self.cFilter = cFilter or function( other ) return other.cc end
+  self.cFilter = cFilter or function( other ) return other.cc and other.solid end
 
   -- Register Tile with bump if Collisions Should be Checked
   if cc then
@@ -45,7 +47,7 @@ end
 -- Move the Tile, Check for Collisions, Register Change w/ Bump
 function Tile:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
-  if self.cc then
+  if self.cc and self.solid then
     local visited = {}
     local dl, dt = new_l - self.l, new_t - self.t
     local cols, len = self.world:check( self, new_l, new_t, self.cFilter )

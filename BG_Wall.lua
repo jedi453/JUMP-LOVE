@@ -13,7 +13,8 @@ BG_Wall.static.w = w
 BG_Wall.static.h = h
 
 function BG_Wall:initialize( world, lpos, tpos )
-  Background.initialize( self, world, true,
+  --                           world, cc, solid, deadly,
+  Background.initialize( self, world, true, true, false,
                          lpos*w, tpos*h, w, h,
                          r, g, b )
 end
