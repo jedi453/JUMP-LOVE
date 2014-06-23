@@ -71,6 +71,10 @@ function Tile:move( new_l, new_t )
   end
 end
 
+-- Default Collision Handling Function for Tiles
+function Tile:handleCollision( tl, tt, nx, ny, sl, st, other )
+end
+
 function Tile:calcGravity(dt)
   if self.hasGravity then
     self.vy = self.vy - ( Tile.GRAVITY * dt )

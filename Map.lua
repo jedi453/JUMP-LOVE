@@ -6,8 +6,10 @@ local Tile = require('Tile')
 local Background = require('Background')
 local BG_Open = require('BG_Open')
 local BG_Wall = require('BG_Wall')
+local OB_Platform = require('OB_Platform')
 local Player = require('Player')
 
+-- See Map:initialize to register new Background/Obstical Types
 
 Map = class('Map')
 
@@ -18,6 +20,19 @@ Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
 
 function Map:initialize( levelNum )
   self.world = bump.newWorld()
+
+  -- BG Constructors Holder -- Register BG Types Here
+  self.BG_Kinds = {
+    WL = function(...) return BG_Wall.new(BG_Wall, ...) end
+  }
+
+  -- OB Constructors Holder -- Register OB Types Here
+  self.OB_Kinds = {
+    PL = function(...) args = {...}; return OB_Platform.new(OB_Platform, args[1], args[2], args[3], -1) end,
+    PR = function(...) args = {...}; return OB_Platform.new(OB_Platform, args[1], args[2], args[3],  1) end,
+  }
+
+  -- Initialize Normal Variable
   self.height = 0
   self.width = 0
   self.players = {}
@@ -27,12 +42,16 @@ function Map:initialize( levelNum )
   self.BGTiles = {}
   self.numOBTiles = 0
   self.OBTiles = {}
+  self.comment = ""
+
+  -- Load Map File if Any, if None, Quit
   local file = Map.MAP_FILES[self.levelNum]
   if file then
     Map.loadFile( self, file )
   else
     love.event.quit()
   end
+  
 end
 
 function Map:nextLevel()
@@ -73,20 +92,30 @@ function Map:addTile( layer, kind, xpos, ypos )
 end
 
 function Map:addBG( kind, lpos, tpos )
+  if type(self.BG_Kinds[kind]) == 'function' then
+    self.numBGTiles = self.numBGTiles + 1
+    self.BGTiles[ self.numBGTiles ] = self.BG_Kinds[kind]( self.world, lpos, tpos )
+  end
+  --[[ -- Old Code
   if kind == 'WL' then
     self.numBGTiles = self.numBGTiles + 1
-    self.BGTiles[ self.numBGTiles ] = BG_Wall:new( self.world, lpos, tpos )
+    self.BGTiles[ self.numBGTiles ] = 
   end
+  ]]
 end
 
 function Map:addOB( kind, lpos, tpos )
+  if type( self.OB_Kinds[kind] ) == 'function' then
+    self.numOBTiles = self.numOBTiles + 1
+    self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[kind]( self.world, lpos, tpos )
+  end
 end
 
 -- Add a Line of Background Elements and Return Maximum lpos
 function Map:addBGLine( line, tpos )
   local lpos = 0
-  for word in string.gmatch( line, '%w+' ) do
-    self:addBG( word, lpos, tpos )
+  for kind in string.gmatch( line, '%w+' ) do
+    self:addBG( kind, lpos, tpos )
     lpos = lpos + 1
   end
   return lpos
@@ -110,6 +139,10 @@ function Map:addTileLine( kind, line, xpos )
   end
 end
 
+function Map:addCommentLine( line )
+  self.comment = self.comment .. line .. string.format("\n")
+end
+
 function Map:addPlayer( lpos, tpos )
   return Player:new( self.world, lpos, tpos, self )
 end
@@ -126,7 +159,6 @@ function Map:loadFile( file )
   local isBG = false
   local isOB = false
   local isPlayer = false
-  local comment = ''
   local tpos = 0
   local maxTPos = 0
   
@@ -166,7 +198,7 @@ function Map:loadFile( file )
         end
       else
         if isComment then
-          comment = comment .. line
+          self:addCommentLine( line )
         elseif isBG then
           maxTPos = math.max( self:addBGLine( line, tpos ), maxTPos )
           tpos = tpos + 1
@@ -222,6 +254,11 @@ function Map:draw()
   for i = 1, self.numPlayers do
     self.players[i]:draw()
   end
+
+  -- Draw Comments
+  love.graphics.setColor( 255, 255, 255 )
+  love.graphics.print(self.comment, Tile.CELL_WIDTH, Tile.CELL_HEIGHT)
+  --print( self.comment ) 
 end
 
 
