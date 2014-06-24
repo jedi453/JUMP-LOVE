@@ -9,6 +9,7 @@ local BG_Wall = require('BG_Wall')
 local OB_Platform = require('OB_Platform')
 local Player = require('Player')
 
+
 -- See Map:initialize to register new Background/Obstical Types
 
 Map = class('Map')
@@ -16,20 +17,21 @@ Map = class('Map')
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
 Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
-
+Map.static.SOUNDS = { jump = "sfx/player_jump.ogg" }
+Map.static.media = {}
 
 function Map:initialize( levelNum )
   self.world = bump.newWorld()
 
   -- BG Constructors Holder -- Register BG Types Here
   self.BG_Kinds = {
-    WL = function(...) return BG_Wall.new(BG_Wall, ...) end
+    WL = function(...) return BG_Wall:new(self, ...) end
   }
 
   -- OB Constructors Holder -- Register OB Types Here
   self.OB_Kinds = {
-    PL = function(...) args = {...}; return OB_Platform.new(OB_Platform, args[1], args[2], args[3], -1) end,
-    PR = function(...) args = {...}; return OB_Platform.new(OB_Platform, args[1], args[2], args[3],  1) end,
+    PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1) end,
+    PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1) end,
   }
 
   -- Initialize Normal Variable
@@ -51,7 +53,21 @@ function Map:initialize( levelNum )
   else
     love.event.quit()
   end
-  
+end
+
+-- Open All Needed Sound Media Files
+function Map.static.openMedia()
+  for k, v in pairs( Map.SOUNDS ) do
+    Map.static.media[k] = love.audio.newSource(v)
+  end
+end
+
+-- Play Sound Media by Name
+function Map:playMedia( name )
+  local sound = Map.media[name]
+  if sound then
+    love.audio.play( sound )
+  end
 end
 
 function Map:nextLevel()
@@ -64,6 +80,7 @@ function Map:nextLevel()
   self.BGTiles = {}
   self.numOBTiles = 0
   self.OBTiles = {}
+  self.comment = ""
   local file = Map.MAP_FILES[self.levelNum]
   if file then
     Map.loadFile( self, file )
@@ -94,7 +111,7 @@ end
 function Map:addBG( kind, lpos, tpos )
   if type(self.BG_Kinds[kind]) == 'function' then
     self.numBGTiles = self.numBGTiles + 1
-    self.BGTiles[ self.numBGTiles ] = self.BG_Kinds[kind]( self.world, lpos, tpos )
+    self.BGTiles[ self.numBGTiles ] = self.BG_Kinds[kind]( lpos, tpos )
   end
   --[[ -- Old Code
   if kind == 'WL' then
@@ -107,7 +124,7 @@ end
 function Map:addOB( kind, lpos, tpos )
   if type( self.OB_Kinds[kind] ) == 'function' then
     self.numOBTiles = self.numOBTiles + 1
-    self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[kind]( self.world, lpos, tpos )
+    self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[kind]( lpos, tpos )
   end
 end
 
@@ -144,12 +161,12 @@ function Map:addCommentLine( line )
 end
 
 function Map:addPlayer( lpos, tpos )
-  return Player:new( self.world, lpos, tpos, self )
+  return Player:new( self, lpos, tpos )
 end
 
 function Map:addPlayerLine( line )
   local lpos, tpos = string.match( line, "(%d+)%s+(%d+)" )
-  return Player:new( self.world, lpos, tpos, self )
+  return Player:new( self, lpos, tpos, self )
 end
 
 function Map:loadFile( file )

@@ -12,16 +12,19 @@ Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
 Tile.static.GRAVITY = 500  -- pixels/second^2
 Tile.static.TERMINAL_VY = 350
+Tile.static.FLOAT_TOL = 0.0001
 
 -- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function
-function Tile:initialize( world, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
+function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
   -- Initialize Members to Given Values
-  self.world = world
+  self.map = map
+  self.world = map.world
   self.cc = cc
   self.solid = solid
   self.deadly = deadly
   self.l, self.t, self.w, self.h = l, t, w, h
   self.r, self.g, self.b = r, g, b
+  --print("updates = " .. tostring(updates))
   self.updates = updates or false
   self.vx = vx or 0
   self.vy = vy or 0
@@ -30,7 +33,8 @@ function Tile:initialize( world, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx,
 
   -- Register Tile with bump if Collisions Should be Checked
   if cc then
-    world:add(self, l,t,w,h)
+    --print( "map.world.add( " .. tostring(map) .. ", " .. tostring(self) .. ", " .. tostring(l) .. ", " .. tostring(t) .. ", " .. tostring(w) .. ", " .. tostring(h) .. " )")
+    map.world:add(self, l,t,w,h)
   end
 end
 
@@ -47,7 +51,7 @@ end
 -- Move the Tile, Check for Collisions, Register Change w/ Bump
 function Tile:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
-  if self.cc and self.solid then
+  if self.cc then
     local visited = {}
     local dl, dt = new_l - self.l, new_t - self.t
     local cols, len = self.world:check( self, new_l, new_t, self.cFilter )
@@ -58,13 +62,20 @@ function Tile:move( new_l, new_t )
       if visited[col.other] then return end -- Thanks to Kikito - Prevent Infinite Loops
       visited[col.other] = true
 
+      -- Handle Collision in Way Specific to Subclass
+      self:handleCollision( new_l, new_t, tl, tt, nx, ny, sl, st, col.other )
+
+      --[[ -- Old Collision Handling
       cols, len = self.world:check( self, sl, st, self.cFilter )
       col = cols[1]
       if self.hasGravity and ny > 0 then -- TODO CHECK THIS
         self.vy = 0
       end
+      --]]
     end
-    self.l, self.t = sl or new_l, st or new_t
+    --self.l, self.t = sl or new_l, st or new_t
+    if ( self.l < 0 ) then self.l = 0 end
+    if ( self.t < 0 ) then self.t = 0 end
     self.world:move( self, self.l, self.t )
   else
     self.l, self.t  = new_l, new_t
@@ -72,7 +83,13 @@ function Tile:move( new_l, new_t )
 end
 
 -- Default Collision Handling Function for Tiles
-function Tile:handleCollision( tl, tt, nx, ny, sl, st, other )
+function Tile:handleCollision( new_l, new_t, tl, tt, nx, ny, sl, st, other )
+      cols, len = self.world:check( self, sl, st, self.cFilter )
+      col = cols[1]
+      if self.hasGravity and ny > 0 then -- TODO CHECK THIS
+        self.vy = 0
+      end
+      self.l, self.t = sl or new_l, st or new_t
 end
 
 function Tile:calcGravity(dt)
@@ -88,8 +105,8 @@ function Tile:update(dt)
   if self.hasGravity then
     self:calcGravity( dt )
   end
-  if self.updates and self.vx ~= 0 or self.vy ~= 0 then
-    self:move( self.l + (self.vx*dt), self.t - (self.vy*dt) )
+  if self.updates and math.abs(self.vx) > Tile.FLOAT_TOL or math.abs(self.vy) > Tile.FLOAT_TOL then
+    self:move( self.l + (self.vx * dt), self.t - (self.vy * dt) )
   end
 end
 

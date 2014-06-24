@@ -12,11 +12,13 @@ local BG_Wall = class( 'BG_Wall', Background )
 BG_Wall.static.w = w
 BG_Wall.static.h = h
 
-function BG_Wall:initialize( world, lpos, tpos )
-  --                           world, cc, solid, deadly,
-  Background.initialize( self, world, true, true, false,
-                         lpos*w, tpos*h, w, h,
-                         r, g, b )
+function BG_Wall:initialize( map, lpos, tpos )
+  --                           map, cc, solid, deadly,
+  Background.initialize( self, map, true, true, false,
+                         lpos*Background.CELL_WIDTH, tpos*Background.CELL_HEIGHT, w, h,
+                         r, g, b,
+  --                  updates, vx, vy, hasGravity
+                         false, 0, 0, false )
 end
 
 function BG_Wall.isSolid() return true end

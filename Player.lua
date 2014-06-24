@@ -1,7 +1,6 @@
 -- Player Class Definitions
 
 Tile = require( 'Tile' )
-
 Player = class( 'Player', Tile )
 
 Player.static.HEIGHT = Tile.CELL_WIDTH
@@ -14,7 +13,7 @@ Player.static.rightKeys = { "right", "d" }
 Player.static.jumpKeys = { "up", "w" }
 Player.static.maxPlayers = 2
 
-function Player:initialize( world, lpos, tpos, map )
+function Player:initialize( map, lpos, tpos )
   -- Only Add to Player Count if Creating a new Player
   if not self.numPlayer then
     Player.static.numPlayers = Player.static.numPlayers + 1
@@ -23,7 +22,7 @@ function Player:initialize( world, lpos, tpos, map )
   if Player.numPlayers > Player.maxPlayers then
     error("Maximum of " .. tostring(Player.maxPlayers) .. " Players Supported...")
   end
-  Tile.initialize( self, world, true, true, false, lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_WIDTH,
+  Tile.initialize( self, map, true, true, false, lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_WIDTH,
                    Player.WIDTH, Player.HEIGHT,
                    255 - ( ( self.numPlayer-1 ) * 63 ), 0, (self.numPlayer - 1) * 63,
                    true, 0, 0, true, Player.cFilter )
@@ -35,6 +34,8 @@ function Player:initialize( world, lpos, tpos, map )
   self.origLPos = self.l
   self.cFilter = Player.cFilter
   -- If Keys Are Held Down Already, Adjust Velocity Accordingly
+  self.vxRiding = 0
+  self.vyRiding = 0
   self:adjustInitialVelocity()
 end
 
@@ -44,6 +45,10 @@ function Player:update( dt )
 end
 --]]
 
+function Player:jump()
+  self.vy = Player.jumpSpeed
+  self.map:playMedia("jump")
+end
 
 -- Move Change Velocity of Player when their Key is Pressed
 function Player:keypressed( key, isRepeat )
@@ -53,12 +58,13 @@ function Player:keypressed( key, isRepeat )
   elseif key == Player.rightKeys[self.numPlayer] then
     self.vx = self.vx + Player.speedHoriz
   elseif key == Player.jumpKeys[self.numPlayer] then
+    -- Checking Done in Jump Function
     if self.isAlive then
       if self.onGround then
-        self.vy = Player.jumpSpeed
+        self:jump()
       elseif self.hasDoubleJump then
         self.hasDoubleJump = false
-        self.vy = Player.jumpSpeed
+        self:jump()
       end
     end
   end
@@ -103,10 +109,8 @@ end
 
 
 function Player:beatMap()
-  local map = self.map
-  map:nextLevel()
+  self.map:nextLevel()
 end
-
 
 -- Move Player to New Location Checking for Collisions if Applicable
 function Player:move( new_l, new_t )
@@ -120,6 +124,13 @@ function Player:move( new_l, new_t )
     -- dl, dt -- Delta_Left, Delta_Top -- Change in Position
     local dl, dt = new_l - self.l, new_t - self.t
     -- Get Collisions for New Location
+
+    --[[
+    -- Make Sure we didn't start with a Collsion
+    local cols, len = self.world:check( self )
+    assert( len == 0 )
+    ]]
+
     local cols, len = self.world:check( self, new_l, new_t, self.cFilter )
     local col = cols[1]
     -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
@@ -178,6 +189,16 @@ function Player:move( new_l, new_t )
   end
 end
 
+-- Change this To Handle Being on Objects that Have Velocity
+function Player:update( dt )
+  self.vxRiding, self.vyRiding = 0, 0
+  self:calcGravity( dt )
+  --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
+  self:adjustVelocityByRiding()
+  self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
+              self.t - ( (self.vy + self.vyRiding) * dt) )
+end
+
 function Player:adjustInitialVelocity()
   if love.keyboard.isDown( Player.leftKeys[ self.numPlayer ] ) then
     self.vx = -Player.speedHoriz
@@ -186,6 +207,21 @@ function Player:adjustInitialVelocity()
   end
 end
 
+function Player:adjustVelocityByRiding()
+  local cols, len = self.map.world:check( self, self.l, self.t+1, Player.cFilter )
+  local visited = {}
+  while len > 0 do
+    local col = cols[1]
+    if visited[col.other] then break end -- Don't Infinitely Loop, and Prevent Adjusting Velocity Twice
+    visited[col.other] = true
+    if math.abs( col.other.vx ) > Tile.FLOAT_TOL then
+      self.vxRiding = self.vxRiding + col.other.vx
+    end
+    if math.abs( col.other.vy ) > Tile.FLOAT_TOL then
+      self.vyRiding = self.vyRiding + col.other.vy
+    end
+  end
+end
 
 -- Only Handle Collisions with these Objects
 function Player.static.cFilter( other )

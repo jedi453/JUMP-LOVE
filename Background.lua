@@ -49,8 +49,8 @@ function Background:initialize( world, cc, kind, lpos, tpos )
 end
 --]]
 
-function Background:initialize( world, cc, solid, deadly, l,t,w,h, r,g,b )
-  Tile.initialize( self, world, cc, solid, deadly, l,t,w,h, r,g,b )
+function Background:initialize(...)
+  Tile.initialize( self, ... )
 end
 
 
