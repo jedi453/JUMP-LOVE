@@ -30,8 +30,8 @@ function Map:initialize( levelNum )
 
   -- OB Constructors Holder -- Register OB Types Here
   self.OB_Kinds = {
-    PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1) end,
-    PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1) end,
+    PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1, self.platformWidth) end,
+    PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1, self.platformWidth) end,
   }
 
   -- Initialize Normal Variable
@@ -40,11 +40,12 @@ function Map:initialize( levelNum )
   self.players = {}
   self.numPlayers = 0
   self.levelNum = levenNum or 1
-  self.numBGTiles = 0
-  self.BGTiles = {}
-  self.numOBTiles = 0
-  self.OBTiles = {}
-  self.comment = ""
+  self.numBGTiles = 0   -- Number of Background Tiles
+  self.BGTiles = {}     -- List of the Background Tiles
+  self.numOBTiles = 0   -- Number of Obstical Tiles
+  self.OBTiles = {}   -- List of the Obstical Tiles
+  self.comment = ""   -- The Comment for the Map, Displayed on the Screen
+  self.platformWidth = 0 -- Used to Maintain State while Adding Platforms of width Greater than 1
 
   -- Load Map File if Any, if None, Quit
   local file = Map.MAP_FILES[self.levelNum]
@@ -121,8 +122,20 @@ function Map:addBG( kind, lpos, tpos )
   ]]
 end
 
-function Map:addOB( kind, lpos, tpos )
-  if type( self.OB_Kinds[kind] ) == 'function' then
+function Map:addOB( kind, lpos, tpos, last )
+  --last = last or '00'
+  -- Handle Multiple Width Platforms
+  if kind == 'PL' or kind == 'PR' then
+    self.platformWidth = self.platformWidth + 1
+  end
+  if ( last == 'PL' or last == 'PR' ) and kind ~= last then
+    self.numOBTiles = self.numOBTiles + 1
+    self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[last]( lpos, tpos )
+    self.platformWidth = 0
+  end
+  
+  -- Handle Non-Platforms
+  if kind ~= 'PL' and kind ~= 'PR' and type( self.OB_Kinds[kind] ) == 'function' then
     self.numOBTiles = self.numOBTiles + 1
     self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[kind]( lpos, tpos )
   end
@@ -141,9 +154,11 @@ end
 -- Add a Line of Obstical Elements and Return Maximum lpos
 function Map:addOBLine( line, tpos )
   local lpos = 0
-  for word in string.gmatch( line, '%w+' ) do
-    self:addOB( word, lpos, tpos )
+  local last --= '00' -- Last Obstical Loaded
+  for obsticalName in string.gmatch( line, '%w+' ) do
+    self:addOB( obsticalName, lpos, tpos, last )
     lpos = lpos + 1
+    last = obsticalName
   end
   return lpos
 end
@@ -214,6 +229,7 @@ function Map:loadFile( file )
           isPlayer = true
         end
       else
+        self.platformWidth = 0 -- Reset Platform Width Holder
         if isComment then
           self:addCommentLine( line )
         elseif isBG then

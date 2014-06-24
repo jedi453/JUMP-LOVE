@@ -12,18 +12,18 @@ function Platform.static.cFilter( other )
   return other.solid
 end
 
-function Platform:initialize( map, lpos, tpos, direction, width )
-  --print("Platform.initialize( " .. tostring(self) .. ", " .. tostring(map) .. ", " .. tostring(lpos) .. ", " .. tostring(tpos) .. ", " .. tostring(direction) .. ", " .. tostring(width) .. ")")
+function Platform:initialize( map, lpos, tpos, direction, platformWidth )
+  --print("Platform.initialize( " .. tostring(self) .. ", " .. tostring(map) .. ", " .. tostring(lpos) .. ", " .. tostring(tpos) .. ", " .. tostring(direction) .. ", " .. tostring(platformWidth) .. ")")
   direction = direction or 1
-  width = width or 1
+  platformWidth = platformWidth or 1
   --                        map,  cc,  solid, deadly,
   Obstical.initialize( self, map, true, true, false,
-                        lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_HEIGHT, width*Tile.CELL_WIDTH, Tile.CELL_HEIGHT,
+                        lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_HEIGHT, platformWidth*Tile.CELL_WIDTH, Tile.CELL_HEIGHT,
                         200, 200, 0,
                         true, direction*Platform.xSpeed, 0, false )
   self.lpos = lpos
   self.tpos = tpos
-  self.width = width or 1
+  self.platformWidth = platformWidth or 1
 end
 
 -- Override Move Function
@@ -50,8 +50,8 @@ function Platform:move( new_l, new_t )
     self.l = 0
     self.vx = Platform.xSpeed
   end
-  if ( self.l > self.map.width - Tile.CELL_WIDTH ) then
-    self.l = self.map.width - Tile.CELL_WIDTH
+  if ( self.l + self.w ) > self.map.width then
+    self.l = self.map.width - self.w
     self.vx = -Platform.xSpeed
   end
   self.world:move( self, self.l, self.t )
