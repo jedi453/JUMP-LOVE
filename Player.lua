@@ -251,7 +251,7 @@ end
 function Player:checkJumpArrow()
   if not self.hasDoubleJump then
     local jumpArrowFilter = function( other ) return other.class.name == 'JumpArrow'; end
-    local cols, len = self.map.world:check( self, self.l, self.t, jumpPadFilter )
+    local cols, len = self.map.world:check( self, self.l, self.t, jumpArrowFilter )
     local visited = {}
     for i = 1, len do
       local col = cols[i]
