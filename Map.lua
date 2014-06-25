@@ -207,7 +207,7 @@ function Map:loadFile( file )
   
   Player.static.numPlayers = 0
 
-  for line in io.lines( file ) do
+  for line in love.filesystem.lines( file ) do
     if string.sub( line, 1, 1 ) == '#' then
       -- Skip Comment
     else
