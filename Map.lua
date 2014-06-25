@@ -6,9 +6,10 @@ local Tile = require('Tile')
 local Background = require('Background')
 local BG_Open = require('BG_Open')
 local BG_Wall = require('BG_Wall')
+local BG_JumpPad = require('BG_JumpPad')
 local OB_Platform = require('OB_Platform')
+local OB_JumpArrow = require('OB_JumpArrow')
 local Player = require('Player')
-
 
 -- See Map:initialize to register new Background/Obstical Types
 
@@ -17,7 +18,9 @@ Map = class('Map')
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
 Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
-Map.static.SOUNDS = { jump = "sfx/player_jump.ogg" }
+
+-- Add Sound Effects Here
+Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
 Map.static.media = {}
 
 function Map:initialize( levelNum )
@@ -25,13 +28,16 @@ function Map:initialize( levelNum )
 
   -- BG Constructors Holder -- Register BG Types Here
   self.BG_Kinds = {
-    WL = function(...) return BG_Wall:new(self, ...) end
+    -------------------------------------- map, rest
+    WL = function(...) return BG_Wall:new(self, ...); end,
+    JP = function(...) return BG_JumpPad:new(self, ...); end,
   }
 
   -- OB Constructors Holder -- Register OB Types Here
   self.OB_Kinds = {
-    PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1, self.platformWidth) end,
-    PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1, self.platformWidth) end,
+    PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1, self.platformWidth); end,
+    PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1, self.platformWidth); end,
+    JA = function(...) return OB_JumpArrow(self, ...); end,
   }
 
   -- Initialize Normal Variable
@@ -131,7 +137,12 @@ function Map:addOB( kind, lpos, tpos, last )
   if ( last == 'PL' or last == 'PR' ) and kind ~= last then
     self.numOBTiles = self.numOBTiles + 1
     self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[last]( lpos, tpos )
-    self.platformWidth = 0
+    -- Handle Opposing Platform Types Next to Each Other
+    if kind == 'PL' or kind == 'PR' then
+      self.platformWidth = 1
+    else
+      self.platformWidth = 0
+    end
   end
   
   -- Handle Non-Platforms

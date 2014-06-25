@@ -24,11 +24,11 @@ OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  WL  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  WL  WL  WL  WL  WL  WL  OP  OP  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  
+WL  WL  WL  WL  WL  WL  JP  OP  OP  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  
 #
 #
 Player:
@@ -57,13 +57,13 @@ Obstical:
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
+00  00  00  00  00  00  00  00  JA  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
+00  00  00  00  00  00  PR  PL  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  

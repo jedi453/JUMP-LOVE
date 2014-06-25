@@ -8,6 +8,7 @@ Player.static.WIDTH = Tile.CELL_HEIGHT
 Player.static.numPlayers = 0
 Player.static.speedHoriz = 150
 Player.static.jumpSpeed = 300
+Player.static.superJumpSpeed = 2 * Player.jumpSpeed
 Player.static.leftKeys = { "left", "a" }
 Player.static.rightKeys = { "right", "d" }
 Player.static.jumpKeys = { "up", "w" }
@@ -96,6 +97,7 @@ function Player:kill()
   self.t = math.min( self.map.height - Player.HEIGHT, self.t )
   self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
+  self.map:playMedia("kill")
 end
 
 
@@ -194,11 +196,19 @@ function Player:update( dt )
   self.vxRiding, self.vyRiding = 0, 0
   self:calcGravity( dt )
   --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
+  -- Check For Moving Platforms/Conveyor Belts, Move Accordingly
   self:adjustVelocityByRiding()
+
+  -- Check for JumpPad, Adjust Velocity Accordingly
+  self:adjustVelocityByJumpPad()
+
+  -- Check for JumpArrow, Collect if Needed
+  self:checkJumpArrow()
   self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
               self.t - ( (self.vy + self.vyRiding) * dt) )
 end
 
+-- Set Initial Velocity at Start of Level to Correspond With Current Keys
 function Player:adjustInitialVelocity()
   if love.keyboard.isDown( Player.leftKeys[ self.numPlayer ] ) then
     self.vx = -Player.speedHoriz
@@ -207,8 +217,10 @@ function Player:adjustInitialVelocity()
   end
 end
 
+-- Check for a Moving Platform Below the Player and Increase Base Velocity to Match
 function Player:adjustVelocityByRiding()
-  local cols, len = self.map.world:check( self, self.l, self.t+1, Player.cFilter )
+  local ridingFilter = function( other ) return other.class.name == 'Platform'; end
+  local cols, len = self.map.world:check( self, self.l, self.t+1, ridingFilter )
   local visited = {}
   while len > 0 do
     local col = cols[1]
@@ -222,6 +234,35 @@ function Player:adjustVelocityByRiding()
     end
   end
 end
+
+-- Check for a JumpPad Below the Player and Cause Superjump if Detected
+function Player:adjustVelocityByJumpPad()
+  local jumpPadFilter = function( other ) return other.class.name == 'JumpPad'; end
+  local cols, len = self.map.world:check( self, self.l, self.t+1, jumpPadFilter )
+  local visited = {}
+  if len > 0 then
+    self.onGround = false
+    self.vy = Player.superJumpSpeed 
+    self.map:playMedia("jump")
+  end
+end
+
+-- Check for a Double Jump Arrow Under the Player, and Try to Collect it if Applicable
+function Player:checkJumpArrow()
+  if not self.hasDoubleJump then
+    local jumpArrowFilter = function( other ) return other.class.name == 'JumpArrow'; end
+    local cols, len = self.map.world:check( self, self.l, self.t, jumpPadFilter )
+    local visited = {}
+    for i = 1, len do
+      local col = cols[i]
+      self.hasDoubleJump = col.other:collect()
+
+      -- Stop Checking After Finding a Full JumpArrow
+      if self.hasDoubleJump then return end
+    end
+  end
+end
+
 
 -- Only Handle Collisions with these Objects
 function Player.static.cFilter( other )
