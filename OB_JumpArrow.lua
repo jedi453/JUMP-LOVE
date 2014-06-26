@@ -12,7 +12,7 @@ JumpArrow.static.SOLID = false
 JumpArrow.static.DEADLY = false
 
 -- Positional Stuff
-JumpArrow.static.WIDTH = (1/4) * Tile.CELL_WIDTH
+JumpArrow.static.WIDTH = (1/2) * Tile.CELL_WIDTH
 JumpArrow.static.HEIGHT = (3/4) * Tile.CELL_HEIGHT
 JumpArrow.static.lOffset = ( Tile.CELL_WIDTH - JumpArrow.WIDTH ) / 2
 JumpArrow.static.tOffset = ( Tile.CELL_HEIGHT - JumpArrow.HEIGHT ) / 2
@@ -21,7 +21,7 @@ JumpArrow.static.tOffset = ( Tile.CELL_HEIGHT - JumpArrow.HEIGHT ) / 2
 JumpArrow.static.R = 200
 JumpArrow.static.G = 200
 JumpArrow.static.B = 75
-JumpArrow.static.ALPHA = Tile.TILE_ALPHA
+JumpArrow.static.ALPHA = 90---Tile.TILE_ALPHA
 
 -- Updates/Velocity
 JumpArrow.static.UPDATES = true

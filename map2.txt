@@ -1,35 +1,72 @@
 Background:
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  WL  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  WL  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  WL  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  
+  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP
+  WL  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  OP  OP  OP
+  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  OP  OP  OP  OP  OP  WL  WL  WL
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  WL  OP  OP  
+#
+#
+Obstical:
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  PR  PR  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
+  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
 #
 #
 Player:
-1 1
+  0 0
+Comment:
+  1 20
+  Use Golden Arrows to Gain Back
+  a Double Jump after Losing One

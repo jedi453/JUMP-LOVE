@@ -23,6 +23,10 @@ Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
 Map.static.media = {}
 
+-- Default Text Location
+Map.static.COMMENT_L_DEFAULT = 1
+Map.static.COMMENT_T_DEFAULT = 1
+
 function Map:initialize( levelNum )
   self.world = bump.newWorld()
 
@@ -51,6 +55,8 @@ function Map:initialize( levelNum )
   self.numOBTiles = 0   -- Number of Obstical Tiles
   self.OBTiles = {}   -- List of the Obstical Tiles
   self.comment = ""   -- The Comment for the Map, Displayed on the Screen
+  self.commentL = Map.COMMENT_L_DEFAULT -- The l Position of the Comment
+  self.commentT = Map.COMMENT_T_DEFAULT -- The t Position of the Comment
   self.platformWidth = 0 -- Used to Maintain State while Adding Platforms of width Greater than 1
 
   -- Load Map File if Any, if None, Quit
@@ -199,6 +205,7 @@ function Map:loadFile( file )
   
   local row = 0
   local isComment = false
+  local isCommentLocation = false
   local isBG = false
   local isOB = false
   local isPlayer = false
@@ -221,6 +228,7 @@ function Map:loadFile( file )
           isBG = false
           isOB = false
           isPlayer = false
+          isCommentLocation = true
         elseif mode == 'Background' then
           isBG = true
           isComment = false
@@ -242,7 +250,21 @@ function Map:loadFile( file )
       else
         self.platformWidth = 0 -- Reset Platform Width Holder
         if isComment then
-          self:addCommentLine( line )
+          if isCommentLocation then
+            local i = 1
+            for pos in string.gmatch( line, "%d+" ) do
+              -- Set Position for Comments if Given, Otherwise, use Default
+              if i == 1 then self.commentL = tonumber(pos) or Map.COMMENT_L_DEFAULT
+              elseif i == 2 then self.commentT = tonumber(pos) or Map.COMMENT_T_DEFAULT
+              end
+              i = i + 1
+            end
+            -- If No Position Was Given, Assume that line is a Comment, forward it to addCommentLine()
+            if i < 2 then self:addCommentLine( line ) end
+            isCommentLocation = false
+          else
+            self:addCommentLine( line )
+          end
         elseif isBG then
           maxTPos = math.max( self:addBGLine( line, tpos ), maxTPos )
           tpos = tpos + 1
@@ -301,7 +323,7 @@ function Map:draw()
 
   -- Draw Comments
   love.graphics.setColor( 255, 255, 255 )
-  love.graphics.print(self.comment, Tile.CELL_WIDTH, Tile.CELL_HEIGHT)
+  love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT )
   --print( self.comment ) 
 end
 
