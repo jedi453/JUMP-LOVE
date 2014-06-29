@@ -19,7 +19,10 @@ local BG_Wall = require('BG_Wall')
 local BG_JumpPad = require('BG_JumpPad')
 
 -- Obstical Tile Types
+-- Platforms
 local OB_Platform = require('OB_Platform')
+local OB_Platform_Stop = require('OB_Platform_Stop')
+--
 local OB_JumpArrow = require('OB_JumpArrow')
 local OB_Death = require('OB_Death')
 -- Lightning
@@ -63,6 +66,8 @@ function Map:initialize( levelNum )
     PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1, self.platformWidth); end,
     -- Platform starting Right
     PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1, self.platformWidth); end,
+    -- Platform Stopper
+    PS = function(...) return OB_Platform_Stop(self, ...) end,
     -- double Jump Arrow
     JA = function(...) return OB_JumpArrow(self, ...); end,
     -- DeaTh
@@ -175,6 +180,7 @@ function Map:addOB( kind, lpos, tpos, last )
     self.numOBTiles = self.numOBTiles + 1
     self.OBTiles[ self.numOBTiles ] = self.OB_Kinds[last]( lpos, tpos )
     -- Handle Opposing Platform Types Next to Each Other
+    --- TODO ERROR with Adjacent Platforms of Differing Types
     if kind == 'PL' or kind == 'PR' then
       self.platformWidth = 1
     else

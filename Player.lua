@@ -221,7 +221,7 @@ end
 
 -- Check for a Moving Platform Below the Player and Increase Base Velocity to Match
 function Player:adjustVelocityByRiding()
-  local ridingFilter = function( other ) return other.class.name == 'Platform'; end
+  local ridingFilter = function( other ) return other.class.name == 'OB_Platform'; end
   local cols, len = self.map.world:check( self, self.l, self.t+1, ridingFilter )
   local visited = {}
   while len > 0 do
