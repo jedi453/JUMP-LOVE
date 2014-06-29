@@ -1,4 +1,14 @@
 -- Moving Platform ( Platform ) Class Definitions
+-- Yellow Solid Block that Moves and Can Carry Player Along with it
+-- CODE:  PL - Moving Platform ( Starts Left )
+--        PR - Moving Platform ( Starts Right )
+-- Note:  Platforms of the Same type in a Row Will be Strung Together to form one Contiguous Platform
+
+
+-- TODO: BUGS
+--[[
+  -- Different Types of Platforms Next to Each other seem to Break
+--]]
 class = require("lib.middleclass")
 Tile = require("Tile")
 Obstical = require("Obstical")

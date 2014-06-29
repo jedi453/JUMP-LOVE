@@ -1,5 +1,7 @@
 -- Player Class Definitions
 
+-- CODE: In map file, "Player:" Header then the T, L Coordinates of Each Player ( 0 Based )
+
 Tile = require( 'Tile' )
 Player = class( 'Player', Tile )
 

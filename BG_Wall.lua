@@ -1,4 +1,6 @@
 -- BG_Wall Class Definition File
+--
+--  Code: 
 
 local class = require('lib.middleclass')
 local Background = require('Background')
@@ -7,7 +9,7 @@ local w = Background.CELL_WIDTH
 local h = Background.CELL_HEIGHT
 local r, g, b = 128, 128, 128
 
-local BG_Wall = class( 'BG_Wall', Background )
+local BG_Wall = class( 'Wall', Background )
 
 BG_Wall.static.w = w
 BG_Wall.static.h = h

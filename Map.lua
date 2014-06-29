@@ -2,13 +2,33 @@
 
 local class = require('lib.middleclass')
 local bump = require('bump.bump')
+
+-- Base Tile Type
 local Tile = require('Tile')
+
+--[[
+-- Base Background Tile Type
 local Background = require('Background')
+-- Base Obstical Tile Type
+local Obstical = require('Obstical')
+--]]
+
+-- Background Tile Types
 local BG_Open = require('BG_Open')
 local BG_Wall = require('BG_Wall')
 local BG_JumpPad = require('BG_JumpPad')
+
+-- Obstical Tile Types
 local OB_Platform = require('OB_Platform')
 local OB_JumpArrow = require('OB_JumpArrow')
+local OB_Death = require('OB_Death')
+-- Lightning
+local OB_Lightning_Vert = require('OB_Lightning_Vert')
+local OB_Lightning_Horiz = require('OB_Lightning_Horiz')
+local OB_Lightning_Cross = require('OB_Lightning_Cross')
+
+
+-- Player Tile Type
 local Player = require('Player')
 
 -- See Map:initialize to register new Background/Obstical Types
@@ -39,9 +59,20 @@ function Map:initialize( levelNum )
 
   -- OB Constructors Holder -- Register OB Types Here
   self.OB_Kinds = {
+    -- Platform starting Left
     PL = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2], -1, self.platformWidth); end,
+    -- Platform starting Right
     PR = function(...) args = {...}; return OB_Platform:new(self, args[1], args[2],  1, self.platformWidth); end,
+    -- double Jump Arrow
     JA = function(...) return OB_JumpArrow(self, ...); end,
+    -- DeaTh
+    DT = function(...) return OB_Death(self, ...); end,
+    -- Lightning Cross
+    LC = function(...) return OB_Lightning_Cross(self, ...) end,
+    -- Lightning Vertical
+    LV = function(...) return OB_Lightning_Vert(self, ...) end,
+    -- Lightning Horizontal
+    LH = function(...) return OB_Lightning_Horiz(self, ...) end,
   }
 
   -- Initialize Normal Variable
