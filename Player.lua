@@ -95,7 +95,6 @@ function Player:kill()
   self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
   self.map:playMedia("kill")
-  self.map:reset()
 end
 
 
@@ -105,6 +104,7 @@ function Player:respawn()
   self.world:move( self, self.l, self.t )
   self.isAlive = true
   self.vy = 0
+  self.map:reset()
 end
 
 
