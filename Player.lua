@@ -40,13 +40,8 @@ function Player:initialize( map, lpos, tpos )
   self.vxRiding = 0
   self.vyRiding = 0
   self:adjustInitialVelocity()
+  self.isPlayer = true
 end
-
---[[ To Redefine Later? Maybe the Default Tile:update() is Sufficient
--- Maybe Work Should be Done in Tile:update() so it Doesn't Have to be Redone
-function Player:update( dt )
-end
---]]
 
 function Player:jump()
   self.vy = Player.jumpSpeed
@@ -100,6 +95,7 @@ function Player:kill()
   self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
   self.map:playMedia("kill")
+  self.map:reset()
 end
 
 
@@ -121,6 +117,7 @@ function Player:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
   -- Assume Not On Ground Until Proven Otherwise
   self.onGround = false
+
   if self.cc and self.isAlive then
     -- Obey Normal Collision Checking Rules
     
@@ -152,7 +149,7 @@ function Player:move( new_l, new_t )
       self:checkOnGround( ny )
 
       -- Thanks to Kikito - Prevent Infinite Loops
-      if visited[col.other] then return end
+      if visited[col.other] then break end
       visited[col.other] = true
 
       -- Recalculate Collisions
@@ -173,6 +170,7 @@ function Player:move( new_l, new_t )
     end
     if self.t > self.map.height then
       self:kill()
+      return
     end
     self.world:move( self, self.l, self.t )
   else
@@ -197,15 +195,20 @@ end
 function Player:update( dt )
   self.vxRiding, self.vyRiding = 0, 0
   self:calcGravity( dt )
-  --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
-  -- Check For Moving Platforms/Conveyor Belts, Move Accordingly
-  self:adjustVelocityByRiding()
 
-  -- Check for JumpPad, Adjust Velocity Accordingly
-  self:adjustVelocityByJumpPad()
 
-  -- Check for JumpArrow, Collect if Needed
-  self:checkJumpArrow()
+  -- Only Check for Special Tiles if the Player is Alive
+  if self.isAlive then
+    --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
+    -- Check For Moving Platforms/Conveyor Belts, Move Accordingly
+    self:adjustVelocityByRiding()
+
+    -- Check for JumpPad, Adjust Velocity Accordingly
+    self:adjustVelocityByJumpPad()
+
+    -- Check for JumpArrow, Collect if Needed
+    self:checkJumpArrow()
+  end
   self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
               self.t - ( (self.vy + self.vyRiding) * dt) )
 end
@@ -244,6 +247,7 @@ function Player:adjustVelocityByJumpPad()
   local visited = {}
   if len > 0 then
     self.onGround = false
+    self.hasDoubleJump = true
     self.vy = Player.superJumpSpeed 
     self.map:playMedia("jump")
   end

@@ -1,7 +1,7 @@
 -- Lightning Obstical Cross (OB_Lightning_Cross) Class Definitions
 -- Yellow Non-Solid Cell that Causes Player Death
 
--- Code:  "LX" - Cross Lightning
+-- Code:  "LC" - Cross Lightning
 
 
 class = require("lib.middleclass")

@@ -3,7 +3,7 @@
 
 -- Code:  "LV" - Vertical Lightning
 -- Code:  "LH" - Horizontal Lightning
--- Code:  "LX" - Cross Lightning
+-- Code:  "LC" - Cross Lightning
 
 
 class = require("lib.middleclass")

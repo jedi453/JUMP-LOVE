@@ -29,6 +29,8 @@ local OB_Death = require('OB_Death')
 local OB_Lightning_Vert = require('OB_Lightning_Vert')
 local OB_Lightning_Horiz = require('OB_Lightning_Horiz')
 local OB_Lightning_Cross = require('OB_Lightning_Cross')
+-- Falling Block
+local OB_Falling_Block = require('OB_Falling_Block')
 
 
 -- Player Tile Type
@@ -40,7 +42,8 @@ Map = class('Map')
 
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
-Map.static.MAP_FILES = { 'map1.txt', 'map2.txt' }
+--Map.static.MAP_FILES = { 'map3.txt', } 
+Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
 
 -- Add Sound Effects Here
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
@@ -78,6 +81,8 @@ function Map:initialize( levelNum )
     LV = function(...) return OB_Lightning_Vert(self, ...) end,
     -- Lightning Horizontal
     LH = function(...) return OB_Lightning_Horiz(self, ...) end,
+    -- Falling Block
+    FB = function(...) return OB_Falling_Block(self, ...) end,
   }
 
   -- Initialize Normal Variable
@@ -173,7 +178,7 @@ end
 function Map:addOB( kind, lpos, tpos, last )
   --last = last or '00'
   -- Handle Multiple Width Platforms
-  if kind == 'PL' or kind == 'PR' then
+  if kind == 'PL' or kind == 'PR' and kind == last then
     self.platformWidth = self.platformWidth + 1
   end
   if ( last == 'PL' or last == 'PR' ) and kind ~= last then
@@ -324,6 +329,23 @@ end
 -- Map Update Function
 function Map:update( dt )
   -- Iterate over all Non-Player Tiles and Update them
+  -- Iterate over BG Tiles
+  for i = 1, self.numBGTiles do
+    local BGTile = self.BGTiles[i]
+    if BGTile.updates then
+      BGTile:update(dt)
+    end
+  end
+  -- Iterate over OB Tiles
+  for i = 1, self.numOBTiles do
+    local OBTile = self.OBTiles[i]
+    if OBTile.updates then
+      OBTile:update(dt)
+    end
+  end
+ 
+  -- Iterate over all Non-Player Tiles and Update them OLD
+  --[[
   local blocks, len = self.world:queryRect( 0, 0, self.width, self.height )
   for i = 1, len do
     local block = blocks[i]
@@ -331,6 +353,7 @@ function Map:update( dt )
       block:update( dt )
     end
   end
+  --]]
   -- Iterate over all Players and Update them
   for i = 1, self.numPlayers do
     -- Avoid Crashing When Switching to Level with Fewer Players
@@ -365,12 +388,41 @@ function Map:draw()
 end
 
 
+-- Reset Function to Map, Pass to Objects in Map
+function Map:reset()
+  -- Reset Players
+  for i = 1, self.numPlayers do
+    local player = self.players[i]
+    if player.reset then
+      player:reset()
+    end
+  end
+
+  -- Reset Obsticals
+  for i = 1, self.numOBTiles do
+    local obstical = self.OBTiles[i]
+    if obstical.reset then
+      obstical:reset()
+    end
+  end
+
+  -- Reset Backgrounds
+  for i = 1, self.numBGTiles do
+    local background = self.BGTiles[i]
+    if background.reset then
+      background:reset()
+    end
+  end
+end
+
+
 -- Pass Key Presses to Players
 function Map:keypressed( key, isRepeat )
   for _, player in ipairs(self.players) do
     player:keypressed( key, isRepeat )
   end
 end
+
 
 -- Pass Key Releases to Players
 function Map:keyreleased( key )

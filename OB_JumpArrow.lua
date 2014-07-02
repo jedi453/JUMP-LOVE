@@ -90,4 +90,10 @@ function JumpArrow:update(dt)
   end
 end
 
+-- Make the JumpArrow Respawn when the Player Dies
+function JumpArrow:reset()
+  self.remaining = true
+  self.respawnTime = JumpArrow.RESPAWN_TIME
+end
+
 return JumpArrow

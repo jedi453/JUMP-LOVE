@@ -29,7 +29,7 @@ function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, v
   self.vx = vx or 0
   self.vy = vy or 0
   self.hasGravity = hasGravity or false
-  self.cFilter = cFilter or function( other ) return other.cc and other.solid end
+  self.cFilter = cFilter or function( other ) return other.solid end -- other.cc not Needed, as Only Items w/ cc are Checked
 
   -- Register Tile with bump if Collisions Should be Checked
   if cc then
@@ -86,7 +86,7 @@ end
 function Tile:handleCollision( new_l, new_t, tl, tt, nx, ny, sl, st, other )
       cols, len = self.world:check( self, sl, st, self.cFilter )
       col = cols[1]
-      if self.hasGravity and ny > 0 then -- TODO CHECK THIS
+      if self.hasGravity and ny < 0 then -- TODO CHECK THIS
         self.vy = 0
       end
       self.l, self.t = sl or new_l, st or new_t

@@ -7,7 +7,7 @@
 
 -- TODO: BUGS
 --[[
-  -- Different Types of Platforms Next to Each other seem to Break
+  -- Fixed - Different Types of Platforms Next to Each other seem to Break
 --]]
 class = require("lib.middleclass")
 Tile = require("Tile")
@@ -33,6 +33,8 @@ function OB_Platform:initialize( map, lpos, tpos, direction, platformWidth )
   self.lpos = lpos
   self.tpos = tpos
   self.platformWidth = platformWidth or 1
+  self.startL = self.l
+  self.startVX = self.vx
 end
 
 -- Override Move Function
@@ -64,6 +66,13 @@ function OB_Platform:move( new_l, new_t )
     self.vx = -OB_Platform.xSpeed
   end
   self.world:move( self, self.l, self.t )
+end
+
+-- Reset Platform, Called when Player Dies
+function OB_Platform:reset()
+  self.l = self.startL
+  self.vx = self.startVX
+  self.map.world:move( self, self.l, self.t )
 end
 
 return OB_Platform
