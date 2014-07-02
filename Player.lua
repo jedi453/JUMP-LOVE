@@ -28,14 +28,14 @@ function Player:initialize( map, lpos, tpos )
   Tile.initialize( self, map, true, true, false, lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_WIDTH,
                    Player.WIDTH, Player.HEIGHT,
                    255 - ( ( self.numPlayer-1 ) * 63 ), 0, (self.numPlayer - 1) * 63,
-                   true, 0, 0, true, Player.cFilter )
+                   true, 0, 0, true )
   self.isAlive = true
   self.onGround = false
   self.hasDoubleJump = true
   self.map = map
   self.origTPos = self.t
   self.origLPos = self.l
-  self.cFilter = Player.cFilter
+  --self.cFilter = Player.cFilter
   -- If Keys Are Held Down Already, Adjust Velocity Accordingly
   self.vxRiding = 0
   self.vyRiding = 0
@@ -125,22 +125,13 @@ function Player:move( new_l, new_t )
     -- dl, dt -- Delta_Left, Delta_Top -- Change in Position
     local dl, dt = new_l - self.l, new_t - self.t
     -- Get Collisions for New Location
-
-    --[[
-    -- Make Sure we didn't start with a Collsion
-    local cols, len = self.world:check( self )
-    assert( len == 0 )
-    ]]
-
-    local cols, len = self.world:check( self, new_l, new_t, self.cFilter )
+  
+    -- Check for Solid Obstical Collisions, Handle them
+    local cols, len = self.map.world:check( self, new_l, new_t, Player.cFilterSolid )
     local col = cols[1]
     -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
     while len > 0 do
       -- If Touching a Deadly Object, Kill the Player
-      if col.other.deadly then
-        self:kill()
-        return
-      end
       -- Get Adjusted/Corrected Location and Collsion Normals
       tl, tt, nx, ny, sl, st = col:getSlide()
       --[[ Check if the Player is On the Ground, and Reset hasDoubleJump,
@@ -153,7 +144,7 @@ function Player:move( new_l, new_t )
       visited[col.other] = true
 
       -- Recalculate Collisions
-      cols, len = self.world:check( self, sl, st, self.cFilter )
+      cols, len = self.world:check( self, sl, st, Player.cFilterSolid )
       col = cols[1]
 
       -- Set Vertical Velocity to 0 if on a Solid Object
@@ -173,6 +164,13 @@ function Player:move( new_l, new_t )
       return
     end
     self.world:move( self, self.l, self.t )
+
+    -- Check for Deadly Collisions
+    local cols, len = self.map.world:check( self, self.l, self.t, Player.cFilterDeadly )
+    if len > 0 then 
+      self:kill()
+      return
+    end
   else
     -- Don't Obey Normal Collision Checking Rules
     if self.isAlive then
@@ -270,10 +268,21 @@ function Player:checkJumpArrow()
 end
 
 
+--[[ -- Old Overly Generic Collision Checking
 -- Only Handle Collisions with these Objects
 function Player.static.cFilter( other )
   return other.cc and ( other.solid or other.deadly ) and other.class.name ~= 'Player'
 end
+--]]
 
+-- Movement Collision Checking
+function Player.static.cFilterSolid(other)
+  return other.solid and not other.isPlayer
+end
+
+-- Deadly Stuff Collision Checking
+function Player.static.cFilterDeadly(other)
+  return other.deadly
+end
 
 return Player
