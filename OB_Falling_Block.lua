@@ -118,6 +118,10 @@ function OB_Falling_Block:move( new_l, new_t )
         new_t = tt or new_t
         new_t = math.max( new_t, 0 )
         new_t = math.min( new_t, self.map.height+Tile.CELL_HEIGHT ) -- Let OB_Falling_Block Fall out of Map, but not too far
+        -- Reset Vertical Velocity if On Block
+        if ny < 0 then
+          self.vy = 0
+        end
       end
       cols, len = self.map.world:check( self, new_l, new_t, cFilter )
     end

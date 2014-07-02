@@ -1,0 +1,2 @@
+-- In bump.lua ny < 0 Means the Other Object is Below
+--              ny > 0 Means the Other Object is Above
