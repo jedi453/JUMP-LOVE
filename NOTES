@@ -1,2 +1,8 @@
 -- In bump.lua ny < 0 Means the Other Object is Below
 --              ny > 0 Means the Other Object is Above
+
+
+
+BUGS:
+  -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
+  -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?

@@ -18,7 +18,11 @@ OB_Platform = class("OB_Platform", Obstical)
 
 OB_Platform.static.xSpeed = 100
 
+-- Collision Filter to Redirect Movement
 function OB_Platform.static.cFilter( other )
+  -- If it's a Player Only Collide if it's Alive
+  if other.isPlayer then return other.isAlive end
+  -- If it's not a Player, Make Sure it's Solid or it Bounces Platforms
   return other.solid or other.bouncesPlatforms
 end
 

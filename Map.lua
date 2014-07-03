@@ -42,8 +42,10 @@ Map = class('Map')
 
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
---Map.static.MAP_FILES = { 'map3.txt', } 
-Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+--Map.static.MAP_FILES = { 'map-mike.txt', } 
+--Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+Map.static.MAP_FILES = { 'map3.txt', }
+
 
 -- Add Sound Effects Here
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
@@ -178,7 +180,7 @@ end
 function Map:addOB( kind, lpos, tpos, last )
   --last = last or '00'
   -- Handle Multiple Width Platforms
-  if kind == 'PL' or kind == 'PR' and kind == last then
+  if kind == 'PL' or kind == 'PR' then
     self.platformWidth = self.platformWidth + 1
   end
   if ( last == 'PL' or last == 'PR' ) and kind ~= last then
@@ -278,6 +280,7 @@ function Map:loadFile( file )
           isPlayer = false
           tpos = 0
         elseif mode == 'Obstical' then
+          self.platformWidth = 0 -- Reset Platform Width Holder
           isOB = true
           isBG = false
           isComment = false
@@ -290,7 +293,6 @@ function Map:loadFile( file )
           isPlayer = true
         end
       else
-        self.platformWidth = 0 -- Reset Platform Width Holder
         if isComment then
           if isCommentLocation then
             local i = 1
