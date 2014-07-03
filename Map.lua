@@ -43,8 +43,8 @@ Map = class('Map')
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
---Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
-Map.static.MAP_FILES = { 'map3.txt', }
+Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+--Map.static.MAP_FILES = { 'map3.txt', }
 
 
 -- Add Sound Effects Here

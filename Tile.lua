@@ -8,10 +8,11 @@ local bump = require('bump.bump')
 Tile = class('Tile')
 
 Tile.static.TILE_ALPHA = 128
-Tile.static.CELL_WIDTH = 16
-Tile.static.CELL_HEIGHT = 16
-Tile.static.GRAVITY = 500  -- pixels/second^2
-Tile.static.TERMINAL_VY = 350
+Tile.static.SCALE = 2
+Tile.static.CELL_WIDTH = Tile.SCALE * 16
+Tile.static.CELL_HEIGHT = Tile.SCALE * 16
+Tile.static.GRAVITY = 500 * Tile.SCALE  -- pixels/second^2
+Tile.static.TERMINAL_VY = Tile.SCALE * 350
 Tile.static.FLOAT_TOL = 0.0001
 
 -- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function

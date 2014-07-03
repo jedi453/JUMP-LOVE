@@ -31,7 +31,7 @@ OB_Falling_Block.static.HAS_GRAVITY = false
 OB_Falling_Block.static.GRAVITY = Tile.GRAVITY
 OB_Falling_Block.static.TERMINAL_VY = Tile.TERMINAL_VY
 -- Time to Wait After Stepped on Before Falling ( in Seconds )
-OB_Falling_Block.static.FALL_WAIT = 1
+OB_Falling_Block.static.FALL_WAIT = 0.5
 OB_Falling_Block.static.STEPPED_ON0 = false
 
 --- Only Activate self.steppedOn if Colliding with a Player that's Alive

@@ -16,7 +16,7 @@ Player = require("Player")
 
 OB_Platform = class("OB_Platform", Obstical)
 
-OB_Platform.static.xSpeed = 100
+OB_Platform.static.xSpeed = 100 * Tile.SCALE
 
 -- Collision Filter to Redirect Movement
 function OB_Platform.static.cFilter( other )
