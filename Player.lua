@@ -51,13 +51,23 @@ function Player:initialize( map, lpos, tpos )
   -- If Keys Are Held Down Already, Adjust Velocity Accordingly
   self.vxRiding = 0
   self.vyRiding = 0
-  self:adjustInitialVelocity()
+  --self:adjustInitialVelocity() -- OLD - NOW HANDLED BY MAP!
   self.isPlayer = true
 end
 
+-- Make Sure the Player Can Jump then Jump
 function Player:jump()
-  self.vy = Player.jumpSpeed
-  self.map:playMedia("jump")
+  if self.isAlive then
+    if self.onGround then
+      self.vy = Player.jumpSpeed
+      self.map:playMedia("jump")
+      self.onGround = false
+    elseif self.hasDoubleJump then
+      self.vy = Player.jumpSpeed
+      self.map:playMedia("jump")
+      self.hasDoubleJump = false
+    end
+  end
 end
 
 -- Move Change Velocity of Player when their Key is Pressed
@@ -70,12 +80,8 @@ function Player:keypressed( key, isRepeat )
   elseif key == Player.jumpKeys[self.numPlayer] then
     -- Checking Done in Jump Function
     if self.isAlive then
-      if self.onGround then
-        self:jump()
-      elseif self.hasDoubleJump then
-        self.hasDoubleJump = false
-        self:jump()
-      end
+      -- Player:jump() Checks if Player can Jump, then Jumps
+      self:jump()
     end
   end
 end
@@ -239,6 +245,9 @@ function Player:update( dt )
   self:checkWin()
 end
 
+
+-- OLD -- Now Handled By Map!
+--[[
 -- Set Initial Velocity at Start of Level to Correspond With Current Keys
 function Player:adjustInitialVelocity()
   if love.keyboard.isDown( Player.leftKeys[ self.numPlayer ] ) then
@@ -247,6 +256,8 @@ function Player:adjustInitialVelocity()
     self.vx = Player.speedHoriz
   end
 end
+--]]
+
 
 -- Check for a Moving Platform Below the Player and Increase Base Velocity to Match
 function Player:adjustVelocityByRiding()

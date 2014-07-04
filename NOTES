@@ -6,3 +6,6 @@
 BUGS:
   -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
   -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
+  -- ANDROID -- Sliding Between Touch_Buttons Before Releasing will Cause Breakage,
+      -- Maybe Add in Check with love.touch.touchmoved() or Redo love.touch.touchreleased()
+      -- OR 

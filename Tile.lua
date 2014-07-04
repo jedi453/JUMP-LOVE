@@ -8,7 +8,11 @@ local bump = require('bump.bump')
 Tile = class('Tile')
 
 Tile.static.TILE_ALPHA = 128
-Tile.static.SCALE = 2
+if love.system.getOS() == 'Android' then
+  Tile.static.SCALE = 2
+else
+  Tile.static.SCALE = 1
+end
 Tile.static.CELL_WIDTH = Tile.SCALE * 16
 Tile.static.CELL_HEIGHT = Tile.SCALE * 16
 Tile.static.GRAVITY = 500 * Tile.SCALE  -- pixels/second^2

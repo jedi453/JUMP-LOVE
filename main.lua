@@ -6,9 +6,8 @@ tilesHoriz = 40
 bump = require('bump.bump')
 bump_debug = require('bump.bump_debug')
 Tile = require('Tile')
-BG_Open = require('BG_Open')
-BG_Wall = require('BG_Wall')
 Map = require('Map')
+if Map.IS_ANDROID then Touch_Button = require('Touch_Button') end
 --media = require('lib.media')
 
 
@@ -50,5 +49,27 @@ end
 function love.keyreleased( key )
   if map then
     map:keyreleased( key )
+  end
+end
+
+
+-- Android Specific Stuff
+function love.touchpressed( id, l, t, pressure )
+  if pressure > 0 then
+    local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+    for i = 1, len do
+      items[i]:touched()
+    end
+  end
+end
+
+
+-- Android Specific Stuff
+function love.touchreleased( id, l, t, pressure )
+  if pressure > 0 then
+    local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+    for i = 1, len do
+      items[i]:released()
+    end
   end
 end

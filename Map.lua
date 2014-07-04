@@ -36,9 +36,17 @@ local OB_Falling_Block = require('OB_Falling_Block')
 -- Player Tile Type
 local Player = require('Player')
 
+-- Android Touch Buttons
+local Touch_Button = require('Touch_Button')
+
 -- See Map:initialize to register new Background/Obstical Types
 
+
+-- Create the Map Class
 Map = class('Map')
+
+
+-- Set Map Class Static Members
 
 Map.static.CELL_WIDTH = 16
 Map.static.CELL_HEIGHT = 16
@@ -55,6 +63,21 @@ Map.static.media = {}
 Map.static.COMMENT_L_DEFAULT = 1
 Map.static.COMMENT_T_DEFAULT = 1
 
+-- OS Specific Stuff
+Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' )
+
+
+-- Android Stuff
+Map.static.TOUCH_BUTTON_MOVE_WIDTH = 250    -- Width of Move Touch_Buttons
+Map.static.TOUCH_BUTTON_MOVE_HEIGHT = 150   -- Height of Move Touch_Buttons
+Map.static.TOUCH_BUTTON_MOVE_L_OFFSET = 50  -- Distance From Left Edge of Screen For First Move Touch_Button
+Map.static.TOUCH_BUTTON_MOVE_T_OFFSET = 0   -- Distance from Top of Viewport to First Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_WIDTH = 200    -- Width of Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_HEIGHT = 1000  -- Height of Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_L_OFFSET = 50 -- Distance from Right of Viewport to Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_T_OFFSET = 0  -- Distance from Top of Screen to Jump Touch_Button
+
+-- Initializer For Map Function, Loads Current Level From File and Sets Everything Up
 function Map:initialize( levelNum )
   self.world = bump.newWorld()
 
@@ -90,7 +113,8 @@ function Map:initialize( levelNum )
   -- Initialize Normal Variable
   self.height = 0
   self.width = 0
-  self.players = {}
+  self.players = {} -- Array of Players
+  self.players_vx = {} -- Array of Players' Initial x Velocities, Used to Reset Initial Velocity
   self.numPlayers = 0
   self.levelNum = levenNum or 1
   self.numBGTiles = 0   -- Number of Background Tiles
@@ -101,6 +125,7 @@ function Map:initialize( levelNum )
   self.commentL = Map.COMMENT_L_DEFAULT -- The l Position of the Comment
   self.commentT = Map.COMMENT_T_DEFAULT -- The t Position of the Comment
   self.platformWidth = 0 -- Used to Maintain State while Adding Platforms of width Greater than 1
+  self.touchButtons = {} -- Touch_Button Array
 
   -- Load Map File if Any, if None, Quit
   local file = Map.MAP_FILES[self.levelNum]
@@ -108,6 +133,19 @@ function Map:initialize( levelNum )
     Map.loadFile( self, file )
   else
     love.event.quit()
+  end
+
+  -- Add Touch_Buttons if On Android
+  if Map.IS_ANDROID then
+    self.touchButtons[1] = Touch_Button( self, Map.TOUCH_BUTTON_MOVE_L_OFFSET, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
+                                          Map.TOUCH_BUTTON_MOVE_WIDTH, Map.TOUCH_BUTTON_MOVE_HEIGHT,
+                                          'left', 1 )
+    self.touchButtons[2] = Touch_Button( self, Map.TOUCH_BUTTON_MOVE_L_OFFSET+Map.TOUCH_BUTTON_MOVE_WIDTH, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
+                                          Map.TOUCH_BUTTON_MOVE_WIDTH, Map.TOUCH_BUTTON_MOVE_HEIGHT,
+                                          'right', 1 )
+    self.touchButtons[3] = Touch_Button( self, self.width + Map.TOUCH_BUTTON_JUMP_L_OFFSET, Map.TOUCH_BUTTON_JUMP_T_OFFSET,
+                                          Map.TOUCH_BUTTON_JUMP_WIDTH, Map.TOUCH_BUTTON_JUMP_HEIGHT,
+                                          'jump', 1 )
   end
 end
 
@@ -129,7 +167,6 @@ end
 function Map:nextLevel()
   self.world = bump.newWorld()
   self.width, self.height = 0, 0
-  self.players = {}
   self.numPlayers = 0
   self.levelNum = self.levelNum + 1
   self.numBGTiles = 0
@@ -137,12 +174,34 @@ function Map:nextLevel()
   self.numOBTiles = 0
   self.OBTiles = {}
   self.comment = ""
+
+  -- Get Previous players' x Velocities ( Restored Later ), then Reset players, 
+  for i = 1, #self.players do
+    self.players_vx[i] = self.players[i].vx
+  end
+  self.players = {}
   local file = Map.MAP_FILES[self.levelNum]
   if file then
     Map.loadFile( self, file )
   else
     love.event.quit()
   end
+
+  -- Restore Players' Initial x Velocities
+  for i = 1, #self.players do
+    local old_vx = self.players_vx[i]
+    if old_vx then
+      self.players[i].vx = old_vx
+    end
+  end
+  
+  -- Android Specific Stuff, Register Touch_Buttons in New World
+  for i = 1, #self.touchButtons do
+    local button = self.touchButtons[i]
+    self.world:add( button, button.l,button.t,button.w,button.h )
+  end
+
+  -- Garbage Collect, Try to Reduce Memory Leakage
   collectgarbage("collect")
 end
 
@@ -330,6 +389,15 @@ end
 
 -- Map Update Function
 function Map:update( dt )
+  -- Get Android Screen Touches
+  -- Update Touch Buttons
+  if Map.IS_ANDROID then
+    for i = 1, #self.touchButtons do
+      self.touchButtons[i]:update(dt)
+    end
+    --self.comment = "Player.vx = " .. self.players[1].vx -- TODO REMOVE DEBUG
+  end
+
   -- Iterate over all Non-Player Tiles and Update them
   -- Iterate over BG Tiles
   for i = 1, self.numBGTiles do
@@ -345,17 +413,6 @@ function Map:update( dt )
       OBTile:update(dt)
     end
   end
- 
-  -- Iterate over all Non-Player Tiles and Update them OLD
-  --[[
-  local blocks, len = self.world:queryRect( 0, 0, self.width, self.height )
-  for i = 1, len do
-    local block = blocks[i]
-    if block.class.name ~= 'Player' and block.update then
-      block:update( dt )
-    end
-  end
-  --]]
   -- Iterate over all Players and Update them
   for i = 1, self.numPlayers do
     -- Avoid Crashing When Switching to Level with Fewer Players
@@ -387,6 +444,13 @@ function Map:draw()
   love.graphics.setColor( 255, 255, 255 )
   love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT )
   --print( self.comment ) 
+
+  -- Draw Touch Buttons
+  if Map.IS_ANDROID then
+    for i = 1, #self.touchButtons do
+      self.touchButtons[i]:draw()
+    end
+  end
 end
 
 
