@@ -111,8 +111,14 @@ function love.touchmoved( id, l, t, pressure )
     --map.touchButtonsByID[id]:released( id, l, t, pressure ) -- DONE ABOVE
 
     -- Only Press the Button the Previous Button if the Current One isn't the Same
-    if map.touchButtonsByID[id] and map.touchButtonsByID[id].touchID ~= item.touchID then
-      map.touchButtonsByID[id]:released( id, l, t, pressure )
+    if map.touchButtonsByID[id] then
+      if map.touchButtonsByID[id].touchID ~= item.touchID then
+        map.touchButtonsByID[id]:released( id, l, t, pressure )
+        map.touchButtonsByID[id] = item
+        item:touched( id, l, t, pressure )
+      end
+    else
+      -- No Previous Button Pressed, Press this One
       map.touchButtonsByID[id] = item
       item:touched( id, l, t, pressure )
     end
@@ -123,5 +129,9 @@ function love.touchmoved( id, l, t, pressure )
       map.touchButtonsByID[id] = item
     end
     --]]
+  elseif map.touchButtonsByID[id] then
+    -- Moved Off Active Touch_Button, Release it and Remove it from touchButtonsByID
+    map.touchButtonsByID[id]:released( id, l, t, pressure )
+    map.touchButtonsByID[id] = nil
   end
 end
