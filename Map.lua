@@ -72,7 +72,7 @@ Map.static.TOUCH_BUTTON_MOVE_WIDTH = 250    -- Width of Move Touch_Buttons
 Map.static.TOUCH_BUTTON_MOVE_HEIGHT = 150   -- Height of Move Touch_Buttons
 Map.static.TOUCH_BUTTON_MOVE_L_OFFSET = 50  -- Distance From Left Edge of Screen For First Move Touch_Button
 Map.static.TOUCH_BUTTON_MOVE_T_OFFSET = 0   -- Distance from Top of Viewport to First Touch_Button
-Map.static.TOUCH_BUTTON_JUMP_WIDTH = 200    -- Width of Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_WIDTH = 400    -- Width of Jump Touch_Button
 Map.static.TOUCH_BUTTON_JUMP_HEIGHT = 1000  -- Height of Jump Touch_Button
 Map.static.TOUCH_BUTTON_JUMP_L_OFFSET = 50 -- Distance from Right of Viewport to Jump Touch_Button
 Map.static.TOUCH_BUTTON_JUMP_T_OFFSET = 0  -- Distance from Top of Screen to Jump Touch_Button
@@ -126,6 +126,7 @@ function Map:initialize( levelNum )
   self.commentT = Map.COMMENT_T_DEFAULT -- The t Position of the Comment
   self.platformWidth = 0 -- Used to Maintain State while Adding Platforms of width Greater than 1
   self.touchButtons = {} -- Touch_Button Array
+  self.touchButtonsByID = {} -- Hash Table
 
   -- Load Map File if Any, if None, Quit
   local file = Map.MAP_FILES[self.levelNum]

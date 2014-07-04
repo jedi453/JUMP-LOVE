@@ -6,6 +6,15 @@
 BUGS:
   -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
   -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
-  -- ANDROID -- Sliding Between Touch_Buttons Before Releasing will Cause Breakage,
+  
+
+FIXED BUGS:
+  -- FIXED! -- ANDROID -- Sliding Between Touch_Buttons Before Releasing will Cause Breakage,
+    -- Created Hash Table with touch ID keys and Touch_Button References as Values
+    -- Each Time a love.touchmoved event happens, the old value is looked up in the Table and
+        if the Current Touch_Button is the Same, then nothing is done, otherwise
       -- Maybe Add in Check with love.touch.touchmoved() or Redo love.touch.touchreleased()
-      -- OR 
+      -- OR Use only One Single Touch_Button for Both Left and Right Movement
+      -- Use love.touch.touchpressed()[id] as Hash Table Keys and Buttons as Values
+        -- Use love.touch.touchmoved()[id] to change old Button to be Released and
+          -- Check for New Button Press

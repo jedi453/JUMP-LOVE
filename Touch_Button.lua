@@ -28,6 +28,7 @@ function Touch_Button:initialize( map, l,t,w,h, kind, numPlayer )
   self.t = t
   self.w = w
   self.h = h
+  self.touchID = -1
   self.numPlayer = numPlayer or 1
   self.isTouchButton = true
   self.kind = kind      -- The Kind of Movement 'left', 'right' or 'jump'
@@ -41,7 +42,8 @@ function Touch_Button:initialize( map, l,t,w,h, kind, numPlayer )
 end
 
 -- Called when this Button is Touched
-function Touch_Button:touched()
+function Touch_Button:touched( id, l, t, pressure )
+  self.touchID = id
   -- Don't Update if numPlayer isn't a Valid Player
   if not self.map.players[ self.numPlayer ] then 
     return
@@ -59,7 +61,8 @@ function Touch_Button:touched()
 end
 
 -- Called when this Button is Released
-function Touch_Button:released()
+function Touch_Button:released( id, l, t, pressure )
+  self.touchID = -1
   -- Don't Update if numPlayer isn't a Valid Player
   if not self.map.players[ self.numPlayer ] then 
     return
