@@ -33,7 +33,7 @@ Background:
 #
 Obstical:
   OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
-  OP  OP  OP  PR  PR  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  
+  OP  OP  OP  PL  PL  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  JA  OP  OP  OP  OP  OP  
   OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
   OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  
   OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  OP  

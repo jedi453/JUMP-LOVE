@@ -4,7 +4,7 @@
 local class = require('lib.middleclass')
 
 local Player = require('Player')
-
+local Tile = require('Tile')
 
 
 local Touch_Button = class('Touch_Button')
@@ -20,6 +20,9 @@ Touch_Button.static.R = 200
 Touch_Button.static.G = 100
 Touch_Button.static.B = 100
 Touch_Button.static.ALPHA = 80
+Touch_Button.static.TEXT_R = 200
+Touch_Button.static.TEXT_G = 200
+Touch_Button.static.TEXT_B = 200
 
 -- Initialization Function / Constructor
 function Touch_Button:initialize( map, l,t,w,h, kind, numPlayer )
@@ -90,6 +93,8 @@ function Touch_Button:draw()
   love.graphics.rectangle( 'fill', self.l,self.t,self.w,self.h )
   love.graphics.setColor( Touch_Button.R, Touch_Button.G, Touch_Button.B )
   love.graphics.rectangle( 'line', self.l,self.t,self.w,self.h )
+  love.graphics.setColor( Touch_Button.TEXT_R, Touch_Button.TEXT_G, Touch_Button.TEXT_B )
+  love.graphics.print( self.kind, self.l, self.t, 0, Tile.SCALE, Tile.SCALE )
 end
 
 return Touch_Button

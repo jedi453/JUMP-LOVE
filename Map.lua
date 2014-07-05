@@ -48,11 +48,11 @@ Map = class('Map')
 
 -- Set Map Class Static Members
 
-Map.static.CELL_WIDTH = 16
-Map.static.CELL_HEIGHT = 16
+--Map.static.CELL_WIDTH = Tile.CELL_WIDTH   -- TODO CHECK, Was 16
+--Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
-Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
---Map.static.MAP_FILES = { 'map3.txt', }
+--Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+Map.static.MAP_FILES = { 'map3.txt', }
 
 
 -- Add Sound Effects Here
@@ -63,19 +63,20 @@ Map.static.media = {}
 Map.static.COMMENT_L_DEFAULT = 1
 Map.static.COMMENT_T_DEFAULT = 1
 
--- OS Specific Stuff
+-- Android Specific Stuff
 Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' )
-
+--Map.static.LEVEL_SCREEN_HEIGHT_RATIO = 0.8
+--Map.static.LEVEL_SCREEN_WIDTH_RATIO = 0.8
 
 -- Android Stuff
-Map.static.TOUCH_BUTTON_MOVE_WIDTH = 250    -- Width of Move Touch_Buttons
-Map.static.TOUCH_BUTTON_MOVE_HEIGHT = 150   -- Height of Move Touch_Buttons
-Map.static.TOUCH_BUTTON_MOVE_L_OFFSET = 50  -- Distance From Left Edge of Screen For First Move Touch_Button
+Map.static.TOUCH_BUTTON_MOVE_L_OFFSET = 0.05 * love.graphics.getWidth()  -- Distance From Left Edge of Screen For First Move Touch_Button
 Map.static.TOUCH_BUTTON_MOVE_T_OFFSET = 0   -- Distance from Top of Viewport to First Touch_Button
-Map.static.TOUCH_BUTTON_JUMP_WIDTH = 400    -- Width of Jump Touch_Button
-Map.static.TOUCH_BUTTON_JUMP_HEIGHT = 1000  -- Height of Jump Touch_Button
-Map.static.TOUCH_BUTTON_JUMP_L_OFFSET = 50 -- Distance from Right of Viewport to Jump Touch_Button
+Map.static.TOUCH_BUTTON_MOVE_WIDTH = 0.15 * love.graphics.getWidth()    -- Width of Move Touch_Buttons
+Map.static.TOUCH_BUTTON_MOVE_HEIGHT = love.graphics.getHeight() - ( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_MOVE_T_OFFSET   -- Height of Move Touch_Buttons
+Map.static.TOUCH_BUTTON_JUMP_L_OFFSET = 0.05 * love.graphics.getWidth() -- Distance from Right of Viewport to Jump Touch_Button
 Map.static.TOUCH_BUTTON_JUMP_T_OFFSET = 0  -- Distance from Top of Screen to Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_WIDTH = love.graphics.getWidth() - ( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_JUMP_L_OFFSET   -- Width of Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_HEIGHT = love.graphics.getHeight()  -- Height of Jump Touch_Button
 
 -- Initializer For Map Function, Loads Current Level From File and Sets Everything Up
 function Map:initialize( levelNum )

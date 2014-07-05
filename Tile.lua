@@ -7,14 +7,26 @@ local bump = require('bump.bump')
 
 Tile = class('Tile')
 
+-- Maximum Number of Tiles to Display at Once in Each Direction
+Tile.static.MAX_VERT = math.floor(30)
+
+-- Android Only -- Size of the Displayed Section of Tiles in the Map
+Tile.static.ANDROID_VIEW_SCALE = 0.9
+
+-- Base Cell Size Before Scaling
+Tile.static.CELL_WIDTH = 16
+Tile.static.CELL_HEIGHT = 16
+
 Tile.static.TILE_ALPHA = 128
 if love.system.getOS() == 'Android' then
-  Tile.static.SCALE = 2
+  Tile.static.SCALE = math.floor( Tile.CELL_HEIGHT * (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.MAX_VERT * Tile.CELL_HEIGHT ))) / Tile.CELL_HEIGHT
+  Tile.static.MAX_HORIZ = math.floor(love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.SCALE * Tile.CELL_WIDTH ))
 else
   Tile.static.SCALE = 1
 end
-Tile.static.CELL_WIDTH = Tile.SCALE * 16
-Tile.static.CELL_HEIGHT = Tile.SCALE * 16
+-- Scale the Base Cell Size
+Tile.static.CELL_WIDTH = Tile.SCALE * Tile.CELL_WIDTH
+Tile.static.CELL_HEIGHT = Tile.SCALE * Tile.CELL_HEIGHT
 Tile.static.GRAVITY = 500 * Tile.SCALE  -- pixels/second^2
 Tile.static.TERMINAL_VY = Tile.SCALE * 350
 Tile.static.FLOAT_TOL = 0.0001
