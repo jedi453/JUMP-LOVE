@@ -36,6 +36,9 @@ local OB_Falling_Block = require('OB_Falling_Block')
 -- Player Tile Type
 local Player = require('Player')
 
+-- Camera Class
+local Camera = require('Camera')
+
 -- Android Touch Buttons
 local Touch_Button = require('Touch_Button')
 
@@ -51,8 +54,8 @@ Map = class('Map')
 --Map.static.CELL_WIDTH = Tile.CELL_WIDTH   -- TODO CHECK, Was 16
 --Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
---Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
-Map.static.MAP_FILES = { 'map3.txt', }
+Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+--Map.static.MAP_FILES = { 'map3.txt', }
 
 
 -- Add Sound Effects Here
@@ -72,10 +75,14 @@ Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' )
 Map.static.TOUCH_BUTTON_MOVE_L_OFFSET = 0.05 * love.graphics.getWidth()  -- Distance From Left Edge of Screen For First Move Touch_Button
 Map.static.TOUCH_BUTTON_MOVE_T_OFFSET = 0   -- Distance from Top of Viewport to First Touch_Button
 Map.static.TOUCH_BUTTON_MOVE_WIDTH = 0.15 * love.graphics.getWidth()    -- Width of Move Touch_Buttons
-Map.static.TOUCH_BUTTON_MOVE_HEIGHT = love.graphics.getHeight() - ( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_MOVE_T_OFFSET   -- Height of Move Touch_Buttons
+-- Height of Move Touch_Buttons
+Map.static.TOUCH_BUTTON_MOVE_HEIGHT = love.graphics.getHeight()
+                                  - ( love.graphics.getHeight()*( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_MOVE_T_OFFSET )
 Map.static.TOUCH_BUTTON_JUMP_L_OFFSET = 0.05 * love.graphics.getWidth() -- Distance from Right of Viewport to Jump Touch_Button
 Map.static.TOUCH_BUTTON_JUMP_T_OFFSET = 0  -- Distance from Top of Screen to Jump Touch_Button
-Map.static.TOUCH_BUTTON_JUMP_WIDTH = love.graphics.getWidth() - ( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_JUMP_L_OFFSET   -- Width of Jump Touch_Button
+-- Width of Jump Touch_Button
+Map.static.TOUCH_BUTTON_JUMP_WIDTH = love.graphics.getWidth()
+                                      - (love.graphics.getWidth()*( 1 - Tile.ANDROID_VIEW_SCALE ) - Map.TOUCH_BUTTON_JUMP_L_OFFSET )
 Map.static.TOUCH_BUTTON_JUMP_HEIGHT = love.graphics.getHeight()  -- Height of Jump Touch_Button
 
 -- Initializer For Map Function, Loads Current Level From File and Sets Everything Up
@@ -149,6 +156,9 @@ function Map:initialize( levelNum )
                                           Map.TOUCH_BUTTON_JUMP_WIDTH, Map.TOUCH_BUTTON_JUMP_HEIGHT,
                                           'jump', 1 )
   end
+
+  -- Add Camera
+  self.camera = Camera(self)
 end
 
 -- Open All Needed Sound Media Files
@@ -422,24 +432,42 @@ function Map:update( dt )
       self.players[i]:update( dt )
     end
   end
+
+  -- Update Camera
+  self.camera:update( dt )
 end
 
 
 -- Map Draw Function
 function Map:draw()
+  local camera = self.camera
+
   -- Draw Background Tiles
   for i = 1, self.numBGTiles do
-    self.BGTiles[i]:draw()
+    local BGTile = self.BGTiles[i]
+    -- Only Draw the Tile if it's within the Camera's Viewport
+    if BGTile.l + BGTile.w>= camera.l and BGTile.l <= camera.l + camera.width 
+      and BGTile.t + BGTile.h >= camera.t and BGTile.t <= camera.t + camera.height then
+      BGTile:draw()
+    end
   end
 
   -- Draw Obstical Tiles
   for i = 1, self.numOBTiles do
-    self.OBTiles[i]:draw()
+    local OBTile = self.OBTiles[i]
+    if OBTile.l + OBTile.w >= camera.l and OBTile.l <= camera.l + camera.width 
+      and OBTile.t + OBTile.h >= camera.t and OBTile.t <= camera.t + camera.height then
+      OBTile:draw()
+    end
   end
 
   -- Draw Players
   for i = 1, self.numPlayers do
-    self.players[i]:draw()
+    local player = self.players[i]
+    if player.l + player.w >= camera.l and player.l <= camera.l + camera.width 
+      and player.t + player.h >= camera.t and player.t <= camera.t + camera.height then
+    player:draw()
+    end
   end
 
   -- Draw Comments

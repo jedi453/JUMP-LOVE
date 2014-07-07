@@ -11,7 +11,7 @@ Tile = class('Tile')
 Tile.static.MAX_VERT = math.floor(30)
 
 -- Android Only -- Size of the Displayed Section of Tiles in the Map
-Tile.static.ANDROID_VIEW_SCALE = 0.9
+Tile.static.ANDROID_VIEW_SCALE = 0.8
 
 -- Base Cell Size Before Scaling
 Tile.static.CELL_WIDTH = 16
@@ -19,14 +19,19 @@ Tile.static.CELL_HEIGHT = 16
 
 Tile.static.TILE_ALPHA = 128
 if love.system.getOS() == 'Android' then
-  Tile.static.SCALE = math.floor( Tile.CELL_HEIGHT * (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.MAX_VERT * Tile.CELL_HEIGHT ))) / Tile.CELL_HEIGHT
-  Tile.static.MAX_HORIZ = math.floor(love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.SCALE * Tile.CELL_WIDTH ))
+  --Tile.static.SCALE = math.floor( (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.MAX_VERT * Tile.CELL_HEIGHT )) )
+  Tile.static.SCALE = math.floor( (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE)/(Tile.MAX_VERT) ) / Tile.CELL_HEIGHT
+  --Tile.static.MAX_HORIZ = math.floor(love.graphics.getWidth() * Tile.ANDROID_VIEW_SCALE / ( Tile.SCALE * Tile.CELL_WIDTH ))
+  --Tile.static.MAX_HORIZ = math.floor((love.graphics.getWidth()*Tile.ANDROID_VIEW_SCALE)/(Tile.CELL_WIDTH*Tile.SCALE) )
+  Tile.static.MAX_HORIZ = 40
 else
   Tile.static.SCALE = 1
+  Tile.static.MAX_HORIZ = 40
 end
 -- Scale the Base Cell Size
-Tile.static.CELL_WIDTH = Tile.SCALE * Tile.CELL_WIDTH
-Tile.static.CELL_HEIGHT = Tile.SCALE * Tile.CELL_HEIGHT
+-- Calculate Cell Width/Height and Round to Nearest Integer
+Tile.static.CELL_WIDTH = math.floor(Tile.SCALE * Tile.CELL_WIDTH + 0.5)
+Tile.static.CELL_HEIGHT = math.floor(Tile.SCALE * Tile.CELL_HEIGHT + 0.5)
 Tile.static.GRAVITY = 500 * Tile.SCALE  -- pixels/second^2
 Tile.static.TERMINAL_VY = Tile.SCALE * 350
 Tile.static.FLOAT_TOL = 0.0001
@@ -58,10 +63,13 @@ end
 
 -- Draw the Tile
 function Tile:draw()
+  local camera = self.map.camera
+
+  -- Only Draw the Tile if it's within the Camera's Viewport
   love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
-  love.graphics.rectangle( "fill", self.l,self.t,self.w,self.h )
+  love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
   love.graphics.setColor( self.r,self.g,self.b )
-  love.graphics.rectangle( "line", self.l,self.t,self.w,self.h )
+  love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
 end
 
 

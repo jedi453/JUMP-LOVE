@@ -27,7 +27,7 @@ Background:
 00  00  00  WL  00  00  00  00  00  00  00  WL  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  WL  00  00  00  00  00  00  00  WL  00  00  00  00  00  00  WL  00  00  00  00  WL  00  00  00  00  WL  00  00  00  00  WL  00  00  00  00  WL  00  
 00  00  00  WL  00  00  00  00  00  00  00  WL  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-WL  WL  JP  WL  WL  WL  WL  WL  JP  WL  WL  WL  00  00  WL  WL  JP  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL
+WL  WL  JP  WL  WL  WL  WL  WL  WL  JP  WL  WL  00  00  WL  WL  JP  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL  WL
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 #
 #

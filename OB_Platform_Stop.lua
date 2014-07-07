@@ -44,8 +44,10 @@ function OB_Platform_Stop:initialize( map, lpos, tpos )
 end
 
 function OB_Platform_Stop:draw()
+  local camera = self.map.camera
+
   love.graphics.setColor( self.r, self.g, self.b )
-  love.graphics.rectangle( "line", self.l, self.t, self.w, self.h )
+  love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 
 return OB_Platform_Stop
