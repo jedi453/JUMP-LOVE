@@ -104,7 +104,10 @@ function Player:checkOnGround( ny )
   if ny < 0 then
     self.onGround = true
     self.hasDoubleJump = true
+    self.vy = 0 --- TODO CHECK THIS
+    return true
   end
+  return false
 end
 
 function Player:kill()
@@ -119,7 +122,7 @@ end
 function Player:respawn()
   self.l = self.origLPos
   self.t = self.origTPos 
-  self.world:move( self, self.l, self.t )
+  self.world:move( self, self.l,self.t,self.w,self.h )
   self.isAlive = true
   self.vy = 0
   self.map:reset()
@@ -143,8 +146,7 @@ function Player:move( new_l, new_t )
     local cols, len = self.map.world:check( self, new_l, new_t, Player.cFilterSolid )
     if len == 0 then
       self.l, self.t = new_l, new_t -- Move to New Position
-      -- Let bump Know About the Move
-      self.world:move( self, self.l, self.t )
+      self.world:move( self, self.l,self.t, self.w,self.h )  -- Let bump Know About the Move
     else
       -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
       while len > 0 do
@@ -161,14 +163,15 @@ function Player:move( new_l, new_t )
         
         -- Move the Player Until they Just Touch the Obstical
         self.l, self.t = tl, tt
-        self.map.world:move( self, tl, tt )
+        self.map.world:move( self, tl,tt,self.w,self.h )
 
         -- Recalculate Collisions
         cols, len = self.map.world:check( self, sl, st, Player.cFilterSolid )
         if len == 0 then
           -- Move with Slide
+          --if st > self.t then self.map.comment = 'st = ' .. tostring(st) end -- TODO REMOVE DEBUG
           self.l, self.t = sl, st
-          self.map.world:move( self, sl, st )
+          self.map.world:move( self, sl,st, self.w,self.h )
         end
 
         -- Set Vertical Velocity to 0 if On or Below a Solid Object
@@ -181,12 +184,12 @@ function Player:move( new_l, new_t )
     -- Make Sure the Player Doesn't Move out of the Map
     if self.l < 0 then
       self.l = 0
-      self.map.world:move( self, self.l, self.t )
+      self.map.world:move( self, self.l,self.t, self.w,self.h )
     end
     if self.t < 0 then 
       self.t = 0
       self.vy = 0
-      self.map.world:move( self, self.l, self.t )
+      self.map.world:move( self, self.l,self.t, self.w,self.h )
     end
     -- Kill the Player If Below the Bottom of the Map
     if self.t > self.map.height then
@@ -200,6 +203,7 @@ function Player:move( new_l, new_t )
       self:respawn()
     end
   end
+  
 end
 
 -- Check for Deadly Collisions
@@ -233,8 +237,23 @@ function Player:update( dt )
     -- Check for JumpArrow, Collect if Needed
     self:checkJumpArrow()
   end
-  self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
+
+  -- Avoid Getting Stuck When On the Ground, Lined Up with the Cell Below
+  if self.onGround then
+    -- Player is On the Ground, Only Move Left/Right
+    self:move( self.l + ( (self.vx + self.vxRiding) * dt ), self.t )
+    -- Check if the Player is On the Ground
+    local cols, len = self.map.world:check( self, self.l, self.t - (self.vy+self.vyRiding)*dt, Player.cFilter )
+    -- Loop Through Collisions, Breaking if/when a Collision Says the Player is On the Ground
+    for i = 1, len do
+      local tl, tt, nx, ny = cols[i]:getTouch()
+      if self:checkOnGround(ny) then break end
+    end
+  else
+    -- Player is Not On the Ground, Move Normally
+    self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
               self.t - ( (self.vy + self.vyRiding) * dt) )
+  end
 
   -- Check for Deadly Obstical
   if self.isAlive then

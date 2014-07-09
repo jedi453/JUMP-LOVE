@@ -1,10 +1,16 @@
+
+NOTES:
 -- In bump.lua ny < 0 Means the Other Object is Below
 --              ny > 0 Means the Other Object is Above
 
 
 
 BUGS:
-  -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
+  -- [FIXED?!] -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
+    -- When the Player is On the Ground, it tries to Move left/right and down due to gravity all at the Same time
+        This Causes the Vertical Displacement to Collide with the Adjacent Block, Overriding the Horizontal Displacement
+        -- For Now, Making the Player Only Move Left/Right while on the Ground Seems to Fix this
+          -- But, Another Check to See if the Player is On the Ground is Required, Otherwise the Player Might Lose A DoubleJump Randomly
   -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
   
 
@@ -18,3 +24,9 @@ FIXED BUGS:
       -- Use love.touch.touchpressed()[id] as Hash Table Keys and Buttons as Values
         -- Use love.touch.touchmoved()[id] to change old Button to be Released and
           -- Check for New Button Press
+
+
+TODO:
+  -- [DONE!] Add Camera Scrolling Support
+  -- Add 4th Map
+  -- Add 5th Map

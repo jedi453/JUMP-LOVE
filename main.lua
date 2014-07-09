@@ -6,10 +6,12 @@ tilesHoriz = 40
 bump = require('bump.bump')
 bump_debug = require('bump.bump_debug')
 Tile = require('Tile')
+Game = require('Game')
 Map = require('Map')
 if Map.IS_ANDROID then Touch_Button = require('Touch_Button') end
 --media = require('lib.media')
 
+game = {}
 
 local map
 
@@ -21,41 +23,37 @@ function love.load()
   Map.openMedia()
 
   -- Create Map Instance
-  map = Map:new()
+  --map = Map:new()
+  game = Game( 'map' )
 end
 
 
 function love.draw()
-  map:draw()
+  game:draw()
 end
 
 
 function love.update( dt )
-  map:update(dt)
+  game:update(dt)
 end
 
 -- Pass Key Presses to Map
 function love.keypressed( key, isrepeat )
-  if key == "escape" then
-    love.event.quit()
-    return 
-  end
-  if map then
-    map:keypressed( key, isrepeat )
+  if game then
+    game:keypressed( key, isrepeat )
   end
 end
 
 -- Pass Key Releases to Map
 function love.keyreleased( key )
-  if map then
-    map:keyreleased( key )
+  if game then
+    game:keyreleased( key )
   end
 end
 
 
 -- Android Specific Stuff
 function love.touchpressed( id, l, t, pressure )
-  --map.comment = 'Touch Pressed ID: ' .. tostring(id) -- TODO REMOVE DEBUG
   if pressure > 0 then
     local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
     if len < 1 then
@@ -73,7 +71,6 @@ end
 
 -- Android Specific Stuff
 function love.touchreleased( id, l, t, pressure )
-  --map.comment = 'Touch Released ID: ' .. tostring(id) -- TODO REMOVE DEBUG
   local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
   -- Only Support One Touch_Button in the Same Location
   if len < 1 then 
@@ -83,17 +80,7 @@ function love.touchreleased( id, l, t, pressure )
     local item = items[1]
     item:released( id, l, t, pressure )
     map.touchButtonsByID[id] = nil
-    --[[
-    if map.touchButtonsByID[i].touchID == item.touchID and item.touchID >= 0 then 
-      item:released( id, l, t, pressure ) 
-    end
-    --]]
   end
-  --[[
-  for i = 1, len do
-    items[i]:released( id, l, t, pressure )
-  end
-  --]]
 end
 
 
@@ -107,8 +94,6 @@ function love.touchmoved( id, l, t, pressure )
   
   if len > 0 then -- TODO Improve Efficiency
     local item = items[1]
-    --map.comment = map.comment .. ',  ' .. tostring(map.touchButtonsByID[id])
-    --map.touchButtonsByID[id]:released( id, l, t, pressure ) -- DONE ABOVE
 
     -- Only Press the Button the Previous Button if the Current One isn't the Same
     if map.touchButtonsByID[id] then
@@ -122,13 +107,6 @@ function love.touchmoved( id, l, t, pressure )
       map.touchButtonsByID[id] = item
       item:touched( id, l, t, pressure )
     end
-    --[[
-    if item.touchID ~= map.touchButtonsByID[id].touchID and item.touchID >= 0 and map.touchButtonsByID[id].touchID >= 0 then 
-      map.touchButtonsByID[id]:released( id, l, t, pressure )
-      item:touched( id, l, t, pressure )
-      map.touchButtonsByID[id] = item
-    end
-    --]]
   elseif map.touchButtonsByID[id] then
     -- Moved Off Active Touch_Button, Release it and Remove it from touchButtonsByID
     map.touchButtonsByID[id]:released( id, l, t, pressure )

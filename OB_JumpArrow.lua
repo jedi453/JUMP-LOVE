@@ -72,12 +72,12 @@ function JumpArrow:draw()
 
   -- Draw Inside, If Applicable
   if self.remaining then
-    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
+    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
     love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
   end
 
   -- Draw Outline
-  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
+  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
   love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 

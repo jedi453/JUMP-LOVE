@@ -1,5 +1,10 @@
 -- Map Class Definitions
 
+-- The Map Class Acts as a Container for All the Background Objects,
+--    Obstical Objects, Camera Object, and Player Objects
+-- It Also Holds the Bump.lua World Object as Well as anything That Would
+--  Otherwise be Global, in Order to Avoid Global Variables
+
 local class = require('lib.middleclass')
 local bump = require('bump.bump')
 
@@ -54,9 +59,9 @@ Map = class('Map')
 --Map.static.CELL_WIDTH = Tile.CELL_WIDTH   -- TODO CHECK, Was 16
 --Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
-Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
+--Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
 --Map.static.MAP_FILES = { 'map3.txt', }
-
+Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', }
 
 -- Add Sound Effects Here
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
@@ -434,7 +439,9 @@ function Map:update( dt )
   end
 
   -- Update Camera
-  self.camera:update( dt )
+  if self.players[Camera.FOLLOW_PLAYER_NUM] then
+    self.camera:update( dt )
+  end
 end
 
 
@@ -461,6 +468,10 @@ function Map:draw()
     end
   end
 
+  -- Draw Comments
+  love.graphics.setColor( 255, 255, 255 )
+  love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT, 0, Tile.SCALE )
+
   -- Draw Players
   for i = 1, self.numPlayers do
     local player = self.players[i]
@@ -469,11 +480,6 @@ function Map:draw()
     player:draw()
     end
   end
-
-  -- Draw Comments
-  love.graphics.setColor( 255, 255, 255 )
-  love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT )
-  --print( self.comment ) 
 
   -- Draw Touch Buttons
   if Map.IS_ANDROID then
