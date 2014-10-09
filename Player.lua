@@ -13,7 +13,12 @@ Player.static.jumpSpeed = 300 * Tile.SCALE
 Player.static.superJumpSpeed = 2 * Player.jumpSpeed
 Player.static.leftKeys = { "left", "a" }
 Player.static.rightKeys = { "right", "d" }
-Player.static.jumpKeys = { "up", "w" }
+-- Attempt to Change Jump Key to Space On the GCW0
+if love.graphics.getHeight() < 300 then
+  Player.static.jumpKeys = { " ", "w" }
+else
+  Player.static.jumpKeys = { "up", "w" }
+end
 Player.static.maxPlayers = 2
 -- Offset to Prevent Player Getting Stuck when Exactly Positioned on Block
 Player.static.OFFSET = Tile.FLOAT_TOL 

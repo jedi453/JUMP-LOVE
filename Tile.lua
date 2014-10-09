@@ -26,6 +26,7 @@ if love.system.getOS() == 'Android' then
   Tile.static.MAX_HORIZ = 40
 else
   Tile.static.SCALE = 1
+  Tile.static.SCALE = math.floor( love.graphics.getHeight() / Tile.MAX_VERT) / Tile.CELL_HEIGHT
   Tile.static.MAX_HORIZ = 40
 end
 -- Scale the Base Cell Size
@@ -35,6 +36,7 @@ Tile.static.CELL_HEIGHT = math.floor(Tile.SCALE * Tile.CELL_HEIGHT + 0.5)
 Tile.static.GRAVITY = 500 * Tile.SCALE  -- pixels/second^2
 Tile.static.TERMINAL_VY = Tile.SCALE * 350
 Tile.static.FLOAT_TOL = 0.0001
+
 
 -- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function
 function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
@@ -60,18 +62,26 @@ function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, v
   end
 end
 
+-- Don't Draw Outlines/Alpha on GCW0 Version
+if love.graphics.getHeight() < 300 then
+  function Tile:draw()
+    local camera = self.map.camera
+    -- Only Draw the Filled in Rectangle, without alpha
+    love.graphics.setColor(self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
+  end
+else
+  -- Draw the Tile
+  function Tile:draw()
+    local camera = self.map.camera
 
--- Draw the Tile
-function Tile:draw()
-  local camera = self.map.camera
-
-  -- Only Draw the Tile if it's within the Camera's Viewport
-  love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
-  love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
-  love.graphics.setColor( self.r,self.g,self.b )
-  love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
+    -- Only Draw the Tile if it's within the Camera's Viewport
+    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
+    love.graphics.setColor( self.r,self.g,self.b )
+    love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
+  end
 end
-
 
 -- Move the Tile, Check for Collisions, Register Change w/ Bump
 function Tile:move( new_l, new_t )

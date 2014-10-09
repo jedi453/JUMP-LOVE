@@ -2,20 +2,25 @@
 NOTES:
 -- In bump.lua ny < 0 Means the Other Object is Below
 --              ny > 0 Means the Other Object is Above
+--
+-- On Embedded Platforms ( Like the GCW0 ) and some Slower Devices, 
+	-- Using love.graphics.rectangle("line", ...) Slows the Game Down to be Unplayable at times
 
 
 
 BUGS:
-  -- [FIXED?!] -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
+  -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
+  -- Unbearably slow on map3.txt on GCW0
+    -- Not Drawing Lightning Obsticals Seems to Fix this
+  
+
+FIXED BUGS:
+  -- [FIXED!] -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
     -- When the Player is On the Ground, it tries to Move left/right and down due to gravity all at the Same time
         This Causes the Vertical Displacement to Collide with the Adjacent Block, Overriding the Horizontal Displacement
         -- For Now, Making the Player Only Move Left/Right while on the Ground Seems to Fix this
           -- But, Another Check to See if the Player is On the Ground is Required, Otherwise the Player Might Lose A DoubleJump Randomly
-  -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
-  
-
-FIXED BUGS:
-  -- FIXED! -- ANDROID -- Sliding Between Touch_Buttons Before Releasing will Cause Breakage,
+  -- [FIXED!] -- ANDROID -- Sliding Between Touch_Buttons Before Releasing will Cause Breakage,
     -- Created Hash Table with touch ID keys and Touch_Button References as Values
     -- Each Time a love.touchmoved event happens, the old value is looked up in the Table and
         if the Current Touch_Button is the Same, then nothing is done, otherwise
@@ -28,5 +33,8 @@ FIXED BUGS:
 
 TODO:
   -- [DONE!] Add Camera Scrolling Support
-  -- Add 4th Map
-  -- Add 5th Map
+  -- [DONE!] Add 4th Map
+  -- [DONE!] Add 5th Map
+  -- Add 6th Map
+  -- Add 7th Map
+  -- Add Menu System ( Started, but Needs Research )

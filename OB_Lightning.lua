@@ -79,4 +79,16 @@ function OB_Lightning:switchLook()
   end
 end
 
+
+-- TODO: Re-implement or Remove
+--[[
+function OB_Lightning:draw() 
+  local camera = self.map.camera
+	love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+  love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
+	love.graphics.setColor( self.r, self.g, self.b )
+  love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
+end
+--]]
+
 return OB_Lightning

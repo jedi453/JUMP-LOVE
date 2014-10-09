@@ -61,7 +61,8 @@ Map = class('Map')
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
 --Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
 --Map.static.MAP_FILES = { 'map3.txt', }
-Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', }
+Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', 'map3.txt', }
+
 
 -- Add Sound Effects Here
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }

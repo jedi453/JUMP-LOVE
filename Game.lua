@@ -41,7 +41,7 @@ function Game:setState( state, ... )
       self.isMap = true
       self.isMenu = false
       self.menu = nil
-      self.map =Map(...)
+      self.map = Map(...)
     end
   end
 end
