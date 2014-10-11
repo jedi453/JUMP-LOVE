@@ -192,7 +192,12 @@ function Player:move( new_l, new_t )
       self.world:move( self, self.l,self.t, self.w,self.h )  -- Let bump Know About the Move
     else
       -- Stop the Player From Flying Further
-      self.flying = false
+      
+      -- Stop Flying and Quit Playing Games with my Physics... With my Physics... With my Physics...
+      if self.flying then
+        self.flying = false
+        self.vy = 0, 0
+      end
       -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
       while len > 0 do
         local visited = {}
@@ -230,13 +235,21 @@ function Player:move( new_l, new_t )
     if self.l < 0 then
       self.l = 0
       self.map.world:move( self, self.l,self.t, self.w,self.h )
-      self.flying = false
+      -- Stop Flying and Quit Playing Games with my Physics... With my Physics... With my Physics...
+      if self.flying then
+        self.flying = false
+        self.vy = 0
+      end
     end
     if self.t < 0 then 
       self.t = 0
       self.vy = 0
       self.map.world:move( self, self.l,self.t, self.w,self.h )
-      self.flying = false
+      -- Stop Flying and Quit Playing Games with my Physics... With my Physics... With my Physics...
+      if self.flying then
+        self.flying = false
+        self.vy = 0, 0
+      end
     end
     -- Kill the Player If Below the Bottom of the Map
     if self.t > self.map.height then
@@ -250,7 +263,6 @@ function Player:move( new_l, new_t )
       self:respawn()
     end
   end
-  
 end
 
 
