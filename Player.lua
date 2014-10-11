@@ -113,7 +113,10 @@ function Player:shootCannon()
     -- Make sure the Player can Enter the Block
     -- Player is Flying ( Not Affected By Gravity )
     self.flying = true
+    -- Set Flying Velocities
     self.vxFlying = cannon.directionX * Player.CANNON_SPEED
+    -- Remember my Questionable choice of making vy Variable Positive for Upwards, while t increases Downward
+    self.vyFlying = - cannon.directionY * Player.CANNON_SPEED
     -- Player is no Longer in a Cannon
     self.inCannon = false
     self.cannon:removePlayer( self )
@@ -277,7 +280,7 @@ end
 -- Change this To Handle Being on Objects that Have Velocity
 function Player:update( dt )
   -- Only Update the Player if they're not in a Cannon
-  if not self.inCannon then
+  if not self.inCannon and not self.flying then
     self.vxRiding, self.vyRiding = 0, 0
     if not self.flying and not self.inCannon then
       self:calcGravity( dt )
@@ -304,7 +307,7 @@ function Player:update( dt )
       -- Player is On the Ground, Only Move Left/Right
       self:move( self.l + ( (self.vx + self.vxRiding) * dt ), self.t )
       -- Check if the Player is On the Ground
-      local cols, len = self.map.world:check( self, self.l, self.t - (self.vy+self.vyRiding)*dt, Player.cFilter )
+      local cols, len = self.map.world:check( self, self.l, self.t - (self.vy+self.vyRiding)*dt, Player.cFilterSolid )
       -- Loop Through Collisions, Breaking if/when a Collision Says the Player is On the Ground
       for i = 1, len do
         local tl, tt, nx, ny = cols[i]:getTouch()
@@ -322,6 +325,14 @@ function Player:update( dt )
     end
 
     -- Check for Win Condition
+    self:checkWin()
+  elseif self.flying and self.isAlive then
+    -- Player is Flying from Cannon, Move With Cannon Velocities
+    self:move( self.l + (self.vxFlying*dt),
+              self.t - (self.vyFlying*dt) )
+    self:checkDeadly()
+    self:checkJumpArrow()
+    self:checkCannon()
     self:checkWin()
   end
 end
