@@ -151,12 +151,15 @@ function Player:checkOnGround( ny )
   return false
 end
 
+-- Ya dun well sun, but not well enough
 function Player:kill()
   self.isAlive = false
   self.t = math.min( self.map.height - Player.HEIGHT, self.t )
   self.vy = Player.jumpSpeed / 2
   self:move( self.l, self.t )
   self.map:playMedia("kill")
+  self.flying = false
+  self.inCannon = false
 end
 
 
@@ -269,7 +272,8 @@ end
 
 -- Draw the Player when Applicable
 function Player:draw()
-  if self.isAlive and not self.inCannon then
+  -- Oops... Player Should be Drawn When Dead... For Death Animation...
+  if not self.inCannon then
     Tile.draw(self)
   end
 end

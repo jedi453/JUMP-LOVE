@@ -62,8 +62,8 @@ Map = class('Map')
 --Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
 --Map.static.MAP_FILES = { 'map-mike.txt', } 
 --Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
---Map.static.MAP_FILES = { 'map3.txt', }
-Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', 'map3.txt', }
+--Map.static.MAP_FILES = { 'map2-1.txt', }
+Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', 'map2-1.txt', 'map2-2.txt', 'map3.txt', }
 
 
 -- Add Sound Effects Here

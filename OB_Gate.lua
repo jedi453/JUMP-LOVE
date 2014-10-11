@@ -29,7 +29,7 @@ OB_Gate.static.HAS_GRAVITY = false
 
 -- Initialize the OB_Gate
 function OB_Gate:initialize( map, lpos, tpos, gateOpen )
-  self.gateOpen = gateOpen or true
+  if gateOpen == nil then self.gateOpen = true end
 	Obstical.initialize( self, map, OB_Gate.CC, not self.gateOpen, OB_Gate.DEADLY,
   									lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_HEIGHT, OB_Gate.WIDTH, OB_Gate.HEIGHT,
                     OB_Gate.R, OB_Gate.G, OB_Gate.B,
@@ -48,6 +48,8 @@ function OB_Gate:reset()
   else
     self:closeGate()
   end
+  -- Reset the Gate to Not Have Been Touched By Player
+  self.touchedPlayer = false
 end
 
 -- Draw the Gate as Opened or Closed
