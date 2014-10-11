@@ -47,18 +47,23 @@ end
 -- Called when this Button is Touched
 function Touch_Button:touched( id, l, t, pressure )
   self.touchID = id
+  local player = self.map.players[ self.numPlayer ]
   -- Don't Update if numPlayer isn't a Valid Player
-  if not self.map.players[ self.numPlayer ] then 
+  if not player then 
     return
   else
     -- Send Appropriate Keypress to Appropriate Player
     if self.isLeft then
-      self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx - Player.speedHoriz
+      player.vx = player.vx - Player.speedHoriz
     elseif self.isRight then
-      self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx + Player.speedHoriz
+      player.vx = player.vx + Player.speedHoriz
     elseif self.isJump and self.timeSincePressed > Touch_Button.MIN_WAIT_TIME_JUMP then 
       -- Only Jump if there's Been Enough time Since Last Press
-      self.map.players[ self.numPlayer ]:jump()
+      if self.inCannon then
+        player:shootCannon()
+      else
+        self.map.players[ self.numPlayer ]:jump()
+      end
     end
   end
 end

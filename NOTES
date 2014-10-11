@@ -5,6 +5,7 @@ NOTES:
 --
 -- On Embedded Platforms ( Like the GCW0 ) and some Slower Devices, 
 	-- Using love.graphics.rectangle("line", ...) Slows the Game Down to be Unplayable at times
+-- Added OB_Gate, a Gate that Closes once a Player Goes through it, Code GT
 
 
 
@@ -15,6 +16,7 @@ BUGS:
   
 
 FIXED BUGS:
+/bin/bash: .NOTES.swp: command not found
   -- [FIXED!] -- Sometimes Player Can't Move Left/Right when Perfectly Lined Up with the Block Below it
     -- When the Player is On the Ground, it tries to Move left/right and down due to gravity all at the Same time
         This Causes the Vertical Displacement to Collide with the Adjacent Block, Overriding the Horizontal Displacement

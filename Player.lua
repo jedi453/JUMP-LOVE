@@ -10,6 +10,7 @@ Player.static.WIDTH = Tile.CELL_HEIGHT
 Player.static.numPlayers = 0
 Player.static.speedHoriz = 150 * Tile.SCALE
 Player.static.jumpSpeed = 300 * Tile.SCALE
+Player.static.CANNON_SPEED = Player.jumpSpeed
 Player.static.superJumpSpeed = 2 * Player.jumpSpeed
 Player.static.leftKeys = { "left", "a" }
 Player.static.rightKeys = { "right", "d" }
@@ -37,15 +38,6 @@ function Player:initialize( map, lpos, tpos )
                    Player.WIDTH, Player.HEIGHT,  -- width, height - Adjusted to Prevent Getting Stuck
                    255 - ( ( self.numPlayer-1 ) * 63 ), 0, (self.numPlayer - 1) * 63,
                    true, 0, 0, true )
-  --]]
-  --[[
-  -- Hack to Avoid Player Getting Stuck
-  Tile.initialize( self, map, true, true, false, 
-                   lpos*Tile.CELL_WIDTH + Player.OFFSET, tpos*Tile.CELL_WIDTH + Player.OFFSET, -- left, top - Adjusted to Prevent Getting Stuck
-                   Player.WIDTH - (2*Player.OFFSET), Player.HEIGHT - (2*Player.OFFSET),  -- width, height - Adjusted to Prevent Getting Stuck
-                   255 - ( ( self.numPlayer-1 ) * 63 ), 0, (self.numPlayer - 1) * 63,
-                   true, 0, 0, true )
-  --]]
   self.isAlive = true
   self.onGround = false
   self.hasDoubleJump = true
@@ -58,11 +50,22 @@ function Player:initialize( map, lpos, tpos )
   self.vyRiding = 0
   --self:adjustInitialVelocity() -- OLD - NOW HANDLED BY MAP!
   self.isPlayer = true
+
+  -- True if the Player is in a Cannon
+  self.inCannon = false
+  -- Holds a Reference to the Cannon the Player is in
+  self.cannon = nil
+  self.flying = false
+  self.vxFlying = 0
+  self.vyFlying = 0
 end
 
 -- Make Sure the Player Can Jump then Jump
+-- Or Shoot the Cannon if the Player is in a Cannon
 function Player:jump()
-  if self.isAlive then
+  if self.inCannon then
+    self:shootCannon()
+	elseif self.isAlive and not self.flying then
     if self.onGround then
       self.vy = Player.jumpSpeed
       self.map:playMedia("jump")
@@ -84,12 +87,42 @@ function Player:keypressed( key, isRepeat )
     self.vx = self.vx + Player.speedHoriz
   elseif key == Player.jumpKeys[self.numPlayer] then
     -- Checking Done in Jump Function
-    if self.isAlive then
-      -- Player:jump() Checks if Player can Jump, then Jumps
-      self:jump()
-    end
+    -- Will Shoot Cannon Instead if in One
+  	self:jump()
   end
 end
+
+
+-- Enter a Cannon
+function Player:enterCannon( cannon )
+  if cannon then
+    self.inCannon = true
+    self.cannon = cannon
+    self.flying = false
+    cannon:addPlayer( self )
+  end
+end
+
+
+-- Shoot the Player Out of the Cannon into the Wild Blue Yonder!
+function Player:shootCannon()
+  if self.cannon then
+    local cannon = self.cannon
+    local newL = cannon.l + (cannon.w*cannon.directionX)
+    local newT = cannon.t + (cannon.h*cannon.directionY)
+    -- Make sure the Player can Enter the Block
+    -- Player is Flying ( Not Affected By Gravity )
+    self.flying = true
+    self.vxFlying = cannon.directionX * Player.CANNON_SPEED
+    -- Player is no Longer in a Cannon
+    self.inCannon = false
+    self.cannon:removePlayer( self )
+    self.cannon = nil
+    -- Do this Last as Normally Collision isn't Checked the Same way -- TODO CHECK THIS!
+    self:move( newL, newT )
+  end
+end
+
 
 -- 
 function Player:keyreleased( key )
@@ -131,6 +164,8 @@ function Player:respawn()
   self.isAlive = true
   self.vy = 0
   self.map:reset()
+  self.flying = false
+  self.inCannon = false
 end
 
 
@@ -145,7 +180,7 @@ function Player:move( new_l, new_t )
   -- Assume Not On Ground Until Proven Otherwise
   self.onGround = false
 
-  if self.isAlive then
+  if self.isAlive and not self.inCannon then
   
     -- Check for Solid Obstical Collisions, Handle them
     local cols, len = self.map.world:check( self, new_l, new_t, Player.cFilterSolid )
@@ -153,6 +188,8 @@ function Player:move( new_l, new_t )
       self.l, self.t = new_l, new_t -- Move to New Position
       self.world:move( self, self.l,self.t, self.w,self.h )  -- Let bump Know About the Move
     else
+      -- Stop the Player From Flying Further
+      self.flying = false
       -- Keep Adjusting Location Until there are No More Collisions or all Have Been Checked
       while len > 0 do
         local visited = {}
@@ -190,11 +227,13 @@ function Player:move( new_l, new_t )
     if self.l < 0 then
       self.l = 0
       self.map.world:move( self, self.l,self.t, self.w,self.h )
+      self.flying = false
     end
     if self.t < 0 then 
       self.t = 0
       self.vy = 0
       self.map.world:move( self, self.l,self.t, self.w,self.h )
+      self.flying = false
     end
     -- Kill the Player If Below the Bottom of the Map
     if self.t > self.map.height then
@@ -210,6 +249,16 @@ function Player:move( new_l, new_t )
   end
   
 end
+
+
+
+-- Draw the Player when Applicable
+function Player:draw()
+  if self.isAlive and not self.inCannon then
+    Tile.draw(self)
+  end
+end
+
 
 -- Check for Deadly Collisions
 function Player:checkDeadly()
@@ -227,46 +276,54 @@ end
 
 -- Change this To Handle Being on Objects that Have Velocity
 function Player:update( dt )
-  self.vxRiding, self.vyRiding = 0, 0
-  self:calcGravity( dt )
-
-  -- Only Check for Special Tiles if the Player is Alive
-  if self.isAlive then
-    --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
-    -- Check For Moving Platforms/Conveyor Belts, Move Accordingly
-    self:adjustVelocityByRiding()
-
-    -- Check for JumpPad, Adjust Velocity Accordingly
-    self:adjustVelocityByJumpPad()
-
-    -- Check for JumpArrow, Collect if Needed
-    self:checkJumpArrow()
-  end
-
-  -- Avoid Getting Stuck When On the Ground, Lined Up with the Cell Below
-  if self.onGround then
-    -- Player is On the Ground, Only Move Left/Right
-    self:move( self.l + ( (self.vx + self.vxRiding) * dt ), self.t )
-    -- Check if the Player is On the Ground
-    local cols, len = self.map.world:check( self, self.l, self.t - (self.vy+self.vyRiding)*dt, Player.cFilter )
-    -- Loop Through Collisions, Breaking if/when a Collision Says the Player is On the Ground
-    for i = 1, len do
-      local tl, tt, nx, ny = cols[i]:getTouch()
-      if self:checkOnGround(ny) then break end
+  -- Only Update the Player if they're not in a Cannon
+  if not self.inCannon then
+    self.vxRiding, self.vyRiding = 0, 0
+    if not self.flying and not self.inCannon then
+      self:calcGravity( dt )
     end
-  else
-    -- Player is Not On the Ground, Move Normally
-    self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
-              self.t - ( (self.vy + self.vyRiding) * dt) )
-  end
 
-  -- Check for Deadly Obstical
-  if self.isAlive then
-    self:checkDeadly()
-  end
+    -- Only Check for Special Tiles if the Player is Alive
+    if self.isAlive and not self.inCannon then
+      --local new_l, new_t = self.l + (self.vx*dt), self.t - (self.vy*dt)
+      -- Check For Moving Platforms/Conveyor Belts, Move Accordingly
+      self:adjustVelocityByRiding()
 
-  -- Check for Win Condition
-  self:checkWin()
+      -- Check for JumpPad, Adjust Velocity Accordingly
+      self:adjustVelocityByJumpPad()
+
+      -- Check for JumpArrow, Collect if Needed
+      self:checkJumpArrow()
+
+      -- Check for Cannon, Enter if Touching
+      self:checkCannon()
+    end
+
+    -- Avoid Getting Stuck When On the Ground, Lined Up with the Cell Below
+    if self.onGround then
+      -- Player is On the Ground, Only Move Left/Right
+      self:move( self.l + ( (self.vx + self.vxRiding) * dt ), self.t )
+      -- Check if the Player is On the Ground
+      local cols, len = self.map.world:check( self, self.l, self.t - (self.vy+self.vyRiding)*dt, Player.cFilter )
+      -- Loop Through Collisions, Breaking if/when a Collision Says the Player is On the Ground
+      for i = 1, len do
+        local tl, tt, nx, ny = cols[i]:getTouch()
+        if self:checkOnGround(ny) then break end
+      end
+    else
+      -- Player is Not On the Ground, Move Normally
+      self:move( self.l + ( (self.vx + self.vxRiding) * dt), 
+                self.t - ( (self.vy + self.vyRiding) * dt) )
+    end
+
+    -- Check for Deadly Obstical
+    if self.isAlive then
+      self:checkDeadly()
+    end
+
+    -- Check for Win Condition
+    self:checkWin()
+  end
 end
 
 
@@ -330,6 +387,16 @@ function Player:checkJumpArrow()
   end
 end
 
+
+-- Check for a Cannon Touching the Player and Enter it if There
+function Player:checkCannon()
+	local cannonFilter = function( other ) return other.isCannon; end
+  local cols, len = self.map.world:check( self, self.l, self.t, cannonFilter )
+  -- Enter Cannon if Touching
+  if len > 0 then
+    self:enterCannon( cols[1].other )
+  end
+end
 
 --[[ -- Old Overly Generic Collision Checking
 -- Only Handle Collisions with these Objects

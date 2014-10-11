@@ -36,7 +36,9 @@ local OB_Lightning_Horiz = require('OB_Lightning_Horiz')
 local OB_Lightning_Cross = require('OB_Lightning_Cross')
 -- Falling Block
 local OB_Falling_Block = require('OB_Falling_Block')
-
+-- Gate that Closes After Player Goes Through it
+local OB_Gate = require('OB_Gate')
+local OB_Cannon = require('OB_Cannon')
 
 -- Player Tile Type
 local Player = require('Player')
@@ -122,6 +124,10 @@ function Map:initialize( levelNum )
     LH = function(...) return OB_Lightning_Horiz(self, ...) end,
     -- Falling Block
     FB = function(...) return OB_Falling_Block(self, ...) end,
+    -- Gate that Closes Behind Player
+    GT = function(...) return OB_Gate(self, ...) end,
+    -- Cannon that Shoots the Player Until Hitting an Obstical
+    CN = function(...) return OB_Cannon(self, ...) end,
   }
 
   -- Initialize Normal Variable
