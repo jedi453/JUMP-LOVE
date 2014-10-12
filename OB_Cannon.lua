@@ -12,6 +12,8 @@ Obstical = require('Obstical')
 OB_Cannon = class('OB_Cannon', Obstical)
 
 
+OB_Cannon.static.TURN_SOUND = "cannon_turn"
+
 -- Default Cannon Attributes
 OB_Cannon.static.CC = true
 OB_Cannon.static.SOLID = false
@@ -72,6 +74,7 @@ function OB_Cannon:draw()
                                   self.t-camera.t + 0.375*self.h + 0.375*self.h*self.directionY,
                                   self.w, self.h )
   --]]
+  self.turnSound = OB_Cannon.TURN_SOUND
 end
 
 
@@ -96,6 +99,8 @@ function OB_Cannon:start()
     self.timeSinceTurn = 0
   end
   self.running = true
+  -- Play Turn Sound
+  self.map:playMedia( self.turnSound )
 end
 
 
@@ -138,6 +143,8 @@ function OB_Cannon:turn()
     self.directionX = 1
     self.directionY = 0
   end
+  -- Play Turning Sound
+  self.map:playMedia( self.turnSound )
 end
 
 return OB_Cannon

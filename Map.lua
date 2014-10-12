@@ -67,7 +67,8 @@ Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt',
 
 
 -- Add Sound Effects Here
-Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg" }
+Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg", 
+                       cannon_shoot = "sfx/Cannon_WIP03.ogg", cannon_turn = "sfx/Cannon_Turn_WIP07.ogg", }
 Map.static.media = {}
 
 -- Default Text Location

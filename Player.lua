@@ -5,12 +5,14 @@
 Tile = require( 'Tile' )
 Player = class( 'Player', Tile )
 
+Player.static.CANNON_SOUND = "cannon_shoot"
+
 Player.static.HEIGHT = Tile.CELL_WIDTH
 Player.static.WIDTH = Tile.CELL_HEIGHT
 Player.static.numPlayers = 0
 Player.static.speedHoriz = 150 * Tile.SCALE
 Player.static.jumpSpeed = 300 * Tile.SCALE
-Player.static.CANNON_SPEED = Player.jumpSpeed
+Player.static.CANNON_SPEED = 450 * Tile.SCALE
 Player.static.superJumpSpeed = 2 * Player.jumpSpeed
 Player.static.leftKeys = { "left", "a" }
 Player.static.rightKeys = { "right", "d" }
@@ -123,6 +125,8 @@ function Player:shootCannon()
     self.cannon = nil
     -- Do this Last as Normally Collision isn't Checked the Same way -- TODO CHECK THIS!
     self:move( newL, newT )
+    -- Play the Sound
+    self.map:playMedia( Player.CANNON_SOUND )
   end
 end
 
