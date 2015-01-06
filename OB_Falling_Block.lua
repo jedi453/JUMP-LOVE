@@ -67,6 +67,17 @@ end
 -- Figure out when it Should Start Falling and How Far to Go
 function OB_Falling_Block:update( dt )
 
+  -- Make Not Solid if Fell Out of Map
+  if self.solid and self.t > self.map.height then
+    -- This Code Happens Once, When the OB_Falling_Block Falls Out of the Map
+    self.solid = false
+    return
+  end
+  -- Don't Update if the Block Fell out of the Map
+  if self.t > self.map.height or not self.solid then
+    return
+  end
+
   -- Fall When Appropriate
   if self.steppedOn then
     self.timeTillFall = self.timeTillFall - dt
@@ -102,6 +113,23 @@ function OB_Falling_Block:update( dt )
     self:move( self.l, self.t - (self.vy*dt) )
   end
 end
+
+
+-- Draw the OB_Falling_Block
+function OB_Falling_Block:draw()
+  if self.solid then
+    Tile.draw( self )
+  end
+end
+
+-- FastDraw the OB_Falling_Block
+function OB_Falling_Block:fastDraw()
+  if self.solid then
+    Tile.fastDraw( self )
+  end
+end
+
+
 
 -- Move the Block 
 function OB_Falling_Block:move( new_l, new_t )
@@ -146,6 +174,8 @@ function OB_Falling_Block:reset()
   self.steppedOn = false -- OB_Falling_Block.STEPPED_ON0
   self.timeTillFall = OB_Falling_Block.FALL_WAIT
   self.hasGravity = OB_Falling_Block.HAS_GRAVITY
+  -- Make Solid Again, Incase it Fell out of the Map
+  self.solid = true
 end
 
 return OB_Falling_Block

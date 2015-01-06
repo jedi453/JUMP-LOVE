@@ -43,11 +43,21 @@ function OB_Platform_Stop:initialize( map, lpos, tpos )
   self.bouncesPlatforms = OB_Platform_Stop.BOUNCES_PLATFORMS
 end
 
+-- Regular Draw the Platform Stop
 function OB_Platform_Stop:draw()
   local camera = self.map.camera
 
   love.graphics.setColor( self.r, self.g, self.b )
   love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
+
+-- FastDraw the Platform Stop
+function OB_Platform_Stop:fastDraw()
+  local camera = self.map.camera
+
+  love.graphics.setColor( self.r, self.g, self.b )
+  love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
+end
+
 
 return OB_Platform_Stop

@@ -60,6 +60,7 @@ function OB_Cannon:initialize( map, lpos, tpos, turnTime )
   self.playerList = {}
 end
 
+-- Cannon - Regular Draw Function
 function OB_Cannon:draw()
   -- Draw Outline/Background
   Tile.draw(self)
@@ -76,6 +77,27 @@ function OB_Cannon:draw()
   --]]
   self.turnSound = OB_Cannon.TURN_SOUND
 end
+
+
+-- Cannon - FastDraw Function
+function OB_Cannon:fastDraw()
+  -- Draw Outline/Background
+  Tile.fastDraw(self)
+  -- Draw Direction "Arrow" in Appropriate Spot ( I Hope... )
+  local camera = self.map.camera
+  love.graphics.setColor( self.r, self.g, self.b, OB_Cannon.DIRECTION_ALPHA )
+  love.graphics.rectangle( "fill", self.l-camera.l + 0.375*(1+self.directionX)*self.w,
+                                   self.t-camera.t + 0.375*(1+self.directionY)*self.h,
+                                   OB_Cannon.ARROW_WIDTH, OB_Cannon.ARROW_HEIGHT )
+  --[[ -- Older Easier to Understand Version
+  love.graphics.rectangle("fill", self.l-camera.l + ((1/2)-(1/8))*self.w + ((1/2)-(1/8))*self.w*self.directionX,
+                                  self.t-camera.t + 0.375*self.h + 0.375*self.h*self.directionY,
+                                  self.w, self.h )
+  --]]
+  self.turnSound = OB_Cannon.TURN_SOUND
+end
+
+
 
 
 -- Update the Cannon to Change Direction

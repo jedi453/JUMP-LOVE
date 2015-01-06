@@ -81,6 +81,22 @@ function JumpArrow:draw()
   love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 
+-- FastDraw an Empty Arrow if not Remaining, Draw a Full one Otherwise
+function JumpArrow:fastDraw()
+  local camera = self.map.camera
+
+  -- Draw Inside, If Applicable
+  if self.remaining then
+    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
+    love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+  end
+
+  -- Draw Outline
+  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA/2 )
+  love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+end
+
+
 -- Make the JumpArrow Respawn After Timer Runs Out
 function JumpArrow:update(dt)
   if not self.remaining then

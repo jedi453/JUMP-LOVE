@@ -276,9 +276,15 @@ end
 
 -- Draw the Player when Applicable
 function Player:draw()
-  -- Oops... Player Should be Drawn When Dead... For Death Animation...
   if not self.inCannon then
     Tile.draw(self)
+  end
+end
+
+-- FastDraw the Player when Applicable
+function Player:fastDraw()
+  if not self.inCannon then
+    Tile.fastDraw(self)
   end
 end
 

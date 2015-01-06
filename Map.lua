@@ -39,6 +39,7 @@ local OB_Falling_Block = require('OB_Falling_Block')
 -- Gate that Closes After Player Goes Through it
 local OB_Gate = require('OB_Gate')
 local OB_Cannon = require('OB_Cannon')
+local OB_Lightning_Gate = require('OB_Lightning_Gate')
 
 -- Player Tile Type
 local Player = require('Player')
@@ -60,16 +61,19 @@ Map = class('Map')
 
 --Map.static.CELL_WIDTH = Tile.CELL_WIDTH   -- TODO CHECK, Was 16
 --Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
---Map.static.MAP_FILES = { 'map-mike.txt', } 
---Map.static.MAP_FILES = { 'map1.txt', 'map2.txt', 'map3.txt' }
---Map.static.MAP_FILES = { 'map2-1.txt', }
-Map.static.MAP_FILES = { 'map1-1.txt', 'map1-2.txt', 'map1-3.txt', 'map1-4.txt', 'map1-5.txt', 'map2-1.txt', 'map2-2.txt', 'map3.txt', }
+--Map.static.MAP_FILES = { 'maps/map-mike.txt', } 
+--Map.static.MAP_FILES = { 'maps/map1.txt', 'maps/map2.txt', 'maps/map3.txt' }
+--Map.static.MAP_FILES = { 'maps/map2-4.txt', }
+Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map3.txt', }
 
 
 -- Add Sound Effects Here
 Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg", jump_collect = "sfx/player_collect_jumpArrow.ogg", 
                        cannon_shoot = "sfx/Cannon_WIP03.ogg", cannon_turn = "sfx/Cannon_Turn_WIP07.ogg", }
 Map.static.media = {}
+
+-- FastDraw Cut-off If dt in update() is higher than this value, FastDraw Will be Enabled
+Map.static.FAST_DRAW_CUT_OFF = 1 / 20
 
 -- Default Text Location
 Map.static.COMMENT_L_DEFAULT = 1
@@ -97,6 +101,9 @@ Map.static.TOUCH_BUTTON_JUMP_HEIGHT = love.graphics.getHeight()  -- Height of Ju
 -- Initializer For Map Function, Loads Current Level From File and Sets Everything Up
 function Map:initialize( levelNum )
   self.world = bump.newWorld()
+
+  -- Fast Draw Mode -- For when things start Running Slow ( Walking? ) -- Usually Disables Outlines 
+  self.fastDraw = false
 
   -- BG Constructors Holder -- Register BG Types Here
   self.BG_Kinds = {
@@ -129,6 +136,12 @@ function Map:initialize( levelNum )
     GT = function(...) return OB_Gate(self, ...) end,
     -- Cannon that Shoots the Player Until Hitting an Obstical
     CN = function(...) return OB_Cannon(self, ...) end,
+    -- Lightning Gate that is Safe Until after the Player Passes through it
+    LG = function(...) return OB_Lightning_Gate(self, ...) end,
+    -- Lightning Gate that is Safe Until after the Player Passes through it - Vertical
+    LGV = function(...) args={...}; return OB_Lightning_Gate(self, args[1], args[2], true, Tile.CELL_WIDTH/2, Tile.CELL_HEIGHT) end,
+    -- Lightning Gate that is Safe Until after the Player Passes through it - Horizontal
+    LGH = function(...) args={...}; return OB_Lightning_Gate(self, args[1], args[2], true, Tile.CELL_WIDTH, Tile.CELL_HEIGHT/2) end,
   }
 
   -- Initialize Normal Variable
@@ -198,6 +211,7 @@ function Map:nextLevel()
   self.BGTiles = {}
   self.numOBTiles = 0
   self.OBTiles = {}
+  self.fastDraw = false -- Attempt Normal Drawing for this Map
   self.comment = ""
 
   -- Get Previous players' x Velocities ( Restored Later ), then Reset players, 
@@ -414,6 +428,11 @@ end
 
 -- Map Update Function
 function Map:update( dt )
+  -- Turn on FastDraw if dt is too High
+  if ( dt > Map.FAST_DRAW_CUT_OFF ) then
+    self.fastDraw = true
+  end
+
   -- Get Android Screen Touches
   -- Update Touch Buttons
   if Map.IS_ANDROID then
@@ -457,22 +476,45 @@ end
 function Map:draw()
   local camera = self.camera
 
-  -- Draw Background Tiles
-  for i = 1, self.numBGTiles do
-    local BGTile = self.BGTiles[i]
-    -- Only Draw the Tile if it's within the Camera's Viewport
-    if BGTile.l + BGTile.w>= camera.l and BGTile.l <= camera.l + camera.width 
-      and BGTile.t + BGTile.h >= camera.t and BGTile.t <= camera.t + camera.height then
-      BGTile:draw()
+  -- Only Do Normal Drawing When Not in FastDraw Mode
+  if not self.fastDraw then
+    -- Draw Background Tiles
+    for i = 1, self.numBGTiles do
+      local BGTile = self.BGTiles[i]
+      -- Only Draw the Tile if it's within the Camera's Viewport
+      if BGTile.l + BGTile.w>= camera.l and BGTile.l <= camera.l + camera.width 
+        and BGTile.t + BGTile.h >= camera.t and BGTile.t <= camera.t + camera.height then
+        BGTile:draw()
+      end
     end
-  end
 
-  -- Draw Obstical Tiles
-  for i = 1, self.numOBTiles do
-    local OBTile = self.OBTiles[i]
-    if OBTile.l + OBTile.w >= camera.l and OBTile.l <= camera.l + camera.width 
-      and OBTile.t + OBTile.h >= camera.t and OBTile.t <= camera.t + camera.height then
-      OBTile:draw()
+    -- Draw Obstical Tiles
+    for i = 1, self.numOBTiles do
+      local OBTile = self.OBTiles[i]
+      if OBTile.l + OBTile.w >= camera.l and OBTile.l <= camera.l + camera.width 
+        and OBTile.t + OBTile.h >= camera.t and OBTile.t <= camera.t + camera.height then
+        OBTile:draw()
+      end
+    end
+  else
+    -- FastDraw Mode Enabled
+    -- FastDraw Background Tiles
+    for i = 1, self.numBGTiles do
+      local BGTile = self.BGTiles[i]
+      -- Only Draw the Tile if it's within the Camera's Viewport
+      if BGTile.l + BGTile.w>= camera.l and BGTile.l <= camera.l + camera.width 
+        and BGTile.t + BGTile.h >= camera.t and BGTile.t <= camera.t + camera.height then
+        BGTile:fastDraw()
+      end
+    end
+
+    -- FastDraw Obstical Tiles
+    for i = 1, self.numOBTiles do
+      local OBTile = self.OBTiles[i]
+      if OBTile.l + OBTile.w >= camera.l and OBTile.l <= camera.l + camera.width 
+        and OBTile.t + OBTile.h >= camera.t and OBTile.t <= camera.t + camera.height then
+        OBTile:fastDraw()
+      end
     end
   end
 

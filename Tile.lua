@@ -63,25 +63,26 @@ function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, v
 end
 
 -- Don't Draw Outlines/Alpha on GCW0 Version
-if love.graphics.getHeight() < 300 then
-  function Tile:draw()
-    local camera = self.map.camera
-    -- Only Draw the Filled in Rectangle, without alpha
-    love.graphics.setColor(self.r, self.g, self.b, Tile.static.TILE_ALPHA )
-    love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
-  end
-else
-  -- Draw the Tile
-  function Tile:draw()
-    local camera = self.map.camera
-
-    -- Only Draw the Tile if it's within the Camera's Viewport
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
-    love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
-    love.graphics.setColor( self.r,self.g,self.b )
-    love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
-  end
+--if love.graphics.getHeight() < 300 then
+-- Fast Draw the Tile -- No Outline
+function Tile:fastDraw()
+  local camera = self.map.camera
+  -- Only Draw the Filled in Rectangle, without alpha
+  love.graphics.setColor(self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+  love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
 end
+--else
+-- Regular Draw the Tile
+function Tile:draw()
+  local camera = self.map.camera
+
+  -- Only Draw the Tile if it's within the Camera's Viewport
+  love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+  love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
+  love.graphics.setColor( self.r,self.g,self.b )
+  love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
+end
+--end
 
 -- Move the Tile, Check for Collisions, Register Change w/ Bump
 function Tile:move( new_l, new_t )

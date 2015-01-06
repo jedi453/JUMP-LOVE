@@ -28,14 +28,19 @@ OB_Gate.static.VY = 0
 OB_Gate.static.HAS_GRAVITY = false
 
 -- Initialize the OB_Gate
-function OB_Gate:initialize( map, lpos, tpos, gateOpen )
-  if gateOpen == nil then self.gateOpen = true end
-	Obstical.initialize( self, map, OB_Gate.CC, not self.gateOpen, OB_Gate.DEADLY,
-  									lpos*Tile.CELL_WIDTH, tpos*Tile.CELL_HEIGHT, OB_Gate.WIDTH, OB_Gate.HEIGHT,
+function OB_Gate:initialize( map, lpos, tpos, gateOpen, width, height )
+  width = width or OB_Gate.WIDTH
+  height = height or OB_Gate.HEIGHT
+  if gateOpen == nil then gateOpen = true end -- gateOpen is Used Later, So it Must be Changed Directly
+	Obstical.initialize( self, map, OB_Gate.CC, not gateOpen, OB_Gate.DEADLY,
+  									lpos*Tile.CELL_WIDTH + (Tile.CELL_WIDTH - width)/2,
+                    tpos*Tile.CELL_HEIGHT + (Tile.CELL_HEIGHT - height)/2,
+                    width, height,
                     OB_Gate.R, OB_Gate.G, OB_Gate.B,
                     OB_Gate.UPDATES, OB_Gate.VX, OB_Gate.VY,
                     OB_Gate.HAS_GRAVITY )
-  self.gateOpenOrig = self.gateOpen
+  self.gateOpen = gateOpen
+  self.gateOpenOrig = gateOpen
   -- True when the Gate has Been Touched By the Player
   self.touchedByPlayer = false
 end
@@ -52,7 +57,7 @@ function OB_Gate:reset()
   self.touchedPlayer = false
 end
 
--- Draw the Gate as Opened or Closed
+-- Regular Draw the Gate as Opened or Closed
 function OB_Gate:draw()
   local camera = self.map.camera
   if self.gateOpen then
@@ -67,12 +72,23 @@ function OB_Gate:draw()
 end
 
 
+-- FastDraw the Gate as Opened or Closed
+function OB_Gate:fastDraw()
+  local camera = self.map.camera
+  if self.gateOpen then
+    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA / 2 )
+    love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
+  else
+    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
+  end
+end
 
 -- Default OB_Gate Update Function, 
 --  Close when a Player Passes Through
 function OB_Gate:update(dt)
   local touchingPlayerNow = false
-  if self.map and self.map.players then
+  if self.gateOpen == self.gateOpenOrig and self.map and self.map.players then
     local players = self.map.players
 
     for _, player in ipairs(players) do
