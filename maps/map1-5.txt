@@ -74,5 +74,6 @@ Level 1-5
 
 That Yellow/Red Flashing Stuff you See Carries "1.21 JIGAWATTS" of Electricity.
 
-Try not to Touch it, or You'll Be Sent Back in Time to the Beginning of the Level...
+Try not to Touch it, or You'll Be Sent "Back To The..."
+ Beginning of the Level!
 # vim: set nu:

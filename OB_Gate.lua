@@ -46,9 +46,19 @@ OB_Gate.static.DEADLY = false
 OB_Gate.static.WIDTH = Tile.CELL_WIDTH
 OB_Gate.static.HEIGHT = Tile.CELL_HEIGHT
 
-OB_Gate.static.R = 128
-OB_Gate.static.G =  50
-OB_Gate.static.B =  50
+OB_Gate.static.R = 140
+OB_Gate.static.G =  64
+OB_Gate.static.B =  64
+
+-- The Closed Gate Colors With Pre-multiplied Alphas
+OB_Gate.static.RA_CLOSED = OB_Gate.R * Tile.TILE_ALPHA / 255
+OB_Gate.static.GA_CLOSED = OB_Gate.G * Tile.TILE_ALPHA / 255
+OB_Gate.static.BA_CLOSED = OB_Gate.B * Tile.TILE_ALPHA / 255
+
+-- The Open Gate Colors With Pre-Multiplied Alphas
+OB_Gate.static.RA_OPEN = OB_Gate.RA_CLOSED / 2
+OB_Gate.static.GA_OPEN = OB_Gate.GA_CLOSED / 2
+OB_Gate.static.BA_OPEN = OB_Gate.BA_CLOSED / 2
 
 OB_Gate.static.UPDATES = true
 OB_Gate.static.VX = 0
@@ -100,14 +110,15 @@ function OB_Gate:draw()
 end
 
 
--- FastDraw the Gate as Opened or Closed
+-- FastDraw the Gate as Opened or Closed 
+--  No Outline + Pre-Multiplied Alphas
 function OB_Gate:fastDraw()
   local camera = self.map.camera
   if self.gateOpen then
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA / 2 )
+    love.graphics.setColor( OB_Gate.RA_OPEN, OB_Gate.GA_OPEN, OB_Gate.BA_OPEN )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   else
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.setColor( OB_Gate.RA_CLOSED, OB_Gate.GA_CLOSED, OB_Gate.BA_CLOSED )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   end
 end

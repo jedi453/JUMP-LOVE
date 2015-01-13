@@ -144,6 +144,10 @@ function Player:shootCannon()
   local newL, newT
   if self.cannon then
     local cannon = self.cannon
+
+    -- Calculate Position the Player Starts at Upon Leaving the Cannon
+    --  Done out the Long Way because Player and Cannon Dimensions Might
+    --   not be the Same
     if cannon.directionX < -Tile.FLOAT_TOL then
       newL = cannon.l - self.w
     elseif cannon.directionX > Tile.FLOAT_TOL then
@@ -159,25 +163,19 @@ function Player:shootCannon()
       newT = cannon.t
     end
 
-    -- TODO REMOVE DEBUG
-    --  Looks Like newL and newT aren't to Blame for Player Dying when shot from Cannon
-    -- self.map.comment = 'Player:shootCannon()\n'
-    --       .. 'newL = ' .. newL .. '\n'
-    --       .. 'mapW = ' .. self.map.width .. '\n'
-    --       .. 'newT = ' .. newT .. '\n'
-    --       .. 'mapH = ' .. self.map.height .. '\n'
-
-
+    -- Old Way to Calculate New Player Position
     -- local newL = cannon.l + (cannon.w*cannon.directionX)
     -- local newT = cannon.t + (cannon.h*cannon.directionY)
-    -- Kill the Player on Attempt to Shoot out of the Map
-    -- if newT > self.map.height - Tile.FLOAT_TOL then
-    --   -- Call Kill before setting self.inCannon, because move() will think Player
-    --   self:kill()
-    --   cannon:removePlayer( self )
-    --   self.inCannon = false
-    --   self.cannon = nil
-    -- end
+    --
+    --Kill the Player on Attempt to Shoot out of the Map
+    if newT > self.map.height - Tile.FLOAT_TOL then
+      -- Call Kill before setting self.inCannon, because move() will think Player
+      self:kill()
+      cannon:removePlayer( self )
+      self.inCannon = false
+      self.cannon = nil
+    end
+
     -- Make sure the Player can Enter the Block
     local isSolid = function(other) return other.isSolid end
     local _, len = self.map.world:queryRect( newL, newT, self.w, self.h, isSolid )
@@ -233,13 +231,9 @@ end
 
 -- Ya dun well sun, but not well enough
 function Player:kill()
-  -- TODO REMOVE DEBUG
-  self.map.comment = 'self.l = ' .. self.l .. '\n'
-                  .. 'self.t = ' .. self.t .. '\n'
-
   self.isAlive = false
   self.flying = false
-  --self.t = math.min( self.map.height - Player.HEIGHT, self.t ) -- Is this Needed?
+  self.t = math.min( self.map.height - Player.HEIGHT, self.t ) -- Is this Needed?
   self.vy = Player.jumpSpeed / 2
   self.inCannon = false
   if self.cannon then self.cannon:removePlayer( self ) end
