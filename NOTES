@@ -5,15 +5,31 @@ NOTES:
 --
 -- On Embedded Platforms ( Like the GCW0 ) and some Slower Devices, 
 	-- Using love.graphics.rectangle("line", ...) Slows the Game Down to be Unplayable at times
+  -- Added new fastDraw() Functions that Avoid using love.graphics.rectangle("line", ...)
+    -- They Only Activate Once a Slowdown is Detected
 -- Added OB_Gate, a Gate that Closes once a Player Goes through it, Code GT
+-- Added OB_Lightning_Gate that Becomes Deadly only After the Player has been through it once
+  -- Codes: LG - Full Block Lightning Gate
+  --        LGH - Horizontal Lightning Gate, Similar To Horizontal Lightning
+  --        LGV - Vertical Lightning Gate, Similar To Vertical Lightning
 
 
 
-BUGS:
-  -- Falling Blocks Can Freeze + FC Game?  Not sure Why...
+BUGS / TODOs:
   -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
-  -- OB_Cannons Shooting Player Below Bottom of Map Can Cause Player to Appear to be Stuck within the Cannon
+  -- The Naming Scheme I chose for X/Y/L/T is Confusing and Not Followed Well
+     -- I've got to figure out one Way and Stick to it
+     --  Ex. OB_Cannon.directionY is Positive for Down
+        -- While Player.velocityY is Positive for Up
   
+POSSIBLY FIXED BUGS:
+  -- [Fixed?] - Falling Blocks Can Freeze + FC Game?  Not sure Why...
+  -- [Fixed?] - OB_Cannons Shooting Player Below Bottom of Map Can Cause Player to Appear to be Stuck within the Cannon
+    -- Haven't Seen this Since Some Bug Fixes
+    -- Player Re-enters Cannon Upon death, not sure how
+      -- player.isAlive = false
+      -- player.flying = true
+
 
 FIXED BUGS:
   -- [FIXED!] - OB_Lightning_Gates Sometimes kill the player on their first pass through, at least when fired by Cannons
@@ -36,14 +52,26 @@ FIXED BUGS:
   -- [FIXED!] Unbearably slow on map3.txt on GCW0
     -- Not Drawing Lightning Obsticals Seems to Fix this
     -- Don't Over-use love.graphics.rectangle("line",...) on Embedded/Slower Devices
+  -- [FIXED!] - OB_Cannons Can't Seem to Shoot Directly Up
+    -- FIXED - Forgot to Remove Debug Test in Player:shootCannon(), Caused Player to Go Below Cannon Instead of Above
+  -- [FIXED!] - OB_Cannons Can Cause Player to Die When Trying to Exit Up from Bottom of Level
+    -- FIXED - Player:enterCannon() set Player.l and Player.t but Didn't Actually Call world:move() on Player
+      -- It looks like the Player would overshoot the Cannon and Visually enter the Cannon, 
+          but When trying to shoot out, They would Pass through a Deadly Obstical Next to the Cannon During Move
+    -- Player.t > Map.height, not sure why
 
 
 TODO:
+  -- Add 10th Map
+  -- Add Menu System ( Started, but Needs Research )
+  -- Improve Check for FastDraw to Use a Running Average FPS, rather than Picking up a Dip over One Frame
+  -- Remove Debug Keyboard Shortcuts in Map.lua
+
+DONE:
   -- [DONE!] Add Camera Scrolling Support
   -- [DONE!] Add 4th Map
   -- [DONE!] Add 5th Map
   -- [DONE!] Add 6th Map
   -- [DONE!] Add 7th Map
   -- [DONE!] Add 8th Map
-  -- Add 9th Map
-  -- Add Menu System ( Started, but Needs Research )
+  -- [DONE!] Add 9th Map

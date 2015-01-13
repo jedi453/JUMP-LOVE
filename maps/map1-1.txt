@@ -72,7 +72,7 @@ Comment:
 1 1
 World 1.
 
-In JUMP, You are that Red thing (Handsome Fellow).
+In JUMP, You are that Red Square (Handsome Fellow).
 All You have to do is Get Yourself to the Right of the Screen.
 
 To move Left, Press the "Left" Button

@@ -1,3 +1,31 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 -- OB_Cannon Class Definitions
 --  Base Class for Cannons that Grab, then Shoot Player
 -- CODE: CN
@@ -51,20 +79,29 @@ function OB_Cannon:initialize( map, lpos, tpos, turnTime )
                     OB_Cannon.HAS_GRAVITY )
   -- The Direction of the Cannon x Component, -1 for Left, 1 for Right, 0 for Middle
   self.directionX = 0
-  -- The Direction of the Cannon x Component, -1 for Up, 1 for Down, 0 for Middle
+  -- The Direction of the Cannon y Component, -1 for Up, 1 for Down, 0 for Middle
   self.directionY = 0
   self.isCannon = true
   self.running = false
   self.turnTime = turnTime or OB_Cannon.TURN_TIME
   self.timeSinceTurn = 0
   self.playerList = {}
+  self.turnSound = OB_Cannon.TURN_SOUND
+end
+
+-- Reset Cannon
+function OB_Cannon:reset()
+  self.playerList = {}
+  self.directionX = 0
+  self.directionY = 0
+  self.running = false
 end
 
 -- Cannon - Regular Draw Function
 function OB_Cannon:draw()
   -- Draw Outline/Background
   Tile.draw(self)
-  -- Draw Direction "Arrow" in Appropriate Spot ( I Hope... )
+  -- Draw Direction "Arrow" in Appropriate Spot
   local camera = self.map.camera
   love.graphics.setColor( self.r, self.g, self.b, OB_Cannon.DIRECTION_ALPHA )
   love.graphics.rectangle( "fill", self.l-camera.l + 0.375*(1+self.directionX)*self.w,
@@ -75,7 +112,6 @@ function OB_Cannon:draw()
                                   self.t-camera.t + 0.375*self.h + 0.375*self.h*self.directionY,
                                   self.w, self.h )
   --]]
-  self.turnSound = OB_Cannon.TURN_SOUND
 end
 
 
@@ -83,18 +119,12 @@ end
 function OB_Cannon:fastDraw()
   -- Draw Outline/Background
   Tile.fastDraw(self)
-  -- Draw Direction "Arrow" in Appropriate Spot ( I Hope... )
+  -- Draw Direction "Arrow" in Appropriate Spot
   local camera = self.map.camera
   love.graphics.setColor( self.r, self.g, self.b, OB_Cannon.DIRECTION_ALPHA )
   love.graphics.rectangle( "fill", self.l-camera.l + 0.375*(1+self.directionX)*self.w,
                                    self.t-camera.t + 0.375*(1+self.directionY)*self.h,
                                    OB_Cannon.ARROW_WIDTH, OB_Cannon.ARROW_HEIGHT )
-  --[[ -- Older Easier to Understand Version
-  love.graphics.rectangle("fill", self.l-camera.l + ((1/2)-(1/8))*self.w + ((1/2)-(1/8))*self.w*self.directionX,
-                                  self.t-camera.t + 0.375*self.h + 0.375*self.h*self.directionY,
-                                  self.w, self.h )
-  --]]
-  self.turnSound = OB_Cannon.TURN_SOUND
 end
 
 

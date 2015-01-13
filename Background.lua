@@ -1,56 +1,61 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 -- Background Class Definitions File
 
 class = require('lib.middleclass')
-bump = require('bump.bump')
 Tile = require('Tile')
 
 Background = class( 'Background', Tile )
 
---[[
--- Inherited from Tile
-Background.static.CELL_WIDTH = 16
-Background.static.CELL_HEIGHT = 16
---]]
-
---[[ Background Tile Types
---
---    '00' - Empty, Black, No Collisions
---    'WL' - Wall, Gray/Silver, Prohibits Movement
---    'JP' - Jump Platform, Green, Causes Superjump when Stepped on by Player
---    
---]]
-
--- cc - Colision Check
---[[
-function Background:initialize( world, cc, kind, lpos, tpos )
-  local ret -- Return Value
-  if kind == '00' then
-    ret = Tile:initialize( world, false, -- world, check_collisions
-                                  lpos*Background.CELL_WIDTH, tpos*Background.CELL_HEIGHT, -- l, t
-                                  Background.CELL_WIDTH, Background.CELL_HEIGHT, -- w, h
-                                  0, 0, 0 ) -- r, g, b
-    ret.solid = false
-    ret.
-  elseif kind == 'WL' then
-    ret = Tile:initialize( world, true, -- world, check_collisions
-                                  lpos*Background.CELL_WIDTH, tpos*Background.CELL_HEIGHT, -- l, t
-                                  Background.CELL_WIDTH, Background.CELL_HEIGHT, -- w, h
-                                  128, 128, 128 ) -- r, g, b
-    ret.solid = true
-  elseif kind == 'JP' then
-    ret = Tile:initialize( world, true, -- world, check_collisions
-                                  lpos*Background.CELL_WIDTH, tpos*Background.CELL_HEIGHT, -- l, t
-                                  Background.CELL_WIDTH, Background.CELL_HEIGHT, -- w, h
-                                  0, 200, 50 ) -- r, g, b
-    ret.solid = true
-  end
-  ret.kind = kind
-  return ret
-end
---]]
-
 function Background:initialize(...)
   Tile.initialize( self, ... )
+end
+
+
+-- Background Tiles Don't Need Fancy Alphas
+function Background:draw()
+  local camera = self.map.camera
+
+  love.graphics.setColor( self.ra, self.ga, self.ba )
+  love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
+  love.graphics.setColor( self.r,self.g,self.b )
+  love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
+end
+
+-- Fast Draw the Background Tile -- No Outline
+function Tile:fastDraw()
+  local camera = self.map.camera
+  -- Draw Filled Rectangle with Alpha Multiplied Each Draw
+  --love.graphics.setColor(self.r, self.g, self.b, Tile.TILE_ALPHA )
+  -- Only Draw the Filled in Rectangle, without alpha Multiplied Each Draw
+  love.graphics.setColor(self.ra, self.ga, self.ba)
+  love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
 end
 
 

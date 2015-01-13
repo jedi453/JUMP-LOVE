@@ -1,3 +1,31 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 -- Player Class Definitions
 
 -- CODE: In map file, "Player:" Header then the T, L Coordinates of Each Player ( 0 Based )
@@ -16,8 +44,8 @@ Player.static.CANNON_SPEED = 450 * Tile.SCALE
 Player.static.superJumpSpeed = 2 * Player.jumpSpeed
 Player.static.leftKeys = { "left", "a" }
 Player.static.rightKeys = { "right", "d" }
--- Attempt to Change Jump Key to Space On the GCW0
-if love.graphics.getHeight() < 300 then
+-- Attempt to Change Jump Key to Space ("Y") On the GCW0
+if love.graphics.getHeight() == 240 then
   Player.static.jumpKeys = { " ", "w" }
 else
   Player.static.jumpKeys = { "up", "w" }
@@ -102,31 +130,79 @@ function Player:enterCannon( cannon )
     self.cannon = cannon
     self.flying = false
     cannon:addPlayer( self )
+    self.l, self.t = cannon.l, cannon.t
+    -- Remember to Move the Player to the New Location in the World
+    --  Or Else, Player may "Overshoot" Cannon into Obstical Behind it
+    --  and Die Because of it
+    self.map.world:move( self, self.l,self.t, self.w,self.h )
   end
 end
 
 
 -- Shoot the Player Out of the Cannon into the Wild Blue Yonder!
 function Player:shootCannon()
+  local newL, newT
   if self.cannon then
     local cannon = self.cannon
-    local newL = cannon.l + (cannon.w*cannon.directionX)
-    local newT = cannon.t + (cannon.h*cannon.directionY)
+    if cannon.directionX < -Tile.FLOAT_TOL then
+      newL = cannon.l - self.w
+    elseif cannon.directionX > Tile.FLOAT_TOL then
+      newL = cannon.l + cannon.w
+    else
+      newL = cannon.l
+    end
+    if cannon.directionY < -Tile.FLOAT_TOL then
+      newT = cannon.t - self.h
+    elseif cannon.directionY > Tile.FLOAT_TOL then
+      newT = cannon.t + cannon.h
+    else
+      newT = cannon.t
+    end
+
+    -- TODO REMOVE DEBUG
+    --  Looks Like newL and newT aren't to Blame for Player Dying when shot from Cannon
+    -- self.map.comment = 'Player:shootCannon()\n'
+    --       .. 'newL = ' .. newL .. '\n'
+    --       .. 'mapW = ' .. self.map.width .. '\n'
+    --       .. 'newT = ' .. newT .. '\n'
+    --       .. 'mapH = ' .. self.map.height .. '\n'
+
+
+    -- local newL = cannon.l + (cannon.w*cannon.directionX)
+    -- local newT = cannon.t + (cannon.h*cannon.directionY)
+    -- Kill the Player on Attempt to Shoot out of the Map
+    -- if newT > self.map.height - Tile.FLOAT_TOL then
+    --   -- Call Kill before setting self.inCannon, because move() will think Player
+    --   self:kill()
+    --   cannon:removePlayer( self )
+    --   self.inCannon = false
+    --   self.cannon = nil
+    -- end
     -- Make sure the Player can Enter the Block
-    -- Player is Flying ( Not Affected By Gravity )
-    self.flying = true
-    -- Set Flying Velocities
-    self.vxFlying = cannon.directionX * Player.CANNON_SPEED
-    -- Remember my Questionable choice of making vy Variable Positive for Upwards, while t increases Downward
-    self.vyFlying = - cannon.directionY * Player.CANNON_SPEED
-    -- Player is no Longer in a Cannon
-    self.inCannon = false
-    self.cannon:removePlayer( self )
-    self.cannon = nil
-    -- Do this Last as Normally Collision isn't Checked the Same way -- TODO CHECK THIS!
-    self:move( newL, newT )
-    -- Play the Sound
-    self.map:playMedia( Player.CANNON_SOUND )
+    local isSolid = function(other) return other.isSolid end
+    local _, len = self.map.world:queryRect( newL, newT, self.w, self.h, isSolid )
+    -- local _, len = self.map.world:check( newL, newT, self.w, self.h, isSolid )
+    if len == 0 and newL > -Tile.FLOAT_TOL and newT > -Tile.FLOAT_TOL then --and newT < (self.map.height-Tile.FLOAT_TOL) then
+      -- Player is Flying ( Not Affected By Gravity )
+      self.flying = true
+      -- Set Flying Velocities
+      self.vxFlying = cannon.directionX * Player.CANNON_SPEED
+      -- Remember my Questionable choice of making vy Variable Positive for Upwards, but my Position Variable t is Opposite
+      self.vyFlying = - cannon.directionY * Player.CANNON_SPEED
+      -- Player is no Longer in a Cannon
+      self.inCannon = false
+      cannon:removePlayer( self )
+      self.cannon = nil
+      -- Do this Last as Normally Collision isn't Checked the Same way -- TODO CHECK THIS!
+      --self:move( newL, newT )
+      self.l, self.t = newL, newT
+      -- Play the Sound
+      self.map:playMedia( Player.CANNON_SOUND )
+    elseif newT > (self.map.height - Tile.FLOAT_TOL) then
+      -- If the Player is Going Below the Bottom of the Map, They Die, then the Level Resets
+      self:kill()
+      self.map:reset()
+    end
   end
 end
 
@@ -157,25 +233,37 @@ end
 
 -- Ya dun well sun, but not well enough
 function Player:kill()
+  -- TODO REMOVE DEBUG
+  self.map.comment = 'self.l = ' .. self.l .. '\n'
+                  .. 'self.t = ' .. self.t .. '\n'
+
   self.isAlive = false
-  self.t = math.min( self.map.height - Player.HEIGHT, self.t )
-  self.vy = Player.jumpSpeed / 2
-  self:move( self.l, self.t )
-  self.map:playMedia("kill")
   self.flying = false
+  --self.t = math.min( self.map.height - Player.HEIGHT, self.t ) -- Is this Needed?
+  self.vy = Player.jumpSpeed / 2
   self.inCannon = false
+  if self.cannon then self.cannon:removePlayer( self ) end
+  self.cannon = nil
+  self.map:playMedia("kill")
+  -- Do move() Last, so Other Variables are Set Properly for move()
+  self:move( self.l, self.t )
 end
 
-
-function Player:respawn()
+function Player:reset()
   self.l = self.origLPos
   self.t = self.origTPos 
   self.world:move( self, self.l,self.t,self.w,self.h )
   self.isAlive = true
   self.vy = 0
-  self.map:reset()
   self.flying = false
+  self.cannon = nil
   self.inCannon = false
+  self.hasDoubleJump = true
+end
+
+function Player:respawn()
+  self.map:reset()
+  self:reset()
 end
 
 
@@ -184,14 +272,12 @@ function Player:beatMap()
 end
 
 -- Move Player to New Location Checking for Collisions if Applicable
------ TODO FIX When Player is Perfectly Lined Up with the Block Below, it Can't Move
 function Player:move( new_l, new_t )
   local tl, tt, nx, ny, sl, st
   -- Assume Not On Ground Until Proven Otherwise
   self.onGround = false
 
   if self.isAlive and not self.inCannon then
-  
     -- Check for Solid Obstical Collisions, Handle them
     local cols, len = self.map.world:check( self, new_l, new_t, Player.cFilterSolid )
     if len == 0 then
@@ -226,7 +312,6 @@ function Player:move( new_l, new_t )
         cols, len = self.map.world:check( self, sl, st, Player.cFilterSolid )
         if len == 0 then
           -- Move with Slide
-          --if st > self.t then self.map.comment = 'st = ' .. tostring(st) end -- TODO REMOVE DEBUG
           self.l, self.t = sl, st
           self.map.world:move( self, sl,st, self.w,self.h )
         end
@@ -264,6 +349,10 @@ function Player:move( new_l, new_t )
       return
     end
   else
+    --- TODO REMOVE DEBUG
+    -- self.map.comment = "else...NOT: self.isAlive and not self.inCannon\n"
+    --   .. "self.isAlive = " .. tostring(self.isAlive) .. "\n"
+    --   .. "self.inCannon = " .. tostring(self.inCannon)
     -- Player isn't Alive, so Don't Obey Normal Collision Checking Rules
     self.t = new_t
     if self.t > self.map.height then
@@ -293,6 +382,7 @@ end
 function Player:checkDeadly()
     local cols, len = self.map.world:check( self, self.l, self.t, Player.cFilterDeadly )
     if len > 0 then self:kill() end
+    if self.t > self.map.height then self:kill() end -- TODO Should this Be Here?
 end
 
 -- Check if Win Condition is Met ( Player Passed Right Edge of Map
@@ -305,6 +395,11 @@ end
 
 -- Change this To Handle Being on Objects that Have Velocity
 function Player:update( dt )
+  self.flying = self.flying and self.isAlive -- TODO FIX WORKAROUND
+  -- TODO REMOVE DEBUG
+  -- self.map.comment = "self.flying = " .. tostring(self.flying) .. "\n"
+  --         .. "self.isAlive = " .. tostring(self.isAlive) .. "\n"
+  --         .. "self.inCannon = " .. tostring(self.inCannon) .. "\n"
   -- Only Update the Player if they're not in a Cannon
   if not self.inCannon and not self.flying then
     self.vxRiding, self.vyRiding = 0, 0

@@ -1,3 +1,31 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 local class = require('lib.middleclass')
 local bump = require('bump.bump')
 
@@ -48,6 +76,10 @@ function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, v
   self.deadly = deadly
   self.l, self.t, self.w, self.h = l, t, w, h
   self.r, self.g, self.b = r, g, b
+  -- Premultiply Alhpas to Hopefully Speed things up When Needed
+  self.ra = r*Tile.TILE_ALPHA / 255
+  self.ga = g*Tile.TILE_ALPHA / 255
+  self.ba = b*Tile.TILE_ALPHA / 255
   --print("updates = " .. tostring(updates))
   self.updates = updates or false
   self.vx = vx or 0
@@ -67,8 +99,10 @@ end
 -- Fast Draw the Tile -- No Outline
 function Tile:fastDraw()
   local camera = self.map.camera
-  -- Only Draw the Filled in Rectangle, without alpha
-  love.graphics.setColor(self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+  -- Draw Filled Rectangle with Alpha Multiplied Each Draw
+  --love.graphics.setColor(self.r, self.g, self.b, Tile.TILE_ALPHA )
+  -- Only Draw the Filled in Rectangle, without alpha Multiplied Each Draw
+  love.graphics.setColor(self.ra, self.ga, self.ba)
   love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
 end
 --else
@@ -77,6 +111,7 @@ function Tile:draw()
   local camera = self.map.camera
 
   -- Only Draw the Tile if it's within the Camera's Viewport
+  --  Handled in Map.lua ?
   love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
   love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
   love.graphics.setColor( self.r,self.g,self.b )

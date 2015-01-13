@@ -1,3 +1,31 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 -- Lightning Obstical (OB_Lightning) Class Definitions
 -- Yellow Non-Solid Cell that Causes Player Death
 
@@ -25,6 +53,14 @@ OB_Lightning.static.B1 = 50
 OB_Lightning.static.R2 = 255
 OB_Lightning.static.G2 = 220
 OB_Lightning.static.B2 = 70
+-- Pre-Multiply Alphas for Speed and To Be Able to Switch them when in fastDraw Mode
+OB_Lightning.static.RA1 = OB_Lightning.R1 * OB_Lightning.TILE_ALPHA / 255
+OB_Lightning.static.GA1 = OB_Lightning.G1 * OB_Lightning.TILE_ALPHA / 255
+OB_Lightning.static.BA1 = OB_Lightning.B1 * OB_Lightning.TILE_ALPHA / 255
+OB_Lightning.static.RA2 = OB_Lightning.R2 * OB_Lightning.TILE_ALPHA / 255
+OB_Lightning.static.GA2 = OB_Lightning.G2 * OB_Lightning.TILE_ALPHA / 255
+OB_Lightning.static.BA2 = OB_Lightning.B2 * OB_Lightning.TILE_ALPHA / 255
+
 OB_Lightning.static.switchTime = 0.1 -- Time to Keep Each Loop Before Switching
 -- Additional Properties
 OB_Lightning.static.UPDATES = true
@@ -53,6 +89,9 @@ function OB_Lightning:initialize( map, lpos, tpos, w, h )
 
   -- true if Look 1 is Being Used, false if Look 2 is Being Used
   self.isLook1 = true
+  self.ra = OB_Lightning.RA1
+  self.ga = OB_Lightning.GA1
+  self.ba = OB_Lightning.BA1
   -- Time Remaining before Switching Look
   self.lookTimeLeft = OB_Lightning.switchTime
 end
@@ -71,11 +110,19 @@ function OB_Lightning:switchLook()
     self.r = OB_Lightning.R2
     self.g = OB_Lightning.G2
     self.b = OB_Lightning.B2
+    -- Set Premultiplied Colors Too - For Fastdraw Mode
+    self.ra = OB_Lightning.RA2
+    self.ga = OB_Lightning.GA2
+    self.ba = OB_Lightning.BA2
   else
     self.isLook1 = true
     self.r = OB_Lightning.R1
     self.g = OB_Lightning.G1
     self.b = OB_Lightning.B1
+    -- Set Premultiplied Colors Too - For Fastdraw Mode
+    self.ra = OB_Lightning.RA1
+    self.ga = OB_Lightning.GA1
+    self.ba = OB_Lightning.BA1
   end
 end
 

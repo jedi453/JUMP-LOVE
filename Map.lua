@@ -1,3 +1,31 @@
+--[[
+
+LICENSE
+
+Copyright (c) 2014-2015  Daniel Iacoviello
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--]]
+
+
+
 -- Map Class Definitions
 
 -- The Map Class Acts as a Container for All the Background Objects,
@@ -63,7 +91,7 @@ Map = class('Map')
 --Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
 --Map.static.MAP_FILES = { 'maps/map-mike.txt', } 
 --Map.static.MAP_FILES = { 'maps/map1.txt', 'maps/map2.txt', 'maps/map3.txt' }
---Map.static.MAP_FILES = { 'maps/map2-4.txt', }
+--Map.static.MAP_FILES = { 'maps/map2-1.txt', }
 Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map3.txt', }
 
 
@@ -572,6 +600,11 @@ end
 function Map:keypressed( key, isRepeat )
   for _, player in ipairs(self.players) do
     player:keypressed( key, isRepeat )
+  end
+  --- TODO REMOVE - FOR DEBUG ONLY!
+  if key == 'e' then self:nextLevel()
+  elseif key == 'r' then self:reset()
+  elseif key == 'f' then self.fastDraw = not self.fastDraw
   end
 end
 
