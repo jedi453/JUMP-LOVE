@@ -53,8 +53,12 @@ Touch_Button.static.TEXT_G = 200
 Touch_Button.static.TEXT_B = 200
 
 -- Initialization Function / Constructor
-function Touch_Button:initialize( map, l,t,w,h, kind, numPlayer )
+function Touch_Button:initialize( game, map, l,t,w,h, kind, numPlayer )
+  self.game = game
+
+  -- Get Map Object
   self.map = map
+
   self.l = l
   self.t = t
   self.w = w
@@ -70,28 +74,38 @@ function Touch_Button:initialize( map, l,t,w,h, kind, numPlayer )
 
   -- Register Touch_Button With Bump so Touches can be Checked
   map.world:add(self, l,t,w,h)
+  
+  -- TODO REMOVE DEBUG:  -- Why Doesn't this Show Up at First Run?
+  -- game.debugString = 'self.game = ' .. tostring(self.game) .. '\n'
+  --                 .. 'self.map = ' .. tostring(self.map) .. '\n'
+  --                 .. 'game.isMap = ' .. tostring(game.isMap) .. '\n'
+  --                 .. 'game.map = ' .. tostring(game.map) .. '\n'
+  --                 .. 'game.menu = ' .. tostring(game.menu) .. '\n'
 end
 
 -- Called when this Button is Touched
 function Touch_Button:touched( id, l, t, pressure )
   self.touchID = id
-  local player = self.map.players[ self.numPlayer ]
   -- Don't Update if numPlayer isn't a Valid Player
-  if not player then 
+  --local player = self.map.players[ self.numPlayer ]
+  if self.game.isMap and not self.map.players[ self.numPlayer ] then 
     return
   else
     -- Send Appropriate Keypress to Appropriate Player
     if self.isLeft then
-      player.vx = player.vx - Player.speedHoriz
+      --player.vx = player.vx - Player.speedHoriz
+      self.game:keypressed( Player.leftKeys[self.numPlayer] )
     elseif self.isRight then
-      player.vx = player.vx + Player.speedHoriz
-    elseif self.isJump and self.timeSincePressed > Touch_Button.MIN_WAIT_TIME_JUMP then 
+      --player.vx = player.vx + Player.speedHoriz
+      self.game:keypressed( Player.rightKeys[self.numPlayer] )
+    elseif self.isJump then --and self.timeSincePressed > Touch_Button.MIN_WAIT_TIME_JUMP then  -- TODO FIX
       -- Only Jump if there's Been Enough time Since Last Press
-      if self.inCannon then
-        player:shootCannon()
-      else
-        self.map.players[ self.numPlayer ]:jump()
-      end
+      -- if self.inCannon then
+      --   player:shootCannon()
+      -- else
+      --   self.map.players[ self.numPlayer ]:jump()
+      -- end
+      self.game:keypressed( Player.jumpKeys[self.numPlayer] )
     end
   end
 end
@@ -100,14 +114,16 @@ end
 function Touch_Button:released( id, l, t, pressure )
   self.touchID = -1
   -- Don't Update if numPlayer isn't a Valid Player
-  if not self.map.players[ self.numPlayer ] then 
+  if self.game.isMap and not self.map.players[ self.numPlayer ] then 
     return
   else
     -- Send Appropriate Keypress to Appropriate Player
     if self.isLeft then
-      self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx + Player.speedHoriz
+      --self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx + Player.speedHoriz
+      self.map:keyreleased( Player.leftKeys[ self.numPlayer ] )
     elseif self.isRight then
-      self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx - Player.speedHoriz
+      --self.map.players[ self.numPlayer ].vx = self.map.players[ self.numPlayer ].vx - Player.speedHoriz
+      self.map:keyreleased( Player.rightKeys[ self.numPlayer ] )
     end
   end
 end

@@ -53,6 +53,7 @@ function Game:initialize( state, ... )
     self.map = Map(self, ...)
     self.isMap = true
   end
+  self.debugString = ''
 end
 
 
@@ -92,6 +93,8 @@ function Game:draw()
   elseif self.isMap then
     self.map:draw()
   end
+  love.graphics.setColor( 255, 128, 0 )
+  love.graphics.print( self.debugString, 0, 0, 0, 3 )
 end
 
 -- Load a Map/Level

@@ -12,21 +12,6 @@ NOTES:
   -- Codes: LG - Full Block Lightning Gate
   --        LGH - Horizontal Lightning Gate, Similar To Horizontal Lightning
   --        LGV - Vertical Lightning Gate, Similar To Vertical Lightning
--- Simple Idea for Menu System:
-  -- Shows each Map/Level Full-Screen (Except Possibly for Touchscreen Buttons) One at a Time 
-  -- Maps can be switched between with Player 1 Right/Left Keys/Buttons
-  -- Currently Viewed Map Can Be Selected with Jump Button
-  -- Doesn't Call the Map's update() function
-  -- Menu is Inherited from Map
--- Basic / Haxor way to Go back a level:
-  -- Pseudo-Code:
-  -- function Map:prevLevel()
-    -- if Map.levelNum > 1 then
-      -- Map.levelNum = Map.levelNum - 2
-      -- Map:nextLevel()
-    -- else
-      -- Warning: No Previous Level
-        -- Or just: Don't Change
 
 
 
@@ -36,6 +21,12 @@ BUGS / NITPICKS:
      -- I've got to figure out one Way and Stick to it
      --  Ex. OB_Cannon.directionY is Positive for Down
         -- While Player.velocityY is Positive for Up
+  -- Menu Update Killed Android Support
+    -- Now Appears to Run without Input but Without Errors
+    -- The Touch Buttons No Longer Work
+      -- Reset to Controlling Player Directly through Touch_Button.lua ( No Trying to Send Keypress ? )
+        -- Could Use Touch_Button.game to tell what State the Game is in and Choose Appropriate Action
+      -- OR (IDEAL) Send (Fake) Keypress through Game:keypressed(), Keeping thing Easier to Work With
   
 POSSIBLY FIXED BUGS:
   -- [Fixed?] - Falling Blocks Can Freeze + FC Game?  Not sure Why...
@@ -78,9 +69,11 @@ FIXED BUGS:
 
 TODO:
   -- Add 10th Map
-  -- Add Menu System ( Started, but Needs Research )
   -- Improve Check for FastDraw to Use a Running Average FPS, rather than Picking up a Dip over One Frame
   -- Remove Debug Keyboard Shortcuts in Map.lua
+  -- Touch_Button on Android for Escape to Menu / Quit
+  -- Make Touch_Buttons Use game:keypressed()/keyreleased() instead of Directly Affecting Player
+    -- Should Make Touch Buttons Work for Menus
 
 DONE:
   -- [DONE!] Add Camera Scrolling Support
@@ -90,3 +83,19 @@ DONE:
   -- [DONE!] Add 7th Map
   -- [DONE!] Add 8th Map
   -- [DONE!] Add 9th Map
+  -- [DONE!] Add Menu System ( Started, but Needs Research )
+  -- [DONE!] Simple Idea for Menu System:
+    -- Shows each Map/Level Full-Screen (Except Possibly for Touchscreen Buttons) One at a Time 
+    -- Maps can be switched between with Player 1 Right/Left Keys/Buttons
+    -- Currently Viewed Map Can Be Selected with Jump Button
+    -- Doesn't Call the Map's update() function
+    -- Menu is Inherited from Map
+  -- [DONE!] Basic / Haxor way to Go back a level:
+    -- Pseudo-Code:
+    -- function Map:prevLevel()
+      -- if Map.levelNum > 1 then
+        -- Map.levelNum = Map.levelNum - 2
+        -- Map:nextLevel()
+      -- else
+        -- Warning: No Previous Level
+          -- Or just: Don't Change

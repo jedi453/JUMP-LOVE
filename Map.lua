@@ -108,6 +108,8 @@ Map.static.COMMENT_L_DEFAULT = 1
 Map.static.COMMENT_T_DEFAULT = 1
 
 -- Android Specific Stuff
+-- TODO REMOVE DEBUG
+--Map.static.IS_ANDROID = true
 Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' )
 --Map.static.LEVEL_SCREEN_HEIGHT_RATIO = 0.8
 --Map.static.LEVEL_SCREEN_WIDTH_RATIO = 0.8
@@ -180,7 +182,6 @@ function Map:initialize( game, levelNum )
   self.players_vx = {} -- Array of Players' Initial x Velocities, Used to Reset Initial Velocity
   self.numPlayers = 0
   self.levelNum = levelNum or 1 -- TODO - Level Always Starts at this Default Value
-  print('levelNum = ' .. tostring(levelNum) )
   self.numBGTiles = 0   -- Number of Background Tiles
   self.BGTiles = {}     -- List of the Background Tiles
   self.numOBTiles = 0   -- Number of Obstical Tiles
@@ -202,13 +203,13 @@ function Map:initialize( game, levelNum )
 
   -- Add Touch_Buttons if On Android
   if Map.IS_ANDROID then
-    self.touchButtons[1] = Touch_Button( self, Map.TOUCH_BUTTON_MOVE_L_OFFSET, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
+    self.touchButtons[1] = Touch_Button( game, self, Map.TOUCH_BUTTON_MOVE_L_OFFSET, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
                                           Map.TOUCH_BUTTON_MOVE_WIDTH, Map.TOUCH_BUTTON_MOVE_HEIGHT,
                                           'left', 1 )
-    self.touchButtons[2] = Touch_Button( self, Map.TOUCH_BUTTON_MOVE_L_OFFSET+Map.TOUCH_BUTTON_MOVE_WIDTH, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
+    self.touchButtons[2] = Touch_Button( game, self, Map.TOUCH_BUTTON_MOVE_L_OFFSET+Map.TOUCH_BUTTON_MOVE_WIDTH, self.height + Map.TOUCH_BUTTON_MOVE_T_OFFSET,
                                           Map.TOUCH_BUTTON_MOVE_WIDTH, Map.TOUCH_BUTTON_MOVE_HEIGHT,
                                           'right', 1 )
-    self.touchButtons[3] = Touch_Button( self, self.width + Map.TOUCH_BUTTON_JUMP_L_OFFSET, Map.TOUCH_BUTTON_JUMP_T_OFFSET,
+    self.touchButtons[3] = Touch_Button( game, self, self.width + Map.TOUCH_BUTTON_JUMP_L_OFFSET, Map.TOUCH_BUTTON_JUMP_T_OFFSET,
                                           Map.TOUCH_BUTTON_JUMP_WIDTH, Map.TOUCH_BUTTON_JUMP_HEIGHT,
                                           'jump', 1 )
   end

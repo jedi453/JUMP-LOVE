@@ -93,15 +93,15 @@ Menu.static.MENU_TEXT_XPOS_FACTOR = 0.45
 Menu.static.MENU_TEXT_YPOS_FACTOR = 0.8
 
 function Menu:initialize( game, levelNum )
-  -- TODO - Initialize Most Recent Level Instead of Level 1
+  -- TODO - Initialize Latest Unlocked Level Instead of Level 1
   levelNum = levelNum or 1
-  self.game = game
+  --self.game = game -- Handled Below by Map.initialize
   Map.initialize(self, game, levelNum)
   -- This Just Gets rid of the Bump World in Hopes that it will Be Garbage Collected
   --  TODO - Find a Better way to do this that Still Allows Code Reuse from Map.lua
   --   NOTE: Might not Even Work
-  self.world = nil
-  collectgarbage( "collect" )
+  -- self.world = nil -- DON'T DO THIS!  Android Depends On world for Touch_Buttons
+  --collectgarbage( "collect" )
 end
 
 
@@ -134,7 +134,6 @@ end
 function Menu:selectLevel()
   self.game:loadLevel( self.levelNum )
 end
-
 
 -- Go to the Next Level in the Menu
 -- Don't Allow "Beating" the Game by Just Advancing through all the Levels in the Menu

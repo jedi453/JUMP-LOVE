@@ -89,14 +89,16 @@ end
 
 -- Android Specific Stuff
 function love.touchpressed( id, l, t, pressure )
+  local map
+  if game.isMap then map = game.map else map = game.menu end
   if pressure > 0 then
-    local items, len = game.map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+    local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
     if len < 1 then
-      game.map.touchButtonsByID[id] = nil
+      map.touchButtonsByID[id] = nil
       return
     else
       local item = items[1]
-      game.map.touchButtonsByID[id] = item
+      map.touchButtonsByID[id] = item
       -- Only Support One Touch_Button in the Same Location For Now
       item:touched( id, l, t, pressure )
     end
@@ -106,22 +108,26 @@ end
 
 -- Android Specific Stuff
 function love.touchreleased( id, l, t, pressure )
-  local items, len = game.map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+  local map
+  if game.isMap then map = game.map else map = game.menu end
+  local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
   -- Only Support One Touch_Button in the Same Location
   if len < 1 then 
-    game.map.touchButtonsByID[id] = nil
+    map.touchButtonsByID[id] = nil
     return 
-  elseif game.map.touchButtonsByID[id] then  -- TODO IMPROVE EFFICIENCY
+  elseif map.touchButtonsByID[id] then  -- TODO IMPROVE EFFICIENCY
     local item = items[1]
     item:released( id, l, t, pressure )
-    game.map.touchButtonsByID[id] = nil
+    map.touchButtonsByID[id] = nil
   end
 end
 
 
 -- Android Specific Stuff
 function love.touchmoved( id, l, t, pressure )
-  local items, len = game.map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+  local map
+  if game.isMap then map = game.map else map = game.menu end
+  local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
 
   -- Only Support One Touch_Button in the Same Location
   -- TODO Improve Efficiency
@@ -130,20 +136,20 @@ function love.touchmoved( id, l, t, pressure )
     local item = items[1]
 
     -- Only Press the Button the Previous Button if the Current One isn't the Same
-    if game.map.touchButtonsByID[id] then
-      if game.map.touchButtonsByID[id].touchID ~= item.touchID then
-        game.map.touchButtonsByID[id]:released( id, l, t, pressure )
-        game.map.touchButtonsByID[id] = item
+    if map.touchButtonsByID[id] then
+      if map.touchButtonsByID[id].touchID ~= item.touchID then
+        map.touchButtonsByID[id]:released( id, l, t, pressure )
+        map.touchButtonsByID[id] = item
         item:touched( id, l, t, pressure )
       end
     else
       -- No Previous Button Pressed, Press this One
-      game.map.touchButtonsByID[id] = item
+      map.touchButtonsByID[id] = item
       item:touched( id, l, t, pressure )
     end
-  elseif game.map.touchButtonsByID[id] then
+  elseif map.touchButtonsByID[id] then
     -- Moved Off Active Touch_Button, Release it and Remove it from touchButtonsByID
-    game.map.touchButtonsByID[id]:released( id, l, t, pressure )
-    game.map.touchButtonsByID[id] = nil
+    map.touchButtonsByID[id]:released( id, l, t, pressure )
+    map.touchButtonsByID[id] = nil
   end
 end
