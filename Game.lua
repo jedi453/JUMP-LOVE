@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 local class = require('lib.middleclass')
 local Map = require('Map')
---local Menu = require('Menu')
+local Menu = require('Menu')
 
 
 local Game = class('Game')
@@ -47,10 +47,10 @@ function Game:initialize( state, ... )
   self.isMenu = false
   self.isMap  = false
   if state == 'menu' then
-    self.menu = Menu(...)
+    self.menu = Menu(self, ...)
     self.isMenu = true
   elseif state == 'map' then
-    self.map = Map(...)
+    self.map = Map(self, ...)
     self.isMap = true
   end
 end
@@ -64,12 +64,12 @@ function Game:setState( state, ... )
       self.isMenu = true 
       self.isMap = false
       self.map = nil
-      self.menu = Menu(...)
+      self.menu = Menu(self, ...)
     elseif state == 'map' then 
       self.isMap = true
       self.isMenu = false
       self.menu = nil
-      self.map = Map(...)
+      self.map = Map(self, ...)
     end
   end
 end
@@ -96,20 +96,29 @@ end
 
 -- Load a Map/Level
 function Game:loadLevel( levelNum )
-  self.setState( 'map', levelNum )
+  self:setState( 'map', levelNum )
 end
 
 
 -- Pass Key Presses Appropriately, Based On State
 function Game:keypressed( key, isRepeat )
-  if self.isMenu then
-    self.menu:keypressed( key, isRepeat )
-  elseif self.isMap then
-    if key == 'escape' then
+  -- 
+  if key == 'escape' then
+    if self.isMenu then
       love.event.quit()
-      return
+    elseif self.isMap then
+      self:setState( 'menu', self.map.levelNum )
     end
-    self.map:keypressed( key, isRepeat )
+  else
+    if self.isMenu then
+      self.menu:keypressed( key, isRepeat )
+    elseif self.isMap then
+      if key == 'escape' then
+        love.event.quit()
+        return
+      end
+      self.map:keypressed( key, isRepeat )
+    end
   end
 end
 

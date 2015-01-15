@@ -54,7 +54,12 @@ function love.load()
 
   -- Create Map Instance
   --map = Map:new()
-  game = Game( 'map' )
+  game = Game( 'menu' )
+
+  -- Create New Font at Reasonable Size
+  scaledFont = love.graphics.newFont( 12*Tile.SCALE )
+  love.graphics.setFont( scaledFont )
+
 end
 
 

@@ -101,7 +101,7 @@ Map.static.SOUNDS = { jump = "sfx/player_jump.ogg", kill = "sfx/player_die.ogg",
 Map.static.media = {}
 
 -- FastDraw Cut-off If dt in update() is higher than this value, FastDraw Will be Enabled
-Map.static.FAST_DRAW_CUT_OFF = 1 / 20
+Map.static.FAST_DRAW_CUT_OFF = 1 / 16
 
 -- Default Text Location
 Map.static.COMMENT_L_DEFAULT = 1
@@ -127,8 +127,9 @@ Map.static.TOUCH_BUTTON_JUMP_WIDTH = love.graphics.getWidth()
 Map.static.TOUCH_BUTTON_JUMP_HEIGHT = love.graphics.getHeight()  -- Height of Jump Touch_Button
 
 -- Initializer For Map Function, Loads Current Level From File and Sets Everything Up
-function Map:initialize( levelNum )
+function Map:initialize( game, levelNum )
   self.world = bump.newWorld()
+  self.game = game
 
   -- Fast Draw Mode -- For when things start Running Slow ( Walking? ) -- Usually Disables Outlines 
   self.fastDraw = false
@@ -178,7 +179,8 @@ function Map:initialize( levelNum )
   self.players = {} -- Array of Players
   self.players_vx = {} -- Array of Players' Initial x Velocities, Used to Reset Initial Velocity
   self.numPlayers = 0
-  self.levelNum = levenNum or 1
+  self.levelNum = levelNum or 1 -- TODO - Level Always Starts at this Default Value
+  print('levelNum = ' .. tostring(levelNum) )
   self.numBGTiles = 0   -- Number of Background Tiles
   self.BGTiles = {}     -- List of the Background Tiles
   self.numOBTiles = 0   -- Number of Obstical Tiles
@@ -270,6 +272,26 @@ function Map:nextLevel()
 
   -- Garbage Collect, Try to Reduce Memory Leakage
   collectgarbage("collect")
+end
+
+
+
+-- Basic / Haxor way to Go back a level:
+  -- Pseudo-Code:
+  -- function Map:prevLevel()
+    -- if Map.levelNum > 1 then
+      -- Map.levelNum = Map.levelNum - 2
+      -- Map:nextLevel()
+    -- else
+      -- Warning: No Previous Level
+        -- Or just: Don't Change
+function Map:prevLevel()
+  if self.levelNum > 1 then
+    self.levelNum = self.levelNum - 2
+    self:nextLevel()
+  else
+    -- TODO - Show Warning/Message?
+  end
 end
 
 --[[
@@ -548,7 +570,7 @@ function Map:draw()
 
   -- Draw Comments
   love.graphics.setColor( 255, 255, 255 )
-  love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT, 0, Tile.SCALE )
+  love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT ) --, 0, Tile.SCALE ) -- Scaling Now Handled when Font is Loaded
 
   -- Draw Players
   for i = 1, self.numPlayers do
@@ -603,6 +625,7 @@ function Map:keypressed( key, isRepeat )
   end
   --- TODO REMOVE - FOR DEBUG ONLY!
   if key == 'e' then self:nextLevel()
+  elseif key == 'q' then self:prevLevel()
   elseif key == 'r' then self:reset()
   elseif key == 'f' then self.fastDraw = not self.fastDraw
   end

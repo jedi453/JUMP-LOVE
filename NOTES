@@ -12,10 +12,25 @@ NOTES:
   -- Codes: LG - Full Block Lightning Gate
   --        LGH - Horizontal Lightning Gate, Similar To Horizontal Lightning
   --        LGV - Vertical Lightning Gate, Similar To Vertical Lightning
+-- Simple Idea for Menu System:
+  -- Shows each Map/Level Full-Screen (Except Possibly for Touchscreen Buttons) One at a Time 
+  -- Maps can be switched between with Player 1 Right/Left Keys/Buttons
+  -- Currently Viewed Map Can Be Selected with Jump Button
+  -- Doesn't Call the Map's update() function
+  -- Menu is Inherited from Map
+-- Basic / Haxor way to Go back a level:
+  -- Pseudo-Code:
+  -- function Map:prevLevel()
+    -- if Map.levelNum > 1 then
+      -- Map.levelNum = Map.levelNum - 2
+      -- Map:nextLevel()
+    -- else
+      -- Warning: No Previous Level
+        -- Or just: Don't Change
 
 
 
-BUGS / TODOs:
+BUGS / NITPICKS:
   -- Changing the Width of the Player in its Constructor Makes it Able to Pass through Walls?
   -- The Naming Scheme I chose for X/Y/L/T is Confusing and Not Followed Well
      -- I've got to figure out one Way and Stick to it

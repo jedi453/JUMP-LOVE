@@ -66,6 +66,7 @@ Tile.static.TERMINAL_VY = Tile.SCALE * 350
 Tile.static.FLOAT_TOL = 0.0001
 
 
+
 -- cc = collision check, l = left, t = top, w = width, h = height, cFilter = Collision Filter Function
 function Tile:initialize( map, cc, solid, deadly, l,t,w,h, r,g,b, updates, vx, vy, hasGravity, cFilter )
   -- Initialize Members to Given Values
