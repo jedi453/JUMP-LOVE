@@ -38,6 +38,7 @@ THE SOFTWARE.
 local class = require('lib.middleclass')
 local Map = require('Map')
 local Menu = require('Menu')
+local Player = require('Player')
 
 
 local Game = class('Game')
@@ -143,6 +144,30 @@ function Game:keyreleased( key )
     self.map:keyreleased( key )
   end
 end
+
+
+function Game:gamepadpressed(joystick, button)
+  local id = joystick:getID()
+  if id <= Player.maxPlayers and id > 0 then
+    if button == 'dpleft' then self:keypressed( Player.leftKeys[id] )
+    elseif button == 'dpright' then self:keypressed( Player.rightKeys[id] )
+    elseif button == 'y' then self:keypressed( Player.jumpKeys[id] )
+    elseif button == 'back' then self:keypressed( 'escape' )
+    end
+  end
+end
+
+
+function Game:gamepadreleased(joystick, button)
+  local id = joystick:getID()
+  if id <= Player.maxPlayers and id > 0 then
+    if button == 'dpleft' then self:keyreleased( Player.leftKeys[id] )
+    elseif button == 'dpright' then self:keyreleased( Player.rightKeys[id] )
+    elseif button == 'y' then self:keyreleased( Player.jumpKeys[id] )
+    end
+  end
+end
+
 
 
 -- Load Maximum Level Number for Maximum Level Attained 

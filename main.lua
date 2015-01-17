@@ -73,19 +73,35 @@ function love.update( dt )
   game:update(dt)
 end
 
--- Pass Key Presses to Map
+-- Pass Key Presses to Game
 function love.keypressed( key, isrepeat )
   if game then
     game:keypressed( key, isrepeat )
   end
 end
 
--- Pass Key Releases to Map
+-- Pass Key Releases to Game
 function love.keyreleased( key )
   if game then
     game:keyreleased( key )
   end
 end
+
+
+-- Pass Gamepad Pressed Events to Game
+function love.gamepadpressed( joystick, key )
+  if game then
+    game:gamepadpressed( joystick, key )
+  end
+end
+
+-- Pass Gamepad Released Events to Game
+function love.gamepadreleased( joystick, key )
+  if game then
+    game:gamepadreleased( joystick, key )
+  end
+end
+
 
 
 -- Android Specific Stuff
