@@ -31,11 +31,11 @@ THE SOFTWARE.
 
 -- Code 'GT' - GaTe
 
-class = require('lib.middleclass')
-Tile = require('Tile')
-Obstical = require('Obstical')
+local class = require('lib.middleclass')
+local Tile = require('Tile')
+local Obstical = require('Obstical')
 
-OB_Gate = class('OB_Gate', Obstical)
+local OB_Gate = class('OB_Gate', Obstical)
 
 
 -- Default Gate Attributes

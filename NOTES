@@ -12,6 +12,10 @@ NOTES:
   -- Codes: LG - Full Block Lightning Gate
   --        LGH - Horizontal Lightning Gate, Similar To Horizontal Lightning
   --        LGV - Vertical Lightning Gate, Similar To Vertical Lightning
+-- Maybe Add "Doors"/Gates that Open Only Once a "Key" of the Same Color is Found
+  -- Or Maybe Just One Color ( At least to Start )
+-- Remove/Replace other.class.name == "xxxx" in Player.lua and Other Files, Replace with Booleans
+  -- Hopefully Should improve Speed, but With How Lua May Work, I suppose this Isn't a Guarantee
 
 
 

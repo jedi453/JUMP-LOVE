@@ -44,6 +44,7 @@ if Map.IS_ANDROID then Touch_Button = require('Touch_Button') end
 game = {}
 
 local map
+local BASE_FONT_SIZE = 14
 
 
 function love.load()
@@ -57,7 +58,7 @@ function love.load()
   game = Game( 'menu' )
 
   -- Create New Font at Reasonable Size
-  scaledFont = love.graphics.newFont( 12*Tile.SCALE )
+  scaledFont = love.graphics.newFont( BASE_FONT_SIZE*Tile.SCALE )
   love.graphics.setFont( scaledFont )
 
 end

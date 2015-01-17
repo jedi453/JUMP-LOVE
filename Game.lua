@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 
 
+
 --- Game Class Definitions
 
 --- The Game Class Holds the State and State Specific Variables
@@ -42,6 +43,10 @@ local Menu = require('Menu')
 local Game = class('Game')
 
 
+-- A Super Secret Amazingly Securely Encrypted File that No Human's Eyes are Worthy to See the Contents of
+Game.static.SAVE_FILE = "Shhhh...secret"
+
+
 function Game:initialize( state, ... )
   self.state = state or 'menu'
   self.isMenu = false
@@ -54,6 +59,8 @@ function Game:initialize( state, ... )
     self.isMap = true
   end
   self.debugString = ''
+  -- Load Maximum Level Attained
+  self:load()
 end
 
 
@@ -83,6 +90,8 @@ function Game:update( dt )
   elseif self.isMap then
     self.map:update( dt )
   end
+  -- Debug FPS
+  --game.debugString = love.timer.getFPS()
 end
 
 
@@ -133,6 +142,19 @@ function Game:keyreleased( key )
   elseif self.isMap then
     self.map:keyreleased( key )
   end
+end
+
+
+-- Load Maximum Level Number for Maximum Level Attained 
+function Game:load()
+  self.maxLevelReached = love.filesystem.read( Game.SAVE_FILE ) 
+  self.maxLevelReached = tonumber( self.maxLevelReached ) or 1
+end
+
+-- Save the Maximum Progress (Level Number) Made By the Player
+function Game:save( levelNum )
+  love.filesystem.write( Game.SAVE_FILE, levelNum )
+  self.maxLevelReached = levelNum
 end
 
 return Game

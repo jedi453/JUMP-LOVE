@@ -68,6 +68,9 @@ local OB_Falling_Block = require('OB_Falling_Block')
 local OB_Gate = require('OB_Gate')
 local OB_Cannon = require('OB_Cannon')
 local OB_Lightning_Gate = require('OB_Lightning_Gate')
+--Keyed Gates and Keys
+local OB_Keyed_Gate = require('OB_Keyed_Gate')
+local OB_Gate_Key = require('OB_Gate_Key')
 
 -- Player Tile Type
 local Player = require('Player')
@@ -87,11 +90,8 @@ Map = class('Map')
 
 -- Set Map Class Static Members
 
---Map.static.CELL_WIDTH = Tile.CELL_WIDTH   -- TODO CHECK, Was 16
---Map.static.CELL_HEIGHT = Tile.CELL_HEIGHT -- TODO CHECK, Was 16
---Map.static.MAP_FILES = { 'maps/map-mike.txt', } 
---Map.static.MAP_FILES = { 'maps/map1.txt', 'maps/map2.txt', 'maps/map3.txt' }
---Map.static.MAP_FILES = { 'maps/map2-1.txt', }
+--Map.static.MAP_FILES = { 'maps/map-mike.txt', }
+--Map.static.MAP_FILES = { 'maps/map-test.txt', }
 Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map3.txt', }
 
 
@@ -173,6 +173,14 @@ function Map:initialize( game, levelNum )
     LGV = function(...) args={...}; return OB_Lightning_Gate(self, args[1], args[2], true, Tile.CELL_WIDTH/2, Tile.CELL_HEIGHT) end,
     -- Lightning Gate that is Safe Until after the Player Passes through it - Horizontal
     LGH = function(...) args={...}; return OB_Lightning_Gate(self, args[1], args[2], true, Tile.CELL_WIDTH, Tile.CELL_HEIGHT/2) end,
+    -- Gate that is Closed Until a Green Key is Collected
+    KG = function(...) return OB_Keyed_Gate(self, 'green', ...) end,
+    -- Green Key for OB_Keyed_Gate (KG)
+    GK = function(...) return OB_Gate_Key(self, 'green', ...) end,
+    -- Gate that is Closed Until a Blue Key is Collected
+    KB = function(...) return OB_Keyed_Gate(self, 'blue', ...) end,
+    -- Green Key for OB_Keyed_Gate (KB)
+    BK = function(...) return OB_Gate_Key(self, 'blue', ...) end,
   }
 
   -- Initialize Normal Variable
@@ -192,6 +200,7 @@ function Map:initialize( game, levelNum )
   self.platformWidth = 0 -- Used to Maintain State while Adding Platforms of width Greater than 1
   self.touchButtons = {} -- Touch_Button Array
   self.touchButtonsByID = {} -- Hash Table
+  self.keys = {} -- Value True For Index (Color Name) of Collected Key
 
   -- Load Map File if Any, if None, Quit
   local file = Map.MAP_FILES[self.levelNum]
@@ -238,6 +247,13 @@ function Map:nextLevel()
   self.width, self.height = 0, 0
   self.numPlayers = 0
   self.levelNum = self.levelNum + 1
+
+  -- Save Progress
+  if self.levelNum > self.game.maxLevelReached and self.levelNum <= #Map.MAP_FILES then
+    self.game:save( self.levelNum )
+  end
+
+
   self.numBGTiles = 0
   self.BGTiles = {}
   self.numOBTiles = 0
@@ -616,6 +632,8 @@ function Map:reset()
       background:reset()
     end
   end
+
+  self.keys = false
 end
 
 

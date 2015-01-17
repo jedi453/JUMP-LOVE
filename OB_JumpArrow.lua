@@ -61,7 +61,7 @@ JumpArrow.static.HAS_GRAVITY = false
 JumpArrow.static.RESPAWN_TIME = 7
 
 function JumpArrow:initialize( map, lpos, tpos )
-  Background.initialize( self, map,
+  Obstical.initialize( self, map,
                           JumpArrow.CC, JumpArrow.SOLID, JumpArrow.DEADLY,
                           lpos*Tile.CELL_WIDTH + JumpArrow.lOffset, tpos*Tile.CELL_HEIGHT + JumpArrow.tOffset,
                           JumpArrow.WIDTH, JumpArrow.HEIGHT,
@@ -70,6 +70,7 @@ function JumpArrow:initialize( map, lpos, tpos )
   -- Is the Arrow Still there
   self.remaining = true
   self.respawnTime = JumpArrow.RESPAWN_TIME
+  self.isJumpArrow = true
 end
 
 function JumpArrow:collect()

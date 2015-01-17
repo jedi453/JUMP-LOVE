@@ -413,6 +413,9 @@ function Player:update( dt )
       -- Check for JumpArrow, Collect if Needed
       self:checkJumpArrow()
 
+      -- Check for Keys, Collect if There
+      self:checkKeys()
+
       -- Check for Cannon, Enter if Touching
       self:checkCannon()
     end
@@ -447,6 +450,7 @@ function Player:update( dt )
               self.t - (self.vyFlying*dt) )
     self:checkDeadly()
     self:checkJumpArrow()
+    self:checkKeys()
     self:checkCannon()
     self:checkWin()
   end
@@ -500,7 +504,7 @@ end
 -- Check for a Double Jump Arrow Under the Player, and Try to Collect it if Applicable
 function Player:checkJumpArrow()
   if not self.hasDoubleJump then
-    local jumpArrowFilter = function( other ) return other.class.name == 'JumpArrow'; end
+    local jumpArrowFilter = function( other ) return other.isJumpArrow end
     local cols, len = self.map.world:check( self, self.l, self.t, jumpArrowFilter )
     local visited = {}
     for i = 1, len do
@@ -512,6 +516,19 @@ function Player:checkJumpArrow()
     end
   end
 end
+
+
+-- Check for a Keys Under the Player, and Try to Collect it if Applicable
+function Player:checkKeys()
+  local keyFilter = function( other ) return other.isKey end
+  local cols, len = self.map.world:check( self, self.l, self.t, keyFilter )
+  local visited = {}
+  for _, col in ipairs(cols) do
+    col.other:collect()
+  end
+end
+
+
 
 
 -- Check for a Cannon Touching the Player and Enter it if There

@@ -89,12 +89,12 @@ Menu = class('Menu', Map)
 
 
 -- Static Members
-Menu.static.MENU_TEXT_XPOS_FACTOR = 0.45
+Menu.static.MENU_TEXT_XPOS_FACTOR = 0.42
 Menu.static.MENU_TEXT_YPOS_FACTOR = 0.8
 
 function Menu:initialize( game, levelNum )
   -- TODO - Initialize Latest Unlocked Level Instead of Level 1
-  levelNum = levelNum or 1
+  levelNum = levelNum or game.maxLevelReached
   --self.game = game -- Handled Below by Map.initialize
   Map.initialize(self, game, levelNum)
   -- This Just Gets rid of the Bump World in Hopes that it will Be Garbage Collected
@@ -122,10 +122,10 @@ function Menu:draw()
                        0,
                        2)
   love.graphics.print( "Press Left/Right to Go Back/Forward a Level",
-                        self.width * (Menu.MENU_TEXT_XPOS_FACTOR - 0.15 ),
+                        self.width * (Menu.MENU_TEXT_XPOS_FACTOR - 0.17 ),
                         self.height * Menu.MENU_TEXT_YPOS_FACTOR + 2*(Tile.CELL_HEIGHT+1) )
   love.graphics.print( "Press Jump to Select The Level",
-                        self.width * (Menu.MENU_TEXT_XPOS_FACTOR - 0.09 ),
+                        self.width * (Menu.MENU_TEXT_XPOS_FACTOR - 0.11 ),
                         self.height * Menu.MENU_TEXT_YPOS_FACTOR + 3*(Tile.CELL_HEIGHT+1) )
 end
 
@@ -139,7 +139,7 @@ end
 -- Don't Allow "Beating" the Game by Just Advancing through all the Levels in the Menu
 function Menu:nextLevel()
   -- Only Go to The Next Level if it Exists...
-  if self.levelNum < #Map.MAP_FILES then
+  if self.levelNum < self.game.maxLevelReached and self.levelNum < #Map.MAP_FILES then
     Map.nextLevel(self)
   end
 end
