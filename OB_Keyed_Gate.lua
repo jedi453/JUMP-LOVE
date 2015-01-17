@@ -44,6 +44,8 @@ OB_Keyed_Gate.static.KEYHOLE_WIDTH = OB_Gate.WIDTH / 4
 OB_Keyed_Gate.static.KEYHOLE_X_OFFSET = (OB_Gate.WIDTH - OB_Keyed_Gate.KEYHOLE_WIDTH) / 2
 OB_Keyed_Gate.static.KEYHOLE_Y_OFFSET = (OB_Gate.HEIGHT - OB_Keyed_Gate.KEYHOLE_HEIGHT) / 2
 
+OB_Keyed_Gate.static.ALPHA = Tile.TILE_ALPHA
+
 --OB_Keyed_Gate.static.
 
 
@@ -68,7 +70,7 @@ end
 function OB_Keyed_Gate:draw()
   local camera = self.map.camera
   OB_Gate.draw(self)
-  love.graphics.setColor( self.keyR, self.keyG, self.keyB, Tile.ALPHA )
+  love.graphics.setColor( self.keyR, self.keyG, self.keyB, OB_Keyed_Gate.ALPHA )
   love.graphics.rectangle( "line", self.l-camera.l + OB_Keyed_Gate.KEYHOLE_X_OFFSET,
                             self.t-camera.t + OB_Keyed_Gate.KEYHOLE_Y_OFFSET,
                             OB_Keyed_Gate.KEYHOLE_WIDTH,
@@ -86,7 +88,7 @@ end
 -- Draw the OB_Keyed_Gate Gate and Keyhole
 function OB_Keyed_Gate:fastDraw()
   local camera = self.map.camera
-  OB_Gate.draw(self)
+  OB_Gate.fastDraw(self)
   love.graphics.setColor( self.keyR, self.keyG, self.keyB )
   if not self.gateOpen then
     love.graphics.rectangle( "fill", self.l-camera.l + OB_Keyed_Gate.KEYHOLE_X_OFFSET,

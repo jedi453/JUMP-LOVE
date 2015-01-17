@@ -92,7 +92,7 @@ Map = class('Map')
 
 --Map.static.MAP_FILES = { 'maps/map-mike.txt', }
 --Map.static.MAP_FILES = { 'maps/map-test.txt', }
-Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map3.txt', }
+Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map2-5.txt', 'maps/map3.txt', }
 
 
 -- Add Sound Effects Here
@@ -633,7 +633,7 @@ function Map:reset()
     end
   end
 
-  self.keys = false
+  self.keys = {}
 end
 
 

@@ -14,7 +14,7 @@ NOTES:
   --        LGV - Vertical Lightning Gate, Similar To Vertical Lightning
 -- Maybe Add "Doors"/Gates that Open Only Once a "Key" of the Same Color is Found
   -- Or Maybe Just One Color ( At least to Start )
--- Remove/Replace other.class.name == "xxxx" in Player.lua and Other Files, Replace with Booleans
+-- Remove/Replace other.class.name == "xxxx" in Player.lua and Other Files, Replace with Boolean Members of other
   -- Hopefully Should improve Speed, but With How Lua May Work, I suppose this Isn't a Guarantee
 
 
@@ -25,12 +25,9 @@ BUGS / NITPICKS:
      -- I've got to figure out one Way and Stick to it
      --  Ex. OB_Cannon.directionY is Positive for Down
         -- While Player.velocityY is Positive for Up
-  -- Menu Update Killed Android Support
-    -- Now Appears to Run without Input but Without Errors
-    -- The Touch Buttons No Longer Work
-      -- Reset to Controlling Player Directly through Touch_Button.lua ( No Trying to Send Keypress ? )
-        -- Could Use Touch_Button.game to tell what State the Game is in and Choose Appropriate Action
-      -- OR (IDEAL) Send (Fake) Keypress through Game:keypressed(), Keeping thing Easier to Work With
+  -- FastDraw with Premultiplied Alphas Doesn't Really Seem to Actually Speed anything up ( Test this )
+    -- It also messes up levels with Platforms Blocking Lightning
+    -- Messes up Levels with OB_Falling_Block Blocking Lightning
   
 POSSIBLY FIXED BUGS:
   -- [Fixed?] - Falling Blocks Can Freeze + FC Game?  Not sure Why...
@@ -42,6 +39,12 @@ POSSIBLY FIXED BUGS:
 
 
 FIXED BUGS:
+  -- [FIXED!] - Menu Update Killed Android Support
+    -- Now Appears to Run without Input but Without Errors
+    -- The Touch Buttons No Longer Work
+      -- Reset to Controlling Player Directly through Touch_Button.lua ( No Trying to Send Keypress ? )
+        -- Could Use Touch_Button.game to tell what State the Game is in and Choose Appropriate Action
+      -- OR (IDEAL) Send (Fake) Keypress through Game:keypressed(), Keeping thing Easier to Work With
   -- [FIXED!] - OB_Lightning_Gates Sometimes kill the player on their first pass through, at least when fired by Cannons
     -- Problems in OB_Gate Base Code, MAKE SURE ALL FIELDS ARE SET! ( self.solid and self.deadly weren't set correctly )
 /bin/bash: .NOTES.swp: command not found

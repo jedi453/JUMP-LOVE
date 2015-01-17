@@ -45,7 +45,7 @@ OB_Gate_Key.static.DEADLY = false
 OB_Gate_Key.static.DEFAULT_R = 128
 OB_Gate_Key.static.DEFAULT_G = 128
 OB_Gate_Key.static.DEFAULT_B = 128
-OB_Gate_Key.static.ALPHA = Tile.ALPHA
+OB_Gate_Key.static.ALPHA = Tile.TILE_ALPHA
 
 -- Location, Location, Location
 OB_Gate_Key.static.WIDTH = (1/2) * Tile.CELL_WIDTH
