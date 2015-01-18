@@ -1,0 +1,9 @@
+[Desktop Entry]
+
+Type=Application
+Name=JUMP-LOVE
+Comment=JUMP Until Mass Pwnage - A Jumper Inspired Game
+Exec=love JUMP-LOVE.love
+Icon=Logo-32x32
+Categories=games;
+

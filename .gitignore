@@ -2,3 +2,4 @@
 *.swo
 *.old
 *.bak
+.builds
