@@ -48,19 +48,19 @@ Obstical:
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  LC  LC  LC  LC  LC  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  GK  00  00  00  BK  00  00  00  00  00  00  00  00  00  00  
-00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  PS  PR  PR  LC  LC  LC  LC  LC  00  00  00  00  00  00  00  00  00  00  
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  PS  PR  PR  LH  LH  LH  LH  LH  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  GT  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  LC  LC  LC  LC  LC  00  00  00  00  00  
 PR  PR  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-00  00  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  00  00  00  00  00  00  00  00  00  00
+00  00  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  00  00  00  00  00  00  00  00  00  00
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  GT  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-PR  PR  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  LC  LC  LC  00  LC  
+PR  PR  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  FB  LH  LH  LH  GT  00  
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
-00  00  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  LC  00  00  00  00  00
+00  00  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  LH  00  00  00  00  00
 00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  
 #
 #
@@ -76,4 +76,6 @@ This one will require both speed and finesse.
 
 You should probably grab those Square Blue and Green Keys
  Unless you don't want to open the locked gates at the end of the level...
+The Green Blocks are Jump Pads that will shoot you up if you stand on them.
+ You'll have to block yourself off from the lightning somehow...
 # vim: set nu:
