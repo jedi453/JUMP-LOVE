@@ -91,8 +91,8 @@ Map = class('Map')
 -- Set Map Class Static Members
 
 --Map.static.MAP_FILES = { 'maps/map-mike.txt', }
---Map.static.MAP_FILES = { 'maps/map-test.txt', }
-Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map2-5.txt', 'maps/map3.txt', }
+--Map.static.MAP_FILES = { 'maps/map1-8.txt', }
+Map.static.MAP_FILES = { 'maps/map1-1.txt', 'maps/map1-2.txt', 'maps/map1-3.txt', 'maps/map1-4.txt', 'maps/map1-5.txt', 'maps/map1-6.txt', 'maps/map1-7.txt', 'maps/map1-8.txt', 'maps/map2-1.txt', 'maps/map2-2.txt', 'maps/map2-3.txt', 'maps/map2-4.txt', 'maps/map2-5.txt', 'maps/map2-6.txt', 'maps/map3.txt', }
 
 
 -- Add Sound Effects Here

@@ -42,14 +42,26 @@ JumpArrow.static.DEADLY = false
 -- Positional Stuff
 JumpArrow.static.WIDTH = (1/2) * Tile.CELL_WIDTH
 JumpArrow.static.HEIGHT = (3/4) * Tile.CELL_HEIGHT
-JumpArrow.static.lOffset = ( Tile.CELL_WIDTH - JumpArrow.WIDTH ) / 2
+JumpArrow.static.lOffset = ( Tile.CELL_WIDTH - JumpArrow.WIDTH ) / 4
 JumpArrow.static.tOffset = ( Tile.CELL_HEIGHT - JumpArrow.HEIGHT ) / 2
+-- The Coordinates of the Rectangle
+-- JumpArrow.static.rectCoords = { l = Tile.CELL_WIDTH / 3,
+--                                 t = ( Tile.CELL_HEIGHT - JumpArrow.HEIGHT )/2,
+--                                 w = Tile.CELL_WIDTH / 3,
+--                                 h = JumpArrow.HEIGHT / 4,
+--                               }
+-- The Coordinates of the Triangle
+JumpArrow.static.triCoords = {
+                              { l = JumpArrow.WIDTH / 2, t = 0 },
+                              { l = 0, t = JumpArrow.HEIGHT },
+                              { l = JumpArrow.WIDTH, t = JumpArrow.HEIGHT },
+                             }
 
 -- Color
 JumpArrow.static.R = 200
 JumpArrow.static.G = 200
 JumpArrow.static.B = 75
-JumpArrow.static.ALPHA = 90---Tile.TILE_ALPHA
+JumpArrow.static.ALPHA = 100 ---Tile.TILE_ALPHA
 
 -- Updates/Velocity
 JumpArrow.static.UPDATES = true
@@ -58,7 +70,7 @@ JumpArrow.static.VY = 0
 JumpArrow.static.HAS_GRAVITY = false
 
 -- Respawn Time
-JumpArrow.static.RESPAWN_TIME = 7
+JumpArrow.static.RESPAWN_TIME = 5
 
 function JumpArrow:initialize( map, lpos, tpos )
   Obstical.initialize( self, map,
@@ -98,31 +110,47 @@ end
 -- Draw an Empty Arrow if not Remaining, Draw a Full one Otherwise
 function JumpArrow:draw()
   local camera = self.map.camera
+  local l = self.l - camera.l
+  local t = self.t - camera.t
+
+  -- Draw Outline
+  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
+  --love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
+  love.graphics.polygon( "line", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
+                                  l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
+                                  l + JumpArrow.triCoords[3].l, t + JumpArrow.triCoords[3].t )
 
   -- Draw Inside, If Applicable
   if self.remaining then
     love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
-    love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+    --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+    love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
+                                    l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
+                                    l + JumpArrow.triCoords[3].l, t + JumpArrow.triCoords[3].t )
   end
-
-  -- Draw Outline
-  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
-  love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 
 -- FastDraw an Empty Arrow if not Remaining, Draw a Full one Otherwise
 function JumpArrow:fastDraw()
   local camera = self.map.camera
+  local l = self.l - camera.l
+  local t = self.t - camera.t
 
   -- Draw Inside, If Applicable
   if self.remaining then
     love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
-    love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+    --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+    love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
+                                    l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
+                                    l + JumpArrow.triCoords[3].l, t + JumpArrow.triCoords[3].t )
+  else
+    -- Draw Light Version
+    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
+    --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
+    love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
+                                    l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
+                                    l + JumpArrow.triCoords[3].l, t + JumpArrow.triCoords[3].t )
   end
-
-  -- Draw Outline
-  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA/2 )
-  love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 
 

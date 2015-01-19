@@ -50,6 +50,8 @@ Game.static.SAVE_FILE = "Shhhh...secret"
 
 function Game:initialize( state, ... )
   self.state = state or 'menu'
+  -- Load Maximum Level Attained
+  self:load()
   self.isMenu = false
   self.isMap  = false
   if state == 'menu' then
@@ -60,8 +62,6 @@ function Game:initialize( state, ... )
     self.isMap = true
   end
   self.debugString = ''
-  -- Load Maximum Level Attained
-  self:load()
 end
 
 
@@ -174,11 +174,15 @@ end
 function Game:load()
   self.maxLevelReached = love.filesystem.read( Game.SAVE_FILE ) 
   self.maxLevelReached = tonumber( self.maxLevelReached ) or 1
+  if self.maxLevelReached > #Map.MAP_FILES then self.maxLevelReached = #Map.MAP_FILES end
 end
 
 -- Save the Maximum Progress (Level Number) Made By the Player
 function Game:save( levelNum )
-  love.filesystem.write( Game.SAVE_FILE, levelNum )
+  self:load()
+  if levelNum > self.maxLevelReached then
+    love.filesystem.write( Game.SAVE_FILE, levelNum )
+  end
   self.maxLevelReached = levelNum
 end
 

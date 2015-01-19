@@ -71,6 +71,7 @@ Player:
 Comment:
 1 1
 World 1, Level 1.
+"The Ropes"
 
 In JUMP, You are that Red Square (Handsome Fellow).
 All You have to do is Get Yourself to the Right of the Screen.
