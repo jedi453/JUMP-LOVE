@@ -46,6 +46,8 @@ game = {}
 local map
 local BASE_FONT_SIZE = 14
 
+local lastTouchList = {}
+
 
 function love.load()
   love.window.setMode( Tile.CELL_WIDTH*tilesHoriz, Tile.CELL_HEIGHT*tilesVert )
@@ -70,7 +72,34 @@ end
 
 
 function love.update( dt )
+  local touches = love.touch.getTouches()
+  local newTouchList = {}
+
+  -- Get Current Touches
+  for i, id in ipairs(touches) do
+    local l, t = love.touch.getPosition(id)
+    newTouchList[id] = {l = l, t = t}
+  end
+
+  -- Register New Touches
+  for id, v in pairs(newTouchList) do
+    if not lastTouchList[id] then
+      touchpressed(id, v.l, v.t)
+    end
+  end
+
+  -- Remove Old Presses
+  for id, v in pairs(lastTouchList) do
+    if not newTouchList[id] then
+      touchreleased(id, v.l, v.t)
+    end
+  end
+
+  -- Do Normal Update
   game:update(dt)
+
+  -- Update lastTouchList to Current One for Next Frame
+  lastTouchList = newTouchList
 end
 
 -- Pass Key Presses to Game
@@ -105,46 +134,44 @@ end
 
 
 -- Android Specific Stuff
-function love.touchpressed( id, l, t, pressure )
+function touchpressed( id, l, t )
   local map
   if game.isMap then map = game.map else map = game.menu end
-  if pressure > 0 then
-    local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
-    if len < 1 then
-      map.touchButtonsByID[id] = nil
-      return
-    else
-      local item = items[1]
-      map.touchButtonsByID[id] = item
-      -- Only Support One Touch_Button in the Same Location For Now
-      item:touched( id, l, t, pressure )
-    end
+  local items, len = map.world:queryPoint( l, t, Touch_Button.C_FILTER )
+  if len < 1 then
+    map.touchButtonsByID[id] = nil
+    return
+  else
+    local item = items[1]
+    map.touchButtonsByID[id] = item
+    -- Only Support One Touch_Button in the Same Location For Now
+    item:touched( id, l, t )
   end
 end
 
 
 -- Android Specific Stuff
-function love.touchreleased( id, l, t, pressure )
+function touchreleased( id, l, t )
   local map
   if game.isMap then map = game.map else map = game.menu end
-  local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+  local items, len = map.world:queryPoint( l, t, Touch_Button.C_FILTER )
   -- Only Support One Touch_Button in the Same Location
   if len < 1 then 
     map.touchButtonsByID[id] = nil
     return 
   elseif map.touchButtonsByID[id] then  -- TODO IMPROVE EFFICIENCY
     local item = items[1]
-    item:released( id, l, t, pressure )
+    item:released( id, l, t )
     map.touchButtonsByID[id] = nil
   end
 end
 
 
 -- Android Specific Stuff
-function love.touchmoved( id, l, t, pressure )
+function touchmoved( id, l, t )
   local map
   if game.isMap then map = game.map else map = game.menu end
-  local items, len = map.world:queryPoint( l*love.graphics.getWidth(), t*love.graphics.getHeight(), Touch_Button.C_FILTER )
+  local items, len = map.world:queryPoint( l, t, Touch_Button.C_FILTER )
 
   -- Only Support One Touch_Button in the Same Location
   -- TODO Improve Efficiency
@@ -155,18 +182,18 @@ function love.touchmoved( id, l, t, pressure )
     -- Only Press the Button the Previous Button if the Current One isn't the Same
     if map.touchButtonsByID[id] then
       if map.touchButtonsByID[id].touchID ~= item.touchID then
-        map.touchButtonsByID[id]:released( id, l, t, pressure )
+        map.touchButtonsByID[id]:released( id, l, t )
         map.touchButtonsByID[id] = item
-        item:touched( id, l, t, pressure )
+        item:touched( id, l, t )
       end
     else
       -- No Previous Button Pressed, Press this One
       map.touchButtonsByID[id] = item
-      item:touched( id, l, t, pressure )
+      item:touched( id, l, t )
     end
   elseif map.touchButtonsByID[id] then
     -- Moved Off Active Touch_Button, Release it and Remove it from touchButtonsByID
-    map.touchButtonsByID[id]:released( id, l, t, pressure )
+    map.touchButtonsByID[id]:released( id, l, t )
     map.touchButtonsByID[id] = nil
   end
 end

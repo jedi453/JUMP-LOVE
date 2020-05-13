@@ -84,7 +84,7 @@ function Touch_Button:initialize( game, map, l,t,w,h, kind, numPlayer )
 end
 
 -- Called when this Button is Touched
-function Touch_Button:touched( id, l, t, pressure )
+function Touch_Button:touched( id, l, t )
   self.touchID = id
   -- Don't Update if numPlayer isn't a Valid Player
   --local player = self.map.players[ self.numPlayer ]
@@ -111,7 +111,7 @@ function Touch_Button:touched( id, l, t, pressure )
 end
 
 -- Called when this Button is Released
-function Touch_Button:released( id, l, t, pressure )
+function Touch_Button:released( id, l, t )
   self.touchID = -1
   -- Don't Update if numPlayer isn't a Valid Player
   if self.game.isMap and not self.map.players[ self.numPlayer ] then 
