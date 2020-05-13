@@ -115,7 +115,7 @@ end
 -- Override Inherited draw() from Map, Can still Use Map.draw(self,...) if Needed
 function Menu:draw()
   Map.draw(self)
-  love.graphics.setColor( 255, 128, 128 )
+  love.graphics.setColor( 255/255, 128/255, 128/255 )
   love.graphics.print( "MENU\n",
                        self.width * Menu.MENU_TEXT_XPOS_FACTOR,
                        self.height * Menu.MENU_TEXT_YPOS_FACTOR,

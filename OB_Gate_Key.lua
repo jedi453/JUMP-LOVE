@@ -95,10 +95,10 @@ end
 -- Normal Draw - Outline + Inside ( if Present )
 function OB_Gate_Key:draw()
   local camera = self.map.camera
-  love.graphics.setColor( self.r, self.g, self.b, OB_Gate_Key.ALPHA )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255, OB_Gate_Key.ALPHA/255 )
   love.graphics.rectangle( 'line', self.l-camera.l, self.t-camera.t, self.w, self.h )
   if self.remaining then
-    love.graphics.setColor( self.r, self.g, self.b )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
     love.graphics.rectangle( 'fill', self.l-camera.l, self.t-camera.t, self.w, self.h )
   end
 end
@@ -107,10 +107,10 @@ end
 function OB_Gate_Key:fastDraw()
   local camera = self.map.camera
   if self.remaining then
-    love.graphics.setColor( self.r, self.g, self.b, OB_Gate_Key.ALPHA )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, OB_Gate_Key.ALPHA/255 )
     love.graphics.rectangle( 'fill', self.l-camera.l, self.t-camera.t, self.w, self.h )
   else
-    love.graphics.setColor( self.r, self.g, self.b, OB_Gate_Key.ALPHA/2 )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, (OB_Gate_Key.ALPHA/2)/255 )
     love.graphics.rectangle( 'fill', self.l-camera.l, self.t-camera.t, self.w, self.h )
   end
 end

@@ -70,7 +70,7 @@ end
 function OB_Keyed_Gate:draw()
   local camera = self.map.camera
   OB_Gate.draw(self)
-  love.graphics.setColor( self.keyR, self.keyG, self.keyB, OB_Keyed_Gate.ALPHA )
+  love.graphics.setColor( self.keyR/255, self.keyG/255, self.keyB/255, OB_Keyed_Gate.ALPHA/255 )
   love.graphics.rectangle( "line", self.l-camera.l + OB_Keyed_Gate.KEYHOLE_X_OFFSET,
                             self.t-camera.t + OB_Keyed_Gate.KEYHOLE_Y_OFFSET,
                             OB_Keyed_Gate.KEYHOLE_WIDTH,
@@ -89,7 +89,7 @@ end
 function OB_Keyed_Gate:fastDraw()
   local camera = self.map.camera
   OB_Gate.fastDraw(self)
-  love.graphics.setColor( self.keyR, self.keyG, self.keyB )
+  love.graphics.setColor( self.keyR/255, self.keyG/255, self.keyB/255 )
   if not self.gateOpen then
     love.graphics.rectangle( "fill", self.l-camera.l + OB_Keyed_Gate.KEYHOLE_X_OFFSET,
                               self.t-camera.t + OB_Keyed_Gate.KEYHOLE_Y_OFFSET,

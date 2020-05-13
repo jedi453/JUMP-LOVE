@@ -138,11 +138,11 @@ end
 
 -- Draw the Touch_Button
 function Touch_Button:draw()
-  love.graphics.setColor( Touch_Button.R, Touch_Button.G, Touch_Button.B, Touch_Button.ALPHA )
+  love.graphics.setColor( Touch_Button.R/255, Touch_Button.G/255, Touch_Button.B/255, Touch_Button.ALPHA/255 )
   love.graphics.rectangle( 'fill', self.l,self.t,self.w,self.h )
-  love.graphics.setColor( Touch_Button.R, Touch_Button.G, Touch_Button.B )
+  love.graphics.setColor( Touch_Button.R/255, Touch_Button.G/255, Touch_Button.B/255 )
   love.graphics.rectangle( 'line', self.l,self.t,self.w,self.h )
-  love.graphics.setColor( Touch_Button.TEXT_R, Touch_Button.TEXT_G, Touch_Button.TEXT_B )
+  love.graphics.setColor( Touch_Button.TEXT_R/255, Touch_Button.TEXT_G/255, Touch_Button.TEXT_B/255 )
   love.graphics.print( self.kind, self.l, self.t, 0, Tile.SCALE, Tile.SCALE )
 end
 

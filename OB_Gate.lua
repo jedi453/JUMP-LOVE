@@ -99,12 +99,12 @@ end
 function OB_Gate:draw()
   local camera = self.map.camera
   if self.gateOpen then
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, Tile.static.TILE_ALPHA/255 )
     love.graphics.rectangle( "line", self.l - camera.l, self.t - camera.t, self.w, self.h )
   else
-    love.graphics.setColor( self.r, self.g, self.b )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
     love.graphics.rectangle( "line", self.l - camera.l, self.t - camera.t, self.w, self.h )
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, Tile.static.TILE_ALPHA/255 )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   end
 end
@@ -115,10 +115,10 @@ end
 function OB_Gate:fastDraw()
   local camera = self.map.camera
   if self.gateOpen then
-    love.graphics.setColor( OB_Gate.RA_OPEN, OB_Gate.GA_OPEN, OB_Gate.BA_OPEN )
+    love.graphics.setColor( OB_Gate.RA_OPEN/255, OB_Gate.GA_OPEN/255, OB_Gate.BA_OPEN/255 )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   else
-    love.graphics.setColor( OB_Gate.RA_CLOSED, OB_Gate.GA_CLOSED, OB_Gate.BA_CLOSED )
+    love.graphics.setColor( OB_Gate.RA_CLOSED/255, OB_Gate.GA_CLOSED/255, OB_Gate.BA_CLOSED/255 )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   end
 end

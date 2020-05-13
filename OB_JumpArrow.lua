@@ -114,7 +114,7 @@ function JumpArrow:draw()
   local t = self.t - camera.t
 
   -- Draw Outline
-  love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
+  love.graphics.setColor( JumpArrow.R/255, JumpArrow.G/255, JumpArrow.B/255, JumpArrow.ALPHA/255 )
   --love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
   love.graphics.polygon( "line", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
                                   l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
@@ -122,7 +122,7 @@ function JumpArrow:draw()
 
   -- Draw Inside, If Applicable
   if self.remaining then
-    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
+    love.graphics.setColor( JumpArrow.R/255, JumpArrow.G/255, JumpArrow.B/255 )
     --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
     love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
                                     l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
@@ -138,14 +138,14 @@ function JumpArrow:fastDraw()
 
   -- Draw Inside, If Applicable
   if self.remaining then
-    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B )
+    love.graphics.setColor( JumpArrow.R/255, JumpArrow.G/255, JumpArrow.B/255 )
     --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
     love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
                                     l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,
                                     l + JumpArrow.triCoords[3].l, t + JumpArrow.triCoords[3].t )
   else
     -- Draw Light Version
-    love.graphics.setColor( JumpArrow.R, JumpArrow.G, JumpArrow.B, JumpArrow.ALPHA )
+    love.graphics.setColor( JumpArrow.R/255, JumpArrow.G/255, JumpArrow.B/255, JumpArrow.ALPHA/255 )
     --love.graphics.rectangle( "fill", self.l-camera.l, self.t-camera.t, self.w, self.h )
     love.graphics.polygon( "fill", l + JumpArrow.triCoords[1].l, t + JumpArrow.triCoords[1].t,
                                     l + JumpArrow.triCoords[2].l, t + JumpArrow.triCoords[2].t,

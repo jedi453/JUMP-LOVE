@@ -103,7 +103,7 @@ function OB_Cannon:draw()
   Tile.draw(self)
   -- Draw Direction "Arrow" in Appropriate Spot
   local camera = self.map.camera
-  love.graphics.setColor( self.r, self.g, self.b, OB_Cannon.DIRECTION_ALPHA )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255, OB_Cannon.DIRECTION_ALPHA/255 )
   love.graphics.rectangle( "fill", self.l-camera.l + 0.375*(1+self.directionX)*self.w,
                                    self.t-camera.t + 0.375*(1+self.directionY)*self.h,
                                    OB_Cannon.ARROW_WIDTH, OB_Cannon.ARROW_HEIGHT )
@@ -121,7 +121,7 @@ function OB_Cannon:fastDraw()
   Tile.fastDraw(self)
   -- Draw Direction "Arrow" in Appropriate Spot
   local camera = self.map.camera
-  love.graphics.setColor( self.r, self.g, self.b, OB_Cannon.DIRECTION_ALPHA )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255, OB_Cannon.DIRECTION_ALPHA/255 )
   love.graphics.rectangle( "fill", self.l-camera.l + 0.375*(1+self.directionX)*self.w,
                                    self.t-camera.t + 0.375*(1+self.directionY)*self.h,
                                    OB_Cannon.ARROW_WIDTH, OB_Cannon.ARROW_HEIGHT )

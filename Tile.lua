@@ -101,9 +101,9 @@ end
 function Tile:fastDraw()
   local camera = self.map.camera
   -- Draw Filled Rectangle with Alpha Multiplied Each Draw
-  --love.graphics.setColor(self.r, self.g, self.b, Tile.TILE_ALPHA )
+  --love.graphics.setColor(self.r/255, self.g/255, self.b/255, Tile.TILE_ALPHA/255 )
   -- Only Draw the Filled in Rectangle, without alpha Multiplied Each Draw
-  love.graphics.setColor(self.ra, self.ga, self.ba)
+  love.graphics.setColor(self.ra/255, self.ga/255, self.ba/255)
   love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
 end
 --else
@@ -113,9 +113,9 @@ function Tile:draw()
 
   -- Only Draw the Tile if it's within the Camera's Viewport
   --  Handled in Map.lua ?
-  love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255, Tile.static.TILE_ALPHA/255 )
   love.graphics.rectangle( "fill", self.l - camera.l,self.t - camera.t,self.w,self.h )
-  love.graphics.setColor( self.r,self.g,self.b )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
   love.graphics.rectangle( "line", self.l - camera.l,self.t - camera.t,self.w,self.h )
 end
 --end

@@ -103,7 +103,7 @@ function Game:draw()
   elseif self.isMap then
     self.map:draw()
   end
-  love.graphics.setColor( 255, 128, 0 )
+  love.graphics.setColor( 255/255, 128/255, 0/255 )
   love.graphics.print( self.debugString, 0, 0, 0, 3 )
 end
 

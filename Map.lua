@@ -229,8 +229,10 @@ end
 
 -- Open All Needed Sound Media Files
 function Map.static.openMedia()
+  print(Map.SOUNDS)
   for k, v in pairs( Map.SOUNDS ) do
-    Map.static.media[k] = love.audio.newSource(v)
+    print(k, v)
+    Map.static.media[k] = love.audio.newSource(v, "static")
   end
 end
 
@@ -586,7 +588,7 @@ function Map:draw()
   end
 
   -- Draw Comments
-  love.graphics.setColor( 255, 255, 255 )
+  love.graphics.setColor( 255/255, 255/255, 255/255 )
   love.graphics.print( self.comment, self.commentL*Tile.CELL_WIDTH, self.commentT*Tile.CELL_HEIGHT ) --, 0, Tile.SCALE ) -- Scaling Now Handled when Font is Loaded
 
   -- Draw Players

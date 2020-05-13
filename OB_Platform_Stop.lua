@@ -75,7 +75,7 @@ end
 function OB_Platform_Stop:draw()
   local camera = self.map.camera
 
-  love.graphics.setColor( self.r, self.g, self.b )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
   love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 
@@ -83,7 +83,7 @@ end
 function OB_Platform_Stop:fastDraw()
   local camera = self.map.camera
 
-  love.graphics.setColor( self.r, self.g, self.b )
+  love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
   love.graphics.rectangle( "line", self.l-camera.l, self.t-camera.t, self.w, self.h )
 end
 

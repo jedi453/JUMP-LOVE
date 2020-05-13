@@ -128,12 +128,12 @@ end
 function OB_Lightning_Gate:draw()
   local camera = self.map.camera
   if self.gateOpen then
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, Tile.static.TILE_ALPHA/255 )
     love.graphics.rectangle( "line", self.l - camera.l, self.t - camera.t, self.w, self.h )
   else
-    love.graphics.setColor( self.r, self.g, self.b )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255 )
     love.graphics.rectangle( "line", self.l - camera.l, self.t - camera.t, self.w, self.h )
-    love.graphics.setColor( self.r, self.g, self.b, Tile.static.TILE_ALPHA )
+    love.graphics.setColor( self.r/255, self.g/255, self.b/255, Tile.static.TILE_ALPHA/255 )
     love.graphics.rectangle( "fill", self.l - camera.l, self.t - camera.t, self.w, self.h )
   end
 end
