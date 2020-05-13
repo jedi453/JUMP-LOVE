@@ -63,6 +63,9 @@ function love.load()
   scaledFont = love.graphics.newFont( BASE_FONT_SIZE*Tile.SCALE )
   love.graphics.setFont( scaledFont )
 
+  if (love.system.getOS() == 'Android') or (love.system.getOS() == 'iOS') then
+    love.window.setFullscreen(true)
+  end
 end
 
 

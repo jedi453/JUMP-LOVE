@@ -46,7 +46,7 @@ Tile.static.CELL_WIDTH = 16
 Tile.static.CELL_HEIGHT = 16
 
 Tile.static.TILE_ALPHA = 128
-if love.system.getOS() == 'Android' then
+if (love.system.getOS() == 'Android') or (love.system.getOS() == 'iOS') then
   --Tile.static.SCALE = math.floor( (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE / ( Tile.MAX_VERT * Tile.CELL_HEIGHT )) )
   Tile.static.SCALE = math.floor( (love.graphics.getHeight() * Tile.ANDROID_VIEW_SCALE)/(Tile.MAX_VERT) ) / Tile.CELL_HEIGHT
   --Tile.static.MAX_HORIZ = math.floor(love.graphics.getWidth() * Tile.ANDROID_VIEW_SCALE / ( Tile.SCALE * Tile.CELL_WIDTH ))

@@ -110,7 +110,7 @@ Map.static.COMMENT_T_DEFAULT = 1
 -- Android Specific Stuff
 -- TODO REMOVE DEBUG
 --Map.static.IS_ANDROID = true
-Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' )
+Map.static.IS_ANDROID = ( love.system.getOS() == 'Android' ) or ( love.system.getOS() == 'iOS' )
 --Map.static.LEVEL_SCREEN_HEIGHT_RATIO = 0.8
 --Map.static.LEVEL_SCREEN_WIDTH_RATIO = 0.8
 
@@ -229,9 +229,9 @@ end
 
 -- Open All Needed Sound Media Files
 function Map.static.openMedia()
-  print(Map.SOUNDS)
+  --print(Map.SOUNDS)
   for k, v in pairs( Map.SOUNDS ) do
-    print(k, v)
+    --print(k, v)
     Map.static.media[k] = love.audio.newSource(v, "static")
   end
 end
